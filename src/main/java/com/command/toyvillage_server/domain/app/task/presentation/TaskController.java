@@ -1,5 +1,6 @@
 package com.command.toyvillage_server.domain.app.task.presentation;
 
+import com.command.toyvillage_server.domain.app.task.domain.TaskStatus;
 import com.command.toyvillage_server.domain.app.task.presentation.dto.request.TaskRequest;
 import com.command.toyvillage_server.domain.app.task.presentation.dto.response.TaskDetailResponse;
 import com.command.toyvillage_server.domain.app.task.presentation.dto.response.TaskListResponse;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
@@ -47,10 +49,11 @@ public class TaskController {
 
     @GetMapping
     public TaskListResponse getList(
+            @RequestParam(required = false) TaskStatus status,
             @PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.DESC)
             Pageable pageable
     ) {
-        return queryTaskListService.execute(pageable);
+        return queryTaskListService.execute(status, pageable);
     }
 
     @GetMapping("/my")

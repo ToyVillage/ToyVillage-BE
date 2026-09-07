@@ -11,16 +11,31 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
 
     @Query("""
             select t from Task t
-            where t.assigneeType = com.command.toyvillage_server.domain.app.task.domain.TaskAssigneeType.ALL
-               or t.assignee.id = :appAdminId
-               or exists (
-                   select jt.id from JoinTeam jt
-                   where jt.team.id = t.assigneeTeam.id
-                     and jt.appAdmin.id = :appAdminId
-               )
+            join t.assignees a
+            where a.id = :appAdminId
             """)
     Page<Task> findAllAssignedTo(
             @Param("appAdminId") Long appAdminId,
             Pageable pageable
     );
+
+    @Query("""
+            select t from Task t
+            where size(t.assignees) = (
+                select count(w) from WorkReport w
+                where w.task = t
+                  and w.status = com.command.toyvillage_server.domain.app.workreport.domain.Status.APPROVED
+            )
+            """)
+    Page<Task> findAllCompleted(Pageable pageable);
+
+    @Query("""
+            select t from Task t
+            where size(t.assignees) <> (
+                select count(w) from WorkReport w
+                where w.task = t
+                  and w.status = com.command.toyvillage_server.domain.app.workreport.domain.Status.APPROVED
+            )
+            """)
+    Page<Task> findAllInProgress(Pageable pageable);
 }
