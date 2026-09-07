@@ -17,6 +17,12 @@ public record WorkLogAnswerResponse(
     FileResponse file
 ) {
     public static WorkLogAnswerResponse from(WorkLogAnswer answer) {
+        FileResponse file = null;
+
+        if (answer.getFile() != null) {
+            file = FileResponse.from(answer.getFile());
+        }
+
         return WorkLogAnswerResponse.builder()
             .questionId(answer.getQuestion().getId())
             .question(answer.getQuestion().getQuestion())
@@ -25,7 +31,7 @@ public record WorkLogAnswerResponse(
             .options(answer.getSelectedOptions().stream()
                 .map(WorkLogAnswerOptionResponse::from)
                 .toList())
-            .file(answer.getFile() == null ? null : FileResponse.from(answer.getFile()))
+            .file(file)
             .build();
     }
 }

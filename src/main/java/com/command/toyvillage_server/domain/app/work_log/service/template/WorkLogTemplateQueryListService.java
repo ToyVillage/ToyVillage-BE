@@ -18,9 +18,13 @@ public class WorkLogTemplateQueryListService {
 
     @Transactional(readOnly = true)
     public Page<WorkLogTemplateQueryListObjectResponse> execute(Pageable pageable, LocalDate createdAt) {
-        Page<WorkLogTemplate> templates = createdAt == null
-            ? workLogTemplateRepository.findAllByDeleteYnFalse(pageable)
-            : workLogTemplateRepository.findAllByDeleteYnFalseAndCreatedAt(pageable, createdAt);
+        Page<WorkLogTemplate> templates;
+
+        if (createdAt == null) {
+            templates = workLogTemplateRepository.findAllByDeleteYnFalse(pageable);
+        } else {
+            templates = workLogTemplateRepository.findAllByDeleteYnFalseAndCreatedAt(pageable, createdAt);
+        }
 
         return templates.map(WorkLogTemplateQueryListObjectResponse::from);
     }
