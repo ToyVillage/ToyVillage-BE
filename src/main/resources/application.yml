@@ -7,6 +7,9 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+    properties:
+      hibernate:
+        default_batch_fetch_size: 100
   mail:
     host: smtp.gmail.com
     port: 587
