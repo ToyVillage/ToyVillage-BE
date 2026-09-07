@@ -1,6 +1,7 @@
 package com.command.toyvillage_server.domain.app.animal_manage.domain;
 
 import com.command.toyvillage_server.domain.app.animal_manage.domain.enums.AnimalTaxonomic;
+import com.command.toyvillage_server.domain.web.file.domain.File;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -30,4 +31,24 @@ public class AnimalKind {
 
     @Column(name = "detail_kind",  nullable = false)
     private String detailKind;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "file_id", nullable = false)
+    private File kindImage;
+
+    public void update(
+        String kindName,
+        String engName,
+        String scientificName,
+        AnimalTaxonomic animalTaxonomic,
+        String detailKind,
+        File kindImage
+    ) {
+        this.kindName = kindName;
+        this.engName = engName;
+        this.scientificName = scientificName;
+        this.animalTaxonomic = animalTaxonomic;
+        this.detailKind = detailKind;
+        this.kindImage = kindImage;
+    }
 }
