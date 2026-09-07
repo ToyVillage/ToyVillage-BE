@@ -16,6 +16,10 @@ public class AnimalManage {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "animal_kind_id", nullable = false)
+    private AnimalKind animalKind;
+
     @Column(name = "animal_name", nullable = false)
     private String animalName;
 
@@ -29,17 +33,19 @@ public class AnimalManage {
     @Column(name = "other_info")
     private String otherInfo;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "file_id", nullable = false)
     private File animalImage;
 
     public void update(
+        AnimalKind animalKind,
         String animalName,
         AnimalGender animalGender,
         int birthYear,
         String otherInfo,
         File animalImage
     ) {
+        this.animalKind = animalKind;
         this.animalName = animalName;
         this.animalGender = animalGender;
         this.birthYear = birthYear;
