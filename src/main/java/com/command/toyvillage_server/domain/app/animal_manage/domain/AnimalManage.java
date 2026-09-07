@@ -1,6 +1,7 @@
 package com.command.toyvillage_server.domain.app.animal_manage.domain;
 
-import com.command.toyvillage_server.domain.app.animal_manage.domain.enums.AnimalTaxonomic;
+import com.command.toyvillage_server.domain.app.animal_manage.domain.enums.AnimalGender;
+import com.command.toyvillage_server.domain.web.file.domain.File;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -18,15 +19,17 @@ public class AnimalManage {
     @Column(name = "animal_name", nullable = false)
     private String animalName;
 
-    @Column(name = "animal_eng_name", nullable = false)
-    private String animalEngName;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "animal_gender",  nullable = false)
+    private AnimalGender animalGender;
 
-    @Column(name = "animal_scientific_name", nullable = false)
-    private String animalScientificName;
+    @Column(name = "birth_year",  nullable = false)
+    private int birthYear;
 
-    @Column(name = "animal_taxonomic", nullable = false)
-    private AnimalTaxonomic animalTaxonomic;
+    @Column(name = "other_info")
+    private String otherInfo;
 
-    @Column(name = "animal_detail_kind",  nullable = false)
-    private String animalDetailKind;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "file_id", nullable = false)
+    private File animalImage;
 }

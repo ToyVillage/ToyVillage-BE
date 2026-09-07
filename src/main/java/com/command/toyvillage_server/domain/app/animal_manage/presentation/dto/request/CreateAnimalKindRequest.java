@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 
-public record CreateAnimalManageRequest(
+public record CreateAnimalKindRequest(
     @NotBlank(message = "국명을 입력해주세요.")
     String animalName,
 

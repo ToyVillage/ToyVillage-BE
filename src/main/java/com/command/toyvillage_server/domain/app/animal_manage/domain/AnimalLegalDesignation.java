@@ -20,5 +20,5 @@ public class AnimalLegalDesignation {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "animal_manage_id", nullable = false)
-    private AnimalManage animalManage;
+    private AnimalKind animalKind;
 }
