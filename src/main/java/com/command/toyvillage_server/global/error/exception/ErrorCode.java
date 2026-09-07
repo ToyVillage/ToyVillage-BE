@@ -101,6 +101,9 @@ public enum ErrorCode {
     OPEN_TIME_NOT_FOUND(404, "존재하지 않는 운영시간입니다."),
     OPEN_TIME_INVALID_PERIOD(400, "운영 종료시간은 운영 시작시간보다 빠를 수 없습니다."),
 
+    // feed log
+    FEED_LOG_NOT_FOUND(404, "존재하지 않는 급여일지입니다."),
+
     // team
     TEAM_NOT_FOUND(404, "존재하지 않는 팀입니다."),
     JOIN_TEAM_TARGET_INVALID(400, "팀에 배정할 수 없는 사용자입니다."),
