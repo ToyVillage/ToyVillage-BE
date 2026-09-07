@@ -111,6 +111,7 @@ public enum ErrorCode {
     WORK_ALREADY_REJECTED(409, "이미 반려된 업무관리입니다."),
 
     // animal management
+    ANIMAL_KIND_NOT_FOUND(404, "존재하지 않는 종입니다."),
     ANIMAL_MANAGE_NOT_FOUND(404, "존재하지 않는 개체입니다.");
 
     private final int statusCode;
