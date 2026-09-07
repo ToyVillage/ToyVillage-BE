@@ -31,7 +31,7 @@ public record TaskDetailResponse(
         List<ReportResponse> reports,
         ProgressResponse progress
 ) {
-    public static TaskDetailResponse from(Task task, List<WorkReport> workReports) {
+    public static TaskDetailResponse from(Task task, List<WorkReport> workReports, LocalDate today) {
         Map<Long, WorkReport> reportByAppAdminId = workReports.stream()
                 .collect(Collectors.toMap(
                         workReport -> workReport.getAppAdmin().getId(),
@@ -48,7 +48,12 @@ public record TaskDetailResponse(
                 .content(task.getContent())
                 .assigneeName(task.getAssigneeName())
                 .assigneeCount(task.getAssignees().size())
-                .status(TaskStatus.of(task.getAssignees().size(), countOf(reports, Status.APPROVED)))
+                .status(TaskStatus.of(
+                        task.getAssignees().size(),
+                        countOf(reports, Status.APPROVED),
+                        task.getFinishDate(),
+                        today
+                ))
                 .priority(task.getPriority())
                 .finishDate(task.getFinishDate())
                 .createdAt(task.getCreatedAt())

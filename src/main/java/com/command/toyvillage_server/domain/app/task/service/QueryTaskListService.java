@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -24,7 +25,8 @@ public class QueryTaskListService {
 
     @Transactional(readOnly = true)
     public TaskListResponse execute(TaskStatus status, Pageable pageable) {
-        Page<Task> tasks = findTasks(status, pageable);
+        LocalDate today = LocalDate.now();
+        Page<Task> tasks = findTasks(status, today, pageable);
 
         List<Long> taskIds = tasks.map(Task::getId).toList();
         Map<Long, List<WorkReport>> workReportsByTaskId = taskIds.isEmpty()
@@ -32,15 +34,18 @@ public class QueryTaskListService {
                 : workReportRepository.findAllByTask_IdIn(taskIds).stream()
                         .collect(Collectors.groupingBy(workReport -> workReport.getTask().getId()));
 
-        return TaskListResponse.from(tasks, workReportsByTaskId);
+        return TaskListResponse.from(tasks, workReportsByTaskId, today);
     }
 
-    private Page<Task> findTasks(TaskStatus status, Pageable pageable) {
+    private Page<Task> findTasks(TaskStatus status, LocalDate today, Pageable pageable) {
         if (status == null) {
             return taskRepository.findAll(pageable);
         }
-        return status == TaskStatus.COMPLETED
-                ? taskRepository.findAllCompleted(pageable)
-                : taskRepository.findAllInProgress(pageable);
+
+        return switch (status) {
+            case COMPLETED -> taskRepository.findAllCompleted(pageable);
+            case IN_PROGRESS -> taskRepository.findAllInProgress(pageable);
+            case EXPIRED -> taskRepository.findAllExpired(today, pageable);
+        };
     }
 }

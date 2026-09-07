@@ -17,11 +17,16 @@ public record TaskListResponse(
         List<TaskResponse> tasks,
         int totalPageSize
 ) {
-    public static TaskListResponse from(Page<Task> tasks, Map<Long, List<WorkReport>> workReportsByTaskId) {
+    public static TaskListResponse from(
+            Page<Task> tasks,
+            Map<Long, List<WorkReport>> workReportsByTaskId,
+            LocalDate today
+    ) {
         return TaskListResponse.builder()
                 .tasks(tasks.map(task -> TaskResponse.of(
                         task,
-                        workReportsByTaskId.getOrDefault(task.getId(), List.of())
+                        workReportsByTaskId.getOrDefault(task.getId(), List.of()),
+                        today
                 )).toList())
                 .totalPageSize(tasks.getTotalPages())
                 .build();
@@ -37,7 +42,7 @@ public record TaskListResponse(
             TaskPriority priority,
             LocalDate finishDate
     ) {
-        private static TaskResponse of(Task task, List<WorkReport> workReports) {
+        private static TaskResponse of(Task task, List<WorkReport> workReports, LocalDate today) {
             long approved = workReports.stream()
                     .filter(workReport -> workReport.getStatus() == Status.APPROVED)
                     .count();
@@ -47,7 +52,7 @@ public record TaskListResponse(
                     .title(task.getTitle())
                     .assigneeName(task.getAssigneeName())
                     .assigneeCount(task.getAssignees().size())
-                    .status(TaskStatus.of(task.getAssignees().size(), approved))
+                    .status(TaskStatus.of(task.getAssignees().size(), approved, task.getFinishDate(), today))
                     .priority(task.getPriority())
                     .finishDate(task.getFinishDate())
                     .build();

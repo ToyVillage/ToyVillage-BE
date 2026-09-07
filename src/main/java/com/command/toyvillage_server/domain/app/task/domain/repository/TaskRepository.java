@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDate;
+
 public interface TaskRepository extends JpaRepository<Task, Long> {
 
     @Query("""
@@ -38,4 +40,18 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
             )
             """)
     Page<Task> findAllInProgress(Pageable pageable);
+
+    @Query("""
+            select t from Task t
+            where size(t.assignees) <> (
+                select count(w) from WorkReport w
+                where w.task = t
+                  and w.status = com.command.toyvillage_server.domain.app.workreport.domain.Status.APPROVED
+            )
+              and t.finishDate < :today
+            """)
+    Page<Task> findAllExpired(
+            @Param("today") LocalDate today,
+            Pageable pageable
+    );
 }

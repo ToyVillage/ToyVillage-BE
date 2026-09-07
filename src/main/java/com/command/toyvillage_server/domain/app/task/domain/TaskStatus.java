@@ -1,10 +1,16 @@
 package com.command.toyvillage_server.domain.app.task.domain;
 
+import java.time.LocalDate;
+
 public enum TaskStatus {
     IN_PROGRESS,
-    COMPLETED;
+    COMPLETED,
+    EXPIRED;
 
-    public static TaskStatus of(int assigneeCount, long approvedCount) {
-        return assigneeCount > 0 && assigneeCount == approvedCount ? COMPLETED : IN_PROGRESS;
+    public static TaskStatus of(int assigneeCount, long approvedCount, LocalDate finishDate, LocalDate today) {
+        if (assigneeCount > 0 && assigneeCount == approvedCount) {
+            return COMPLETED;
+        }
+        return finishDate.isBefore(today) ? EXPIRED : IN_PROGRESS;
     }
 }

@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -33,6 +34,6 @@ public class QueryMyTaskListService {
                 : workReportRepository.findAllByTask_IdIn(taskIds).stream()
                         .collect(Collectors.groupingBy(workReport -> workReport.getTask().getId()));
 
-        return TaskListResponse.from(tasks, workReportsByTaskId);
+        return TaskListResponse.from(tasks, workReportsByTaskId, LocalDate.now());
     }
 }

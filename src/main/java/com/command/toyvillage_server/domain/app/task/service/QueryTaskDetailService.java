@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+
 @Service
 @RequiredArgsConstructor
 public class QueryTaskDetailService {
@@ -26,6 +28,6 @@ public class QueryTaskDetailService {
             throw TaskNotFoundException.EXCEPTION;
         }
 
-        return TaskDetailResponse.from(task, workReportRepository.findAllByTask_Id(id));
+        return TaskDetailResponse.from(task, workReportRepository.findAllByTask_Id(id), LocalDate.now());
     }
 }
