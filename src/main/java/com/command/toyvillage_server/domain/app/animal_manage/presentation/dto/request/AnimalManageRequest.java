@@ -5,7 +5,7 @@ import com.command.toyvillage_server.domain.web.file.domain.File;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-public record CreateAnimalManageRequest(
+public record AnimalManageRequest(
     @NotBlank(message = "개제명을 입력해주세요.")
     String animalName,
 

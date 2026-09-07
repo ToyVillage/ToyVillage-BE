@@ -32,4 +32,18 @@ public class AnimalManage {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "file_id", nullable = false)
     private File animalImage;
+
+    public void update(
+        String animalName,
+        AnimalGender animalGender,
+        int birthYear,
+        String otherInfo,
+        File animalImage
+    ) {
+        this.animalName = animalName;
+        this.animalGender = animalGender;
+        this.birthYear = birthYear;
+        this.otherInfo = otherInfo;
+        this.animalImage = animalImage;
+    }
 }

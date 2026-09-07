@@ -9,19 +9,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class CreateAnimalManageService {
+public class UpdateAnimalManageService {
     private final AnimalManageRepository animalManageRepository;
 
     @Transactional
-    public void execute(AnimalManageRequest request) {
-        AnimalManage animalManage = AnimalManage.builder()
-            .animalName(request.animalName())
-            .animalGender(request.animalGender())
-            .birthYear(request.birthYear())
-            .otherInfo(request.otherInfo())
-            .animalImage(request.animalImage())
-            .build();
-
-        animalManageRepository.save(animalManage);
+    public void execute(Long animalManageId, AnimalManageRequest request) {
+        AnimalManage animalManage = animalManageRepository.findById(animalManageId)
+            .orElseThrow(() -> );
     }
 }
