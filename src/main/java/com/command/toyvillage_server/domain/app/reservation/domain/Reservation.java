@@ -1,5 +1,6 @@
 package com.command.toyvillage_server.domain.app.reservation.domain;
 
+import com.command.toyvillage_server.domain.app.reservation.domain.enums.ReservationStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

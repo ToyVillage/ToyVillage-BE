@@ -1,4 +1,4 @@
-package com.command.toyvillage_server.domain.app.reservation.domain;
+package com.command.toyvillage_server.domain.app.reservation.domain.enums;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.RequiredArgsConstructor;

@@ -1,7 +1,7 @@
 package com.command.toyvillage_server.domain.app.reservation.service.admin;
 
-import com.command.toyvillage_server.domain.app.reservation.domain.ReservationSortType;
-import com.command.toyvillage_server.domain.app.reservation.domain.ReservationStatus;
+import com.command.toyvillage_server.domain.app.reservation.domain.enums.ReservationSortType;
+import com.command.toyvillage_server.domain.app.reservation.domain.enums.ReservationStatus;
 import com.command.toyvillage_server.domain.app.reservation.domain.repository.ReservationRepository;
 import com.command.toyvillage_server.domain.app.reservation.presentation.dto.response.ReservationAdminQueryListObjectResponse;
 import com.command.toyvillage_server.domain.app.reservation.presentation.dto.response.ReservationAdminQueryListResponse;

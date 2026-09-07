@@ -1,7 +1,7 @@
 package com.command.toyvillage_server.domain.app.reservation.presentation.dto.response;
 
 import com.command.toyvillage_server.domain.app.reservation.domain.Reservation;
-import com.command.toyvillage_server.domain.app.reservation.domain.ReservationStatus;
+import com.command.toyvillage_server.domain.app.reservation.domain.enums.ReservationStatus;
 import lombok.Builder;
 
 import java.time.LocalDate;
