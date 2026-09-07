@@ -2,6 +2,7 @@ package com.command.toyvillage_server.domain.app.animal_manage.service;
 
 import com.command.toyvillage_server.domain.app.animal_manage.domain.AnimalManage;
 import com.command.toyvillage_server.domain.app.animal_manage.domain.repository.AnimalManageRepository;
+import com.command.toyvillage_server.domain.app.animal_manage.exception.AnimalManageNotFoundException;
 import com.command.toyvillage_server.domain.app.animal_manage.presentation.dto.request.AnimalManageRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,13 @@ public class UpdateAnimalManageService {
     @Transactional
     public void execute(Long animalManageId, AnimalManageRequest request) {
         AnimalManage animalManage = animalManageRepository.findById(animalManageId)
-            .orElseThrow(() -> );
+            .orElseThrow(() -> AnimalManageNotFoundException.EXCEPTION);
+
+        animalManage.update(
+            request.animalName(),
+            request.animalGender(),
+            request.birthYear(),
+            request.otherInfo(),
+            request.animalImage());
     }
 }
