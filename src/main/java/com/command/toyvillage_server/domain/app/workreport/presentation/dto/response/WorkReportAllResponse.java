@@ -1,6 +1,5 @@
 package com.command.toyvillage_server.domain.app.workreport.presentation.dto.response;
 
-import com.command.toyvillage_server.domain.app.task.domain.TaskAssigneeType;
 import com.command.toyvillage_server.domain.app.workreport.domain.Status;
 import com.command.toyvillage_server.domain.app.workreport.domain.WorkReport;
 import lombok.Builder;
@@ -11,8 +10,7 @@ public record WorkReportAllResponse(
         Long taskId,
         String name,
         String title,
-        Status status,
-        TaskAssigneeType taskAssignee
+        Status status
 ) {
     public static WorkReportAllResponse from(WorkReport workReport) {
         return WorkReportAllResponse.builder()
@@ -21,7 +19,6 @@ public record WorkReportAllResponse(
                 .name(workReport.getAppAdmin().getName())
                 .title(workReport.getTask().getTitle())
                 .status(workReport.getStatus())
-                .taskAssignee(workReport.getTask().getAssigneeType())
                 .build();
     }
 }

@@ -20,7 +20,7 @@ public class DeleteTaskService {
         Task task = taskRepository.findById(id)
                 .orElseThrow(() -> TaskNotFoundException.EXCEPTION);
 
-        if (workReportRepository.existsByTask_Id(id)) {
+        if (!workReportRepository.findAllByTask_Id(id).isEmpty()) {
             throw WorkReportAlreadyExistsException.EXCEPTION;
         }
 

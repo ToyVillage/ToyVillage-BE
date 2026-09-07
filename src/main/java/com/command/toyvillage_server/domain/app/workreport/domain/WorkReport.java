@@ -15,18 +15,25 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-@Table(name = "tbl_work_report")
+@Table(
+        name = "tbl_work_report",
+        uniqueConstraints = @UniqueConstraint(
+                name = "uk_work_report_task_app_admin",
+                columnNames = {"task_id", "app_admin_id"}
+        )
+)
 public class WorkReport {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "work_report_id",nullable = false)
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "task_id", nullable = false, unique = true)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "task_id", nullable = false)
     private Task task;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "app_admin_id", nullable = false)
     private AppAdmin appAdmin;
 
     @Column(name = "content",nullable = false,length = 1024)
@@ -51,8 +58,9 @@ public class WorkReport {
     private String rejectionReason;
 
     @Builder
-    public WorkReport(Task task,String content, String note, List<File> files) {
+    public WorkReport(Task task, AppAdmin appAdmin, String content, String note, List<File> files) {
         this.task = task;
+        this.appAdmin = appAdmin;
         this.content = content;
         this.note = note;
         this.files = files == null ? new ArrayList<>() : new ArrayList<>(files);

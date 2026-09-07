@@ -17,7 +17,7 @@ public class WorkReportQueryService {
     public WorkReportResponse execute(Long taskId) {
         Long currentUserId = userFacade.getCurrentUserId();
 
-        WorkReport workReport = workReportRepository.findByTask_IdAndTask_Assignee_Id(taskId,currentUserId)
+        WorkReport workReport = workReportRepository.findByTask_IdAndAppAdmin_Id(taskId,currentUserId)
                 .orElseThrow(() -> WorkNotFoundException.EXCEPTION);
         return WorkReportResponse.from(workReport);
     }
