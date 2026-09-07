@@ -19,6 +19,6 @@ public class AnimalLegalDesignation {
     private AnimalLegalStatus animalLegalStatus;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "animal_manage_id", nullable = false)
+    @JoinColumn(name = "animal_kind_id", nullable = false)
     private AnimalKind animalKind;
 }
