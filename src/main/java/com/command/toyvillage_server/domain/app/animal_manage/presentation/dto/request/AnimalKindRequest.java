@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 
-public record CreateAnimalKindRequest(
+public record AnimalKindRequest(
     @NotBlank(message = "국명을 입력해주세요.")
     String animalName,
 
@@ -23,7 +23,10 @@ public record CreateAnimalKindRequest(
     @NotBlank(message = "세부 분류를 입력해주세요.")
     String animalDetailKind,
 
+    @NotBlank(message = "종 사진을 포함해주세요.")
+    String fileKey,
+
     @NotEmpty(message = "법정저정분류를 선택해주세요.")
-    List<Long>animalLegalDesignation
+    List<Long> animalLegalDesignation
 ) {
 }
