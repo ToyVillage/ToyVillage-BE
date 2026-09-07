@@ -11,6 +11,8 @@ import org.springframework.data.domain.Page;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Builder
 public record TaskListResponse(
@@ -43,8 +45,13 @@ public record TaskListResponse(
             LocalDate finishDate
     ) {
         private static TaskResponse of(Task task, List<WorkReport> workReports, LocalDate today) {
+            Set<Long> assigneeIds = task.getAssignees().stream()
+                    .map(assignee -> assignee.getId())
+                    .collect(Collectors.toSet());
+
             long approved = workReports.stream()
                     .filter(workReport -> workReport.getStatus() == Status.APPROVED)
+                    .filter(workReport -> assigneeIds.contains(workReport.getAppAdmin().getId()))
                     .count();
 
             return TaskResponse.builder()

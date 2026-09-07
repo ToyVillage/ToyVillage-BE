@@ -27,6 +27,7 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
                 select count(w) from WorkReport w
                 where w.task = t
                   and w.status = com.command.toyvillage_server.domain.app.workreport.domain.Status.APPROVED
+                  and w.appAdmin member of t.assignees
             )
             """)
     Page<Task> findAllCompleted(Pageable pageable);
@@ -37,6 +38,7 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
                 select count(w) from WorkReport w
                 where w.task = t
                   and w.status = com.command.toyvillage_server.domain.app.workreport.domain.Status.APPROVED
+                  and w.appAdmin member of t.assignees
             )
             """)
     Page<Task> findAllInProgress(Pageable pageable);
@@ -47,6 +49,7 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
                 select count(w) from WorkReport w
                 where w.task = t
                   and w.status = com.command.toyvillage_server.domain.app.workreport.domain.Status.APPROVED
+                  and w.appAdmin member of t.assignees
             )
               and t.finishDate < :today
             """)
