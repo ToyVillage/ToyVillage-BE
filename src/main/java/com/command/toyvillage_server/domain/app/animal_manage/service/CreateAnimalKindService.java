@@ -5,7 +5,7 @@ import com.command.toyvillage_server.domain.app.animal_manage.domain.AnimalLegal
 import com.command.toyvillage_server.domain.app.animal_manage.domain.AnimalKind;
 import com.command.toyvillage_server.domain.app.animal_manage.domain.repository.AnimalLegalDesignationRepository;
 import com.command.toyvillage_server.domain.app.animal_manage.domain.repository.AnimalLegalStatusRepository;
-import com.command.toyvillage_server.domain.app.animal_manage.domain.repository.AnimalManageRepository;
+import com.command.toyvillage_server.domain.app.animal_manage.domain.repository.AnimalKindRepository;
 import com.command.toyvillage_server.domain.app.animal_manage.presentation.dto.request.CreateAnimalKindRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,7 +18,7 @@ import java.util.List;
 public class CreateAnimalKindService {
     private final AnimalLegalStatusRepository animalLegalStatusRepository;
     private final AnimalLegalDesignationRepository animalLegalDesignationRepository;
-    private final AnimalManageRepository animalManageRepository;
+    private final AnimalKindRepository animalKindRepository;
 
     @Transactional
     public void execute(CreateAnimalKindRequest request) {
@@ -30,7 +30,7 @@ public class CreateAnimalKindService {
             .detailKind(request.animalDetailKind())
             .build();
 
-        animalManageRepository.save(animalKind);
+        animalKindRepository.save(animalKind);
 
         List<AnimalLegalStatus> animalLegalStatuses = animalLegalStatusRepository.findAllById(request.animalLegalDesignation());
 
