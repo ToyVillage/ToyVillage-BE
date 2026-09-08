@@ -4,9 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Getter
-@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Entity
 @Table(name = "tbl_animal_legal_designation")
 public class AnimalLegalDesignation {
@@ -21,4 +19,13 @@ public class AnimalLegalDesignation {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "animal_kind_id", nullable = false)
     private AnimalKind animalKind;
+
+    @Builder
+    private AnimalLegalDesignation(
+        AnimalLegalStatus animalLegalStatus,
+        AnimalKind animalKind
+    ) {
+        this.animalLegalStatus = animalLegalStatus;
+        this.animalKind = animalKind;
+    }
 }
