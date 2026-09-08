@@ -16,9 +16,12 @@ public class FeedLogController {
     private final FeedLogCreateService feedLogCreateService;
     private final FeedLogUpdateService feedLogUpdateService;
 
-    @PostMapping
-    public void createFeedLog(@RequestBody @Valid FeedLogRequest feedLogRequest) {
-        feedLogCreateService.execute(feedLogRequest);
+    @PostMapping("/{animal-manage-id}")
+    public void createFeedLog(
+            @PathVariable("animal-manage-id") Long animalManageId,
+            @RequestBody @Valid FeedLogRequest feedLogRequest
+    ) {
+        feedLogCreateService.execute(animalManageId, feedLogRequest);
     }
 
     @PutMapping("/{feed-log-id}")

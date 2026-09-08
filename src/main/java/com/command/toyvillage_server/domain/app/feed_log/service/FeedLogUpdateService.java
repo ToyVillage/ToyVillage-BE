@@ -21,7 +21,6 @@ public class FeedLogUpdateService {
         feedLog.update(
                 feedLogRequest.feedDate(),
                 feedLogRequest.feedStartTime(),
-                feedLogRequest.feedEndTime(),
                 feedLogRequest.feedType(),
                 feedLogRequest.feed_amount(),
                 feedLogRequest.significant()
