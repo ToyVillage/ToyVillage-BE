@@ -5,6 +5,7 @@ import com.command.toyvillage_server.domain.app.animal_manage.domain.enums.Anima
 import com.command.toyvillage_server.domain.app.animal_manage.domain.repository.AnimalKindRepository;
 import com.command.toyvillage_server.domain.app.animal_manage.domain.repository.AnimalManageRepository;
 import com.command.toyvillage_server.domain.app.animal_manage.presentation.dto.response.AnimalKindQueryListObjectResponse;
+import com.command.toyvillage_server.domain.app.animal_manage.presentation.dto.response.AnimalKindQueryListResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,7 +19,7 @@ public class QueryAnimalKindListService {
     private final AnimalManageRepository animalManageRepository;
 
     @Transactional(readOnly = true)
-    public Page<AnimalKindQueryListObjectResponse> execute(AnimalTaxonomic animalTaxonomic, Pageable pageable) {
+    public AnimalKindQueryListResponse execute(AnimalTaxonomic animalTaxonomic, Pageable pageable) {
         Page<AnimalKind> animalKinds;
 
         if (animalTaxonomic == null) {
@@ -27,9 +28,11 @@ public class QueryAnimalKindListService {
             animalKinds = animalKindRepository.findAllByAnimalTaxonomic(animalTaxonomic, pageable);
         }
 
-        return animalKinds.map(animalKind -> AnimalKindQueryListObjectResponse.of(
+        Page<AnimalKindQueryListObjectResponse> responses = animalKinds.map(animalKind -> AnimalKindQueryListObjectResponse.of(
             animalKind,
             animalManageRepository.countByAnimalKindId(animalKind.getId())
         ));
+
+        return AnimalKindQueryListResponse.from(responses);
     }
 }

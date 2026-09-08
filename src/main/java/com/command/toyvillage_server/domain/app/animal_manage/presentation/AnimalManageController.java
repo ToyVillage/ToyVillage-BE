@@ -4,7 +4,7 @@ import com.command.toyvillage_server.domain.app.animal_manage.domain.enums.Anima
 import com.command.toyvillage_server.domain.app.animal_manage.presentation.dto.request.AnimalKindRequest;
 import com.command.toyvillage_server.domain.app.animal_manage.presentation.dto.request.AnimalManageRequest;
 import com.command.toyvillage_server.domain.app.animal_manage.presentation.dto.request.AnimalLegalStatusRequest;
-import com.command.toyvillage_server.domain.app.animal_manage.presentation.dto.response.AnimalKindQueryListObjectResponse;
+import com.command.toyvillage_server.domain.app.animal_manage.presentation.dto.response.AnimalKindQueryListResponse;
 import com.command.toyvillage_server.domain.app.animal_manage.presentation.dto.response.AnimalLegalStatusResponse;
 import com.command.toyvillage_server.domain.app.animal_manage.presentation.dto.response.AnimalKindQueryResponse;
 import com.command.toyvillage_server.domain.app.animal_manage.presentation.dto.response.AnimalManageQueryListObjectResponse;
@@ -61,7 +61,7 @@ public class AnimalManageController {
     }
 
     @GetMapping("/kind")
-    public Page<AnimalKindQueryListObjectResponse> getAnimalKindList(
+    public AnimalKindQueryListResponse getAnimalKindList(
         @PageableDefault(
             size = 10,
             sort = "id",
