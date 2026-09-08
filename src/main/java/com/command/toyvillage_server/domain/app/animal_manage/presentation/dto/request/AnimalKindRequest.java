@@ -27,6 +27,6 @@ public record AnimalKindRequest(
     String fileKey,
 
     @NotEmpty(message = "법정저정분류를 선택해주세요.")
-    List<Long> animalLegalDesignation
+    List<@NotNull(message = "법정지정분류를 선택해주세요.") Long> animalLegalDesignation
 ) {
 }

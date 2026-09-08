@@ -6,6 +6,7 @@ import com.command.toyvillage_server.domain.app.animal_manage.domain.AnimalLegal
 import com.command.toyvillage_server.domain.app.animal_manage.domain.repository.AnimalKindRepository;
 import com.command.toyvillage_server.domain.app.animal_manage.domain.repository.AnimalLegalDesignationRepository;
 import com.command.toyvillage_server.domain.app.animal_manage.domain.repository.AnimalLegalStatusRepository;
+import com.command.toyvillage_server.domain.app.animal_manage.exception.AnimalLegalStatusNotFoundException;
 import com.command.toyvillage_server.domain.app.animal_manage.presentation.dto.request.AnimalKindRequest;
 import com.command.toyvillage_server.domain.web.file.domain.repository.FileRepository;
 import com.command.toyvillage_server.domain.web.file.exception.FileNotFoundException;
@@ -13,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.List;
 
 @Service
@@ -25,6 +27,8 @@ public class CreateAnimalKindService {
 
     @Transactional
     public void execute(AnimalKindRequest request) {
+        List<AnimalLegalStatus> animalLegalStatuses = findAnimalLegalStatuses(request.animalLegalDesignation());
+
         AnimalKind animalKind = AnimalKind.builder()
             .kindName(request.animalName())
             .engName(request.animalEngName())
@@ -37,8 +41,6 @@ public class CreateAnimalKindService {
 
         animalKindRepository.save(animalKind);
 
-        List<AnimalLegalStatus> animalLegalStatuses = animalLegalStatusRepository.findAllById(request.animalLegalDesignation());
-
         List<AnimalLegalDesignation> animalLegalDesignations = animalLegalStatuses.stream()
             .map(animalLegalStatus -> AnimalLegalDesignation.builder()
                 .animalKind(animalKind)
@@ -47,5 +49,15 @@ public class CreateAnimalKindService {
             .toList();
 
         animalLegalDesignationRepository.saveAll(animalLegalDesignations);
+    }
+
+    private List<AnimalLegalStatus> findAnimalLegalStatuses(List<Long> animalLegalStatusIds) {
+        List<AnimalLegalStatus> animalLegalStatuses = animalLegalStatusRepository.findAllById(animalLegalStatusIds);
+
+        if (animalLegalStatuses.size() != new HashSet<>(animalLegalStatusIds).size()) {
+            throw AnimalLegalStatusNotFoundException.EXCEPTION;
+        }
+
+        return animalLegalStatuses;
     }
 }
