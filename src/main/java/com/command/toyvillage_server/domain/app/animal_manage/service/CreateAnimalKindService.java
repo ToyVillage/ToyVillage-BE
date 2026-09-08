@@ -27,7 +27,7 @@ public class CreateAnimalKindService {
 
     @Transactional
     public void execute(AnimalKindRequest request) {
-        List<AnimalLegalStatus> animalLegalStatuses = animalLegalStatusRepository.findAllById(request.animalLegalDesignation());
+        List<AnimalLegalStatus> animalLegalStatuses = findAnimalLegalStatuses(request.animalLegalDesignation());
 
         AnimalKind animalKind = AnimalKind.builder()
             .kindName(request.animalName())
@@ -49,5 +49,15 @@ public class CreateAnimalKindService {
             .toList();
 
         animalLegalDesignationRepository.saveAll(animalLegalDesignations);
+    }
+
+    private List<AnimalLegalStatus> findAnimalLegalStatuses(List<Long> animalLegalStatusIds) {
+        List<AnimalLegalStatus> animalLegalStatuses = animalLegalStatusRepository.findAllById(animalLegalStatusIds);
+
+        if (animalLegalStatuses.size() != new HashSet<>(animalLegalStatusIds).size()) {
+            throw AnimalLegalStatusNotFoundException.EXCEPTION;
+        }
+
+        return animalLegalStatuses;
     }
 }
