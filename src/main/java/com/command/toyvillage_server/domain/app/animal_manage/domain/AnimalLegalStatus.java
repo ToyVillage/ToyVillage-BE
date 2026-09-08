@@ -12,6 +12,7 @@ import lombok.*;
 public class AnimalLegalStatus {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "animal_legal_status_id")
     private Long id;
 
     @Column(name = "kind", nullable = false)
