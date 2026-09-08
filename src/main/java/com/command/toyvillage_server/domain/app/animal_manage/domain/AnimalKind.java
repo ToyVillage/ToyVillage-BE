@@ -6,9 +6,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Getter
-@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Entity
 @Table(name = "tbl_animal_kind")
 public class AnimalKind {
@@ -35,6 +33,23 @@ public class AnimalKind {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "file_id", nullable = false)
     private File kindImage;
+
+    @Builder
+    private AnimalKind(
+        String kindName,
+        String engName,
+        String scientificName,
+        AnimalTaxonomic animalTaxonomic,
+        String detailKind,
+        File kindImage
+    ) {
+        this.kindName = kindName;
+        this.engName = engName;
+        this.scientificName = scientificName;
+        this.animalTaxonomic = animalTaxonomic;
+        this.detailKind = detailKind;
+        this.kindImage = kindImage;
+    }
 
     public void update(
         String kindName,
