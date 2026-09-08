@@ -12,6 +12,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Map;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class QueryAnimalKindListService {
@@ -28,10 +31,21 @@ public class QueryAnimalKindListService {
             animalKinds = animalKindRepository.findAllByAnimalTaxonomic(animalTaxonomic, pageable);
         }
 
-        Page<AnimalKindQueryListObjectResponse> responses = animalKinds.map(animalKind -> AnimalKindQueryListObjectResponse.of(
-            animalKind,
-            animalManageRepository.countByAnimalKindId(animalKind.getId())
-        ));
+        Map<Long, Long> animalCounts = animalKinds.isEmpty()
+            ? Map.of()
+            : animalManageRepository.countByAnimalKindIds(
+                animalKinds.stream().map(AnimalKind::getId).toList()
+            ).stream().collect(Collectors.toMap(
+                count -> (Long) count[0],
+                count -> (Long) count[1]
+            ));
+
+        Page<AnimalKindQueryListObjectResponse> responses = animalKinds.map(animalKind ->
+            AnimalKindQueryListObjectResponse.of(
+                animalKind,
+                animalCounts.getOrDefault(animalKind.getId(), 0L)
+            )
+        );
 
         return AnimalKindQueryListResponse.from(responses);
     }
