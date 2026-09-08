@@ -1,7 +1,7 @@
 package com.command.toyvillage_server.domain.app.reservation.domain.repository;
 
 import com.command.toyvillage_server.domain.app.reservation.domain.Reservation;
-import com.command.toyvillage_server.domain.app.reservation.domain.ReservationStatus;
+import com.command.toyvillage_server.domain.app.reservation.domain.enums.ReservationStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

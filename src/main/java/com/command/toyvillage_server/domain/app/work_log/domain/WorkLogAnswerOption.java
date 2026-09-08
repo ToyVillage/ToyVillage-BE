@@ -45,6 +45,9 @@ public class WorkLogAnswerOption {
 
         this.answer = answer;
         this.option = option;
-        this.etcText = option.isEtcOption() ? etcText : null;
+
+        if (option.isEtcOption()) {
+            this.etcText = etcText;
+        }
     }
 }

@@ -65,7 +65,7 @@ public class WorkLogEmployeeWriteService {
             request.sectionId(),
             request.questionId(),
             request.answerText(),
-            findFile(request.fileId())
+            findFile(request.fileKey())
         );
 
         request.options().forEach(option -> answer.selectOption(option.optionId(), option.etcText()));
@@ -73,12 +73,12 @@ public class WorkLogEmployeeWriteService {
         return answer;
     }
 
-    private File findFile(Long fileId) {
-        if (fileId == null) {
+    private File findFile(String fileKey) {
+        if (fileKey == null || fileKey.isBlank()) {
             return null;
         }
 
-        return fileRepository.findById(fileId)
+        return fileRepository.findByFileKey(fileKey)
             .orElseThrow(() -> FileNotFoundException.EXCEPTION);
     }
 }

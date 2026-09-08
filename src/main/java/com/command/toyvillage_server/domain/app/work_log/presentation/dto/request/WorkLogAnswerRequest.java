@@ -16,12 +16,16 @@ public record WorkLogAnswerRequest(
     @Size(max = 500, message = "답변은 500자 이하여야 합니다.")
     String answerText,
 
-    Long fileId,
+    String fileKey,
 
     @Valid
     List<WorkLogAnswerOptionRequest> options
 ) {
     public List<WorkLogAnswerOptionRequest> options() {
-        return options == null ? List.of() : options;
+        if (options == null) {
+            return List.of();
+        }
+
+        return options;
     }
 }

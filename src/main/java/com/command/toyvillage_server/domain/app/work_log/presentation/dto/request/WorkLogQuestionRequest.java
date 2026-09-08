@@ -22,6 +22,10 @@ public record WorkLogQuestionRequest(
     List<WorkLogQuestionOptionRequest> options
 ) {
     public List<WorkLogQuestionOptionRequest> options() {
-        return options == null ? List.of() : options;
+        if (options == null) {
+            return List.of();
+        }
+
+        return options;
     }
 }

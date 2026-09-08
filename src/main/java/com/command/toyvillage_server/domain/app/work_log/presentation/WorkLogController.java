@@ -45,8 +45,6 @@ public class WorkLogController {
     private final WorkLogQueryService workLogQueryService;
     private final WorkLogDeleteService workLogDeleteService;
 
-    // 업무일지 양식
-
     @PostMapping("/template")
     public ResponseEntity<MessageResponse> createWorkLogTemplate(
         @RequestBody @Valid WorkLogTemplateRequest request
@@ -82,8 +80,6 @@ public class WorkLogController {
 
         return MessageResponse.of("업무일지 양식 삭제 성공");
     }
-
-    // 업무일지
 
     @PostMapping("/{workLogTemplateId}")
     public ResponseEntity<MessageResponse> writeWorkLog(
