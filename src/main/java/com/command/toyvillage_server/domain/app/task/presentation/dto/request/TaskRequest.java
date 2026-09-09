@@ -16,6 +16,7 @@ public record TaskRequest(
         String title,
 
         @NotBlank(message = "업무지시 내용을 입력해주세요.")
+        @Size(max = 5000, message = "업무지시 내용은 5000자를 넘을 수 없습니다.")
         String content,
 
         @NotEmpty(message = "업무지시 담당자를 선택해주세요.")

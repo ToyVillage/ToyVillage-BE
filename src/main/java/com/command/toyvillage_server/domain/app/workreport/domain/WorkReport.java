@@ -36,10 +36,10 @@ public class WorkReport {
     @JoinColumn(name = "app_admin_id", nullable = false)
     private AppAdmin appAdmin;
 
-    @Column(name = "content",nullable = false,length = 1024)
+    @Column(name = "content", nullable = false, length = 2000)
     private String content;
 
-    @Column(name = "note")
+    @Column(name = "note", length = 2000)
     private String note;
 
     @OneToMany

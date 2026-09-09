@@ -28,8 +28,7 @@ public class Task {
     @Column(nullable = false, length = 100, name = "task_title")
     private String title;
 
-    @Lob
-    @Column(name = "task_content")
+    @Column(name = "task_content", columnDefinition = "TEXT")
     private String content;
 
     @ManyToMany(fetch = FetchType.LAZY)
