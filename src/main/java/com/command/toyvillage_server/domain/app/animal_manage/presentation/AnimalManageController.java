@@ -3,23 +3,31 @@ package com.command.toyvillage_server.domain.app.animal_manage.presentation;
 import com.command.toyvillage_server.domain.app.animal_manage.domain.enums.AnimalTaxonomic;
 import com.command.toyvillage_server.domain.app.animal_manage.presentation.dto.request.AnimalKindRequest;
 import com.command.toyvillage_server.domain.app.animal_manage.presentation.dto.request.AnimalManageRequest;
+import com.command.toyvillage_server.domain.app.animal_manage.presentation.dto.request.AnimalObservationRequest;
 import com.command.toyvillage_server.domain.app.animal_manage.presentation.dto.request.AnimalLegalStatusRequest;
 import com.command.toyvillage_server.domain.app.animal_manage.presentation.dto.response.AnimalKindQueryListResponse;
 import com.command.toyvillage_server.domain.app.animal_manage.presentation.dto.response.AnimalLegalStatusResponse;
 import com.command.toyvillage_server.domain.app.animal_manage.presentation.dto.response.AnimalKindQueryResponse;
 import com.command.toyvillage_server.domain.app.animal_manage.presentation.dto.response.AnimalManageQueryListObjectResponse;
 import com.command.toyvillage_server.domain.app.animal_manage.presentation.dto.response.AnimalManageQueryResponse;
+import com.command.toyvillage_server.domain.app.animal_manage.presentation.dto.response.AnimalObservationDetailResponse;
+import com.command.toyvillage_server.domain.app.animal_manage.presentation.dto.response.AnimalObservationListResponse;
 import com.command.toyvillage_server.domain.app.animal_manage.service.CreateAnimalKindService;
 import com.command.toyvillage_server.domain.app.animal_manage.service.CreateAnimalLegalStatusService;
 import com.command.toyvillage_server.domain.app.animal_manage.service.CreateAnimalManageService;
+import com.command.toyvillage_server.domain.app.animal_manage.service.CreateAnimalObservationService;
+import com.command.toyvillage_server.domain.app.animal_manage.service.DeleteAnimalObservationService;
 import com.command.toyvillage_server.domain.app.animal_manage.service.QueryAnimalLegalStatusListService;
 import com.command.toyvillage_server.domain.app.animal_manage.service.QueryAnimalKindListService;
 import com.command.toyvillage_server.domain.app.animal_manage.service.QueryAnimalKindService;
 import com.command.toyvillage_server.domain.app.animal_manage.service.QueryAnimalManageListService;
 import com.command.toyvillage_server.domain.app.animal_manage.service.QueryAnimalManageService;
+import com.command.toyvillage_server.domain.app.animal_manage.service.QueryAnimalObservationListService;
+import com.command.toyvillage_server.domain.app.animal_manage.service.QueryAnimalObservationService;
 import com.command.toyvillage_server.domain.app.animal_manage.service.UpdateAnimalKindService;
 import com.command.toyvillage_server.domain.app.animal_manage.service.UpdateAnimalLegalStatusService;
 import com.command.toyvillage_server.domain.app.animal_manage.service.UpdateAnimalManageService;
+import com.command.toyvillage_server.domain.app.animal_manage.service.UpdateAnimalObservationService;
 import com.command.toyvillage_server.global.common.response.MessageResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +39,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -48,6 +57,11 @@ public class AnimalManageController {
     private final CreateAnimalLegalStatusService createAnimalLegalStatusService;
     private final UpdateAnimalLegalStatusService updateAnimalLegalStatusService;
     private final QueryAnimalLegalStatusListService queryAnimalLegalStatusListService;
+    private final CreateAnimalObservationService createAnimalObservationService;
+    private final QueryAnimalObservationListService queryAnimalObservationListService;
+    private final QueryAnimalObservationService queryAnimalObservationService;
+    private final UpdateAnimalObservationService updateAnimalObservationService;
+    private final DeleteAnimalObservationService deleteAnimalObservationService;
 
     @PostMapping("/kind")
     public ResponseEntity<MessageResponse> createAnimalKind(
@@ -149,5 +163,58 @@ public class AnimalManageController {
         updateAnimalLegalStatusService.execute(animalLegalStatusId, request);
 
         return MessageResponse.of("법정지정분류 수정 성공");
+    }
+
+    @PostMapping("/{animalManageId}/observations")
+    public ResponseEntity<MessageResponse> createAnimalObservation(
+        @PathVariable Long animalManageId,
+        @RequestBody @Valid AnimalObservationRequest request
+    ) {
+        Long observationId = createAnimalObservationService.execute(animalManageId, request);
+
+        return ResponseEntity
+            .created(URI.create("/animal-manage/" + animalManageId + "/observations/" + observationId))
+            .body(MessageResponse.of("관찰 및 특이사항 생성 성공"));
+    }
+
+    @GetMapping("/{animalManageId}/observations")
+    public Page<AnimalObservationListResponse> getAnimalObservationList(
+        @PathVariable Long animalManageId,
+        @PageableDefault(
+            size = 10,
+            sort = "id",
+            direction = Sort.Direction.DESC
+        ) Pageable pageable
+    ) {
+        return queryAnimalObservationListService.execute(animalManageId, pageable);
+    }
+
+    @GetMapping("/{animalManageId}/observations/{observationId}")
+    public AnimalObservationDetailResponse getAnimalObservation(
+        @PathVariable Long animalManageId,
+        @PathVariable Long observationId
+    ) {
+        return queryAnimalObservationService.execute(animalManageId, observationId);
+    }
+
+    @PatchMapping("/{animalManageId}/observations/{observationId}")
+    public MessageResponse updateAnimalObservation(
+        @PathVariable Long animalManageId,
+        @PathVariable Long observationId,
+        @RequestBody @Valid AnimalObservationRequest request
+    ) {
+        updateAnimalObservationService.execute(animalManageId, observationId, request);
+
+        return MessageResponse.of("관찰 및 특이사항 수정 성공");
+    }
+
+    @DeleteMapping("/{animalManageId}/observations/{observationId}")
+    public MessageResponse deleteAnimalObservation(
+        @PathVariable Long animalManageId,
+        @PathVariable Long observationId
+    ) {
+        deleteAnimalObservationService.execute(animalManageId, observationId);
+
+        return MessageResponse.of("관찰 및 특이사항 삭제 성공");
     }
 }
