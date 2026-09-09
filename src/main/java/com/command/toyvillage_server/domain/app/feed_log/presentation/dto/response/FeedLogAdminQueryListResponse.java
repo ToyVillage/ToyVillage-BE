@@ -7,22 +7,26 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Builder
-public record FeedLogDetailsQueryResponse(
+public record FeedLogAdminQueryListResponse(
         Long feedLogId,
+        String name,
+        String animalKind,
+        String animalName,
         String feedType,
         Integer feedAmount,
         LocalDate feedDate,
-        LocalDateTime feedStartTime,
-        Integer significant
+        LocalDateTime feedStartTime
 ) {
-    public static FeedLogDetailsQueryResponse from(FeedLog feedLog) {
-        return FeedLogDetailsQueryResponse.builder()
+    public static FeedLogAdminQueryListResponse from(FeedLog feedLog) {
+        return FeedLogAdminQueryListResponse.builder()
                 .feedLogId(feedLog.getId())
+                .name(feedLog.getAppAdmin().getName())
+                .animalKind(feedLog.getAnimalManage().getAnimalKind().getKindName())
+                .animalName(feedLog.getAnimalManage().getAnimalName())
                 .feedType(feedLog.getFeedType())
                 .feedAmount(feedLog.getFeed_amount())
                 .feedDate(feedLog.getFeedDate())
                 .feedStartTime(feedLog.getFeedStartTime())
-                .significant(feedLog.getSignificant())
                 .build();
     }
 }

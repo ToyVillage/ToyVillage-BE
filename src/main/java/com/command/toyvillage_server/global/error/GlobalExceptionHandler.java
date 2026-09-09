@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
@@ -55,6 +56,13 @@ public class GlobalExceptionHandler {
         ErrorResponse response = ErrorResponse.of(errorCode, "요청 값의 형식이 올바르지 않습니다.");
         log.error("요청 값 변환중 에러: ", e);
 
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    public ResponseEntity<ErrorResponse> handleMissingRequestParameterException(MissingServletRequestParameterException e) {
+        ErrorResponse response = ErrorResponse.of(ErrorCode.BAD_REQUEST,
+                "필수 요청 파라미터가 누락되었습니다: " + e.getParameterName());
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
