@@ -112,10 +112,6 @@ public class Task {
         return visibilityOrDefault(visibility);
     }
 
-    public String getAssigneeName() {
-        return assignees.isEmpty() ? null : assignees.get(0).getName();
-    }
-
     public boolean isAssignee(Long appAdminId) {
         return assignees.stream()
                 .anyMatch(assignee -> assignee.getId().equals(appAdminId));
