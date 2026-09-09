@@ -14,6 +14,7 @@ import com.command.toyvillage_server.domain.app.workreport.presentation.dto.requ
 import com.command.toyvillage_server.domain.web.file.domain.File;
 import com.command.toyvillage_server.domain.web.file.service.FileFacade;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -55,6 +56,10 @@ public class WorkReportCreateService {
                 .files(files)
                 .build();
 
-        workReportRepository.save(workReport);
+        try {
+            workReportRepository.saveAndFlush(workReport);
+        } catch (DataIntegrityViolationException e) {
+            throw WorkReportAlreadyExistsException.EXCEPTION;
+        }
     }
 }
