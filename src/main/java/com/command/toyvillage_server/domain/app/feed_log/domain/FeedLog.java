@@ -1,6 +1,7 @@
 package com.command.toyvillage_server.domain.app.feed_log.domain;
 
 import com.command.toyvillage_server.domain.app.animal_manage.domain.AnimalManage;
+import com.command.toyvillage_server.domain.app.auth.admin.domain.AppAdmin;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -39,9 +40,15 @@ public class FeedLog {
     @Column(nullable = false , name = "significant")
     private Integer significant;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "writer_id")
+    private AppAdmin appAdmin;
+
+
     @Builder
-    public FeedLog(AnimalManage animalManage, LocalDate feedDate, LocalDateTime feedStartTime,
+    public FeedLog(AppAdmin appAdmin,AnimalManage animalManage, LocalDate feedDate, LocalDateTime feedStartTime,
                    String feedType, Integer feed_amount, Integer significant) {
+        this.appAdmin = appAdmin;
         this.animalManage = animalManage;
         this.feedDate = feedDate;
         this.feedStartTime = feedStartTime;
