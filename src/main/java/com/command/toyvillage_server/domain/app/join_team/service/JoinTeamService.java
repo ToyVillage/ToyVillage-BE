@@ -5,6 +5,7 @@ import com.command.toyvillage_server.domain.app.auth.admin.domain.repository.App
 import com.command.toyvillage_server.domain.app.auth.admin.exception.AppAdminNotFoundException;
 import com.command.toyvillage_server.domain.app.join_team.domain.JoinTeam;
 import com.command.toyvillage_server.domain.app.join_team.domain.repository.JoinTeamRepository;
+import com.command.toyvillage_server.domain.app.join_team.exception.JoinTeamTargetInvalidException;
 import com.command.toyvillage_server.domain.app.team.domain.Team;
 import com.command.toyvillage_server.domain.app.team.domain.repository.TeamRepository;
 import com.command.toyvillage_server.domain.app.team.exception.TeamNotFoundException;
@@ -23,6 +24,10 @@ public class JoinTeamService {
     public void execute(Long appAdminId, Long teamId) {
         AppAdmin appAdmin = appAdminRepository.findById(appAdminId)
                 .orElseThrow(() -> AppAdminNotFoundException.EXCEPTION);
+
+        if (appAdmin.isAppAdmin()) {
+            throw JoinTeamTargetInvalidException.EXCEPTION;
+        }
 
         Team team = teamRepository.findById(teamId)
                 .orElseThrow(() -> TeamNotFoundException.EXCEPTION);

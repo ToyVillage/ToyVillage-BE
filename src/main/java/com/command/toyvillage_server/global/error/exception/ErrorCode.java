@@ -89,6 +89,7 @@ public enum ErrorCode {
 
     // team
     TEAM_NOT_FOUND(404, "존재하지 않는 팀입니다."),
+    JOIN_TEAM_TARGET_INVALID(400, "팀에 배정할 수 없는 사용자입니다."),
 
     // work
     WORK_NOT_FOUND(404, "존재하지 않는 업무관리입니다."),
