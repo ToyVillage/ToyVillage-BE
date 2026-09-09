@@ -39,6 +39,7 @@ public record TaskListResponse(
             Long id,
             String title,
             List<AssigneeResponse> assignees,
+            int assigneeCount,
             TaskStatus status,
             TaskPriority priority,
             LocalDate finishDate
@@ -57,6 +58,7 @@ public record TaskListResponse(
                     .id(task.getId())
                     .title(task.getTitle())
                     .assignees(AssigneeResponse.listOf(task.getAssignees()))
+                    .assigneeCount(task.getAssignees().size())
                     .status(TaskStatus.of(task.getAssignees().size(), approved, task.getFinishDate(), today))
                     .priority(task.getPriority())
                     .finishDate(task.getFinishDate())

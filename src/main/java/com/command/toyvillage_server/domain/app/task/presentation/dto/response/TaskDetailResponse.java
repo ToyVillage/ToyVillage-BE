@@ -23,6 +23,7 @@ public record TaskDetailResponse(
         String title,
         String content,
         List<AssigneeResponse> assignees,
+        int assigneeCount,
         TaskStatus status,
         TaskPriority priority,
         TaskVisibility visibility,
@@ -48,6 +49,7 @@ public record TaskDetailResponse(
                 .title(task.getTitle())
                 .content(task.getContent())
                 .assignees(AssigneeResponse.listOf(task.getAssignees()))
+                .assigneeCount(task.getAssignees().size())
                 .status(TaskStatus.of(
                         task.getAssignees().size(),
                         countOf(reports, Status.APPROVED),
