@@ -4,12 +4,14 @@ import com.command.toyvillage_server.global.error.exception.ErrorCode;
 import com.command.toyvillage_server.global.error.exception.ToyVillageException;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.mapping.PropertyReferenceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 @Slf4j
 @RestControllerAdvice
@@ -43,6 +45,28 @@ public class GlobalExceptionHandler {
         ErrorCode errorCode = ErrorCode.BAD_REQUEST;
         ErrorResponse response = ErrorResponse.of(errorCode, e.getBindingResult().getAllErrors().get(0).getDefaultMessage());
         log.error("DTO 필드 검증중 에러: ", e);
+
+        return new ResponseEntity<>(response, HttpStatus.valueOf(errorCode.getStatusCode()));
+    }
+
+    // 요청 파라미터 타입 불일치 (예: 정의되지 않은 status 값)
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<ErrorResponse> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e) {
+
+        ErrorCode errorCode = ErrorCode.BAD_REQUEST;
+        ErrorResponse response = ErrorResponse.of(errorCode, "'" + e.getName() + "' 파라미터 값이 올바르지 않습니다.");
+        log.error("요청 파라미터 타입 오류: ", e);
+
+        return new ResponseEntity<>(response, HttpStatus.valueOf(errorCode.getStatusCode()));
+    }
+
+    // 존재하지 않는 정렬 조건
+    @ExceptionHandler(PropertyReferenceException.class)
+    public ResponseEntity<ErrorResponse> handlePropertyReferenceException(PropertyReferenceException e) {
+
+        ErrorCode errorCode = ErrorCode.BAD_REQUEST;
+        ErrorResponse response = ErrorResponse.of(errorCode, "정렬 조건이 올바르지 않습니다.");
+        log.error("정렬 조건 오류: ", e);
 
         return new ResponseEntity<>(response, HttpStatus.valueOf(errorCode.getStatusCode()));
     }
