@@ -1,7 +1,7 @@
 package com.command.toyvillage_server.domain.app.reservation.presentation;
 
-import com.command.toyvillage_server.domain.app.reservation.domain.ReservationSortType;
-import com.command.toyvillage_server.domain.app.reservation.domain.ReservationStatus;
+import com.command.toyvillage_server.domain.app.reservation.domain.enums.ReservationSortType;
+import com.command.toyvillage_server.domain.app.reservation.domain.enums.ReservationStatus;
 import com.command.toyvillage_server.domain.app.reservation.presentation.dto.request.ReservationRequest;
 import com.command.toyvillage_server.domain.app.reservation.presentation.dto.response.ReservationAdminQueryListResponse;
 import com.command.toyvillage_server.domain.app.reservation.presentation.dto.response.ReservationEmployeeAssignResponse;
@@ -24,7 +24,6 @@ import com.command.toyvillage_server.global.common.response.MessageResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -57,6 +56,44 @@ public class ReservationController {
         return reservationQueryListService.execute();
     }
 
+    @GetMapping
+    public ReservationAdminQueryListResponse getReservationList(
+        @RequestParam(required = false) ReservationStatus status,
+        @RequestParam(required = false) String title,
+        @RequestParam(required = false) ReservationSortType sort,
+        @PageableDefault(page = 0, size = 3) Pageable pageable
+    ) {
+        return reservationAdminQueryListService.execute(status, title, sort, pageable);
+    }
+
+    @GetMapping("/{id}")
+    public ReservationAdminQueryResponse getReservationDetail(@PathVariable Long id) {
+        return reservationAdminQueryService.execute(id);
+    }
+
+    @PostMapping("/permission/{reservationId}/{appAdminId}")
+    public void setReservationPermission(
+        @PathVariable Long reservationId,
+        @PathVariable Long appAdminId,
+        @RequestBody boolean reservationPermission
+    ) {
+        reservationAdminPermissionSettingService.execute(reservationId, appAdminId, reservationPermission);
+    }
+
+    @DeleteMapping("/permission/{reservationId}/{appAdminId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deletePermission(
+        @PathVariable Long reservationId,
+        @PathVariable Long appAdminId
+    ) {
+        reservationAdminPermissionDeleteService.execute(reservationId, appAdminId);
+    }
+
+    @GetMapping("/permission/{reservationId}")
+    public List<ReservationPermissionResponse> getPermissionList(@PathVariable Long reservationId) {
+        return reservationAdminPermissionQueryListService.execute(reservationId);
+    }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public MessageResponse createReservation(@RequestBody @Valid ReservationRequest request) {
@@ -82,50 +119,10 @@ public class ReservationController {
         return MessageResponse.of("단체예약 삭제가 완료되었습니다.");
     }
 
-    @GetMapping
-    public ReservationAdminQueryListResponse getReservationList(
-        @RequestParam(required = false) ReservationStatus status,
-        @RequestParam(required = false) String title,
-        @RequestParam(required = false) ReservationSortType sort,
-        @PageableDefault(page = 0, size = 3) Pageable pageable
+    @GetMapping("/assigned-employee/{reservationId}")
+    public ReservationEmployeeAssignResponse getAssignedEmployees(
+        @PathVariable Long reservationId
     ) {
-        return reservationAdminQueryListService.execute(status, title, sort, pageable);
-    }
-
-    @GetMapping("/{reservationId}/employee")
-    public ReservationEmployeeAssignResponse getAssignableEmployees(
-        @PathVariable Long reservationId,
-        @RequestParam(required = false) String name
-    ) {
-        return reservationAdminEmployeeQueryListService.execute(reservationId, name);
-    }
-
-    @GetMapping("/{id}")
-    public ReservationAdminQueryResponse getReservationDetail(@PathVariable Long id) {
-        return reservationAdminQueryService.execute(id);
-    }
-
-    @PostMapping("/permission/{reservationId}/{appAdminId}")
-    public void setReservationPermission(
-        @PathVariable("reservationId") Long reservationId,
-        @PathVariable("appAdminId") Long appAdminId,
-        @RequestBody boolean reservationPermission
-    ) {
-        reservationAdminPermissionSettingService.execute(reservationId, appAdminId, reservationPermission);
-    }
-
-    @GetMapping("/permission/{reservationId}")
-    public List<ReservationPermissionResponse> getPermissionList(@PathVariable("reservationId") Long reservationId) {
-        return reservationAdminPermissionQueryListService.execute(reservationId);
-    }
-
-    @DeleteMapping("/permission/{reservationId}/{appAdminId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public MessageResponse deletePermission(
-        @PathVariable Long reservationId,
-        @PathVariable Long appAdminId
-    ) {
-        reservationAdminPermissionDeleteService.execute(reservationId, appAdminId);
-        return MessageResponse.of("단체예약 삭제가 완료되었습니다.");
+        return reservationAdminEmployeeQueryListService.execute(reservationId);
     }
 }

@@ -1,6 +1,7 @@
 package com.command.toyvillage_server.global.security.auth;
 
 import com.command.toyvillage_server.domain.app.auth.admin.domain.AppAdmin;
+import com.command.toyvillage_server.domain.app.auth.admin.domain.AppAdminRole;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -47,5 +48,9 @@ public record AppAdminDetails(AppAdmin appAdmin) implements UserDetails {
 
     public Long getId() {
         return appAdmin.getId();
+    }
+
+    public boolean isAdmin() {
+        return appAdmin.getRole() == AppAdminRole.APP_ADMIN;
     }
 }

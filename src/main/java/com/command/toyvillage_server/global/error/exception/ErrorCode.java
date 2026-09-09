@@ -78,6 +78,20 @@ public enum ErrorCode {
 
     //document
     DOCUMENT_NOT_FOUND(404, "존재하지 않는 자료입니다."),
+
+    // work log
+    WORK_LOG_NOT_FOUND(404, "존재하지 않는 업무일지입니다."),
+    WORK_LOG_TEMPLATE_NOT_FOUND(404, "존재하지 않는 업무일지 입니다."),
+    WORK_LOG_TEMPLATE_EXIST(409, "이미 존재하는 업무일지 템플릿 제목입니다."),
+    WORK_LOG_SECTION_NOT_FOUND(404, "존재하지 않는 업무일지 구역입니다."),
+    WORK_LOG_QUESTION_NOT_FOUND(404, "존재하지 않는 업무일지 질문입니다."),
+    WORK_LOG_ANSWER_REQUIRED(400, "필수 질문에 답변하지 않았습니다."),
+    WORK_LOG_OPTION_REQUIRED(400, "해당 질문 타입은 보기를 하나 이상 등록해야 합니다."),
+    WORK_LOG_FORBIDDEN(403, "본인이 작성한 업무일지만 접근할 수 있습니다."),
+    WORK_LOG_QUESTION_OPTION_NOT_FOUND(404, "존재하지 않는 업무일지 보기입니다."),
+    WORK_LOG_SINGLE_OPTION_ONLY(400, "이 질문은 보기를 하나만 선택할 수 있습니다."),
+    WORK_LOG_ETC_ANSWER_REQUIRED(400, "기타를 선택한 경우 내용을 직접 입력해야 합니다."),
+    WORK_LOG_ETC_OPTION_DUPLICATED(400, "기타 보기는 질문당 하나만 등록할 수 있습니다."),
   
     // close day
     CLOSE_DAY_NOT_FOUND(404, "존재하지 않는 휴관일입니다."),
@@ -99,7 +113,12 @@ public enum ErrorCode {
 
     // task
     TASK_NOT_FOUND(404, "존재하지 않는 업무지시입니다."),
-    TASK_TARGET_INVALID(400, "업무지시 대상이 올바르지 않습니다.");
+    TASK_TARGET_INVALID(400, "업무지시 대상이 올바르지 않습니다."),
+
+    // animal management
+    ANIMAL_KIND_NOT_FOUND(404, "존재하지 않는 종입니다."),
+    ANIMAL_LEGAL_STATUS_NOT_FOUND(404, "존재하지 않는 법정지정분류입니다."),
+    ANIMAL_MANAGE_NOT_FOUND(404, "존재하지 않는 개체입니다.");
 
     private final int statusCode;
     private final String errorMessage;

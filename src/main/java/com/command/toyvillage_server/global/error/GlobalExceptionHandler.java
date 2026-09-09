@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.mapping.PropertyReferenceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -49,15 +50,13 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.valueOf(errorCode.getStatusCode()));
     }
 
-    // 요청 파라미터 타입 불일치 (예: 정의되지 않은 status 값)
-    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-    public ResponseEntity<ErrorResponse> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e) {
-
+    @ExceptionHandler({HttpMessageNotReadableException.class, MethodArgumentTypeMismatchException.class})
+    public ResponseEntity<ErrorResponse> handleInvalidRequestValueException(Exception e) {
         ErrorCode errorCode = ErrorCode.BAD_REQUEST;
-        ErrorResponse response = ErrorResponse.of(errorCode, "'" + e.getName() + "' 파라미터 값이 올바르지 않습니다.");
-        log.error("요청 파라미터 타입 오류: ", e);
+        ErrorResponse response = ErrorResponse.of(errorCode, "요청 값의 형식이 올바르지 않습니다.");
+        log.error("요청 값 변환중 에러: ", e);
 
-        return new ResponseEntity<>(response, HttpStatus.valueOf(errorCode.getStatusCode()));
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
     // 존재하지 않는 정렬 조건
