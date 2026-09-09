@@ -62,13 +62,18 @@ public class WorkReportController {
     }
 
     @PutMapping("/{id}")
-    public void updateWorkReport(@PathVariable("id") Long workReportId, @Valid @RequestBody WorkReportRequest workReportRequest) {
+    public MessageResponse updateWorkReport(
+            @PathVariable("id") Long workReportId,
+            @Valid @RequestBody WorkReportRequest workReportRequest
+    ) {
         workReportUpdateService.execute(workReportId, workReportRequest);
+        return MessageResponse.of("업무 보고가 수정되었습니다.");
     }
 
     @DeleteMapping("/{id}")
-    public void deleteWorkReport(@PathVariable("id") Long workReportId) {
+    public MessageResponse deleteWorkReport(@PathVariable("id") Long workReportId) {
         workReportDeleteService.execute(workReportId);
+        return MessageResponse.of("업무 보고가 삭제되었습니다.");
     }
 
     @GetMapping("/{id}")
