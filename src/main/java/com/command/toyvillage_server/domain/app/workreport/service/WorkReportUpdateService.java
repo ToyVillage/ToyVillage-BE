@@ -1,12 +1,13 @@
 package com.command.toyvillage_server.domain.app.workreport.service;
 
+import com.command.toyvillage_server.domain.app.auth.admin.facade.UserFacade;
 import com.command.toyvillage_server.domain.app.workreport.domain.WorkReport;
 import com.command.toyvillage_server.domain.app.workreport.domain.repository.WorkReportRepository;
+import com.command.toyvillage_server.domain.app.workreport.exception.WorkAlreadyApprovedException;
 import com.command.toyvillage_server.domain.app.workreport.exception.WorkNotFoundException;
 import com.command.toyvillage_server.domain.app.workreport.presentation.dto.request.WorkReportRequest;
 import com.command.toyvillage_server.domain.web.file.domain.File;
-import com.command.toyvillage_server.domain.web.file.domain.repository.FileRepository;
-import com.command.toyvillage_server.domain.web.file.exception.FileNotFoundException;
+import com.command.toyvillage_server.domain.web.file.service.FileFacade;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,22 +18,26 @@ import java.util.List;
 @RequiredArgsConstructor
 public class WorkReportUpdateService {
     private final WorkReportRepository workReportRepository;
-    private final FileRepository fileRepository;
+    private final FileFacade fileFacade;
+    private final UserFacade userFacade;
 
     @Transactional
-    public void execute(Long id,WorkReportRequest workReportRequest) {
-        WorkReport workReport = workReportRepository.findById(id)
+    public void execute(Long workReportId, WorkReportRequest workReportRequest) {
+        WorkReport workReport = workReportRepository.findById(workReportId)
                 .orElseThrow(() -> WorkNotFoundException.EXCEPTION);
 
-        List<File> files = null;
-        if (workReportRequest.fileKey() != null) {
-            List<String> fileKeys = workReportRequest.fileKey();
-            files = fileRepository.findAllByFileKeyIn(fileKeys);
-            if (files.size() != fileKeys.size())
-                throw FileNotFoundException.EXCEPTION;
+        if (!workReport.isOwnedBy(userFacade.getCurrentUserId())) {
+            throw WorkNotFoundException.EXCEPTION;
         }
 
-        workReport.update(workReportRequest.content(),workReportRequest.note(),files);
-        workReportRepository.save(workReport);
+        if (workReport.isApproved()) {
+            throw WorkAlreadyApprovedException.EXCEPTION;
+        }
+
+        List<File> files = workReportRequest.fileKey() == null
+                ? null
+                : fileFacade.findAllByKeys(workReportRequest.fileKey());
+
+        workReport.update(workReportRequest.content(), workReportRequest.note(), files);
     }
 }

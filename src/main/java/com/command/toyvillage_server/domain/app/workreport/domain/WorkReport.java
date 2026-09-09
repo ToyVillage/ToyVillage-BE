@@ -75,6 +75,14 @@ public class WorkReport {
         }
     }
 
+    public boolean isOwnedBy(Long appAdminId) {
+        return appAdmin.getId().equals(appAdminId);
+    }
+
+    public boolean isApproved() {
+        return status == Status.APPROVED;
+    }
+
     public void approve(){
         this.status = Status.APPROVED;
     }
