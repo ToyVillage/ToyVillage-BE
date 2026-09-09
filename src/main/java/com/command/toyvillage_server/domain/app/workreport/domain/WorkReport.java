@@ -73,6 +73,8 @@ public class WorkReport {
             this.files.clear();
             this.files.addAll(files);
         }
+        this.status = Status.PENDING;
+        this.rejectionReason = null;
     }
 
     public boolean isOwnedBy(Long appAdminId) {
