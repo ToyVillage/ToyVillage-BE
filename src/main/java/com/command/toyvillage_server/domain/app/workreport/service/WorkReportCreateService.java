@@ -33,7 +33,7 @@ public class WorkReportCreateService {
     private final UserFacade userFacade;
 
     @Transactional
-    public void execute(Long taskId, WorkReportRequest workReportRequest) {
+    public Long execute(Long taskId, WorkReportRequest workReportRequest) {
         Task task = taskRepository.findById(taskId)
                 .orElseThrow(() -> WorkNotFoundException.EXCEPTION);
 
@@ -60,7 +60,7 @@ public class WorkReportCreateService {
                 .build();
 
         try {
-            workReportRepository.saveAndFlush(workReport);
+            return workReportRepository.saveAndFlush(workReport).getId();
         } catch (DataIntegrityViolationException e) {
             if (isDuplicateReport(e)) {
                 throw WorkReportAlreadyExistsException.EXCEPTION;

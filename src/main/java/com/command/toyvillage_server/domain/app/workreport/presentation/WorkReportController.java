@@ -17,10 +17,13 @@ import com.command.toyvillage_server.domain.app.workreport.service.WorkReportDet
 import com.command.toyvillage_server.global.common.response.MessageResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
+
+import java.net.URI;
 
 
 @RestController
@@ -38,8 +41,13 @@ public class WorkReportController {
     private final WorkReportDetailQueryService workReportDetailQueryService;
 
     @PostMapping("/{id}")
-    public void createWorkReport(@PathVariable("id") Long taskId, @Valid @RequestBody WorkReportRequest workReportRequest) {
-        workReportCreateService.execute(taskId, workReportRequest);
+    public ResponseEntity<MessageResponse> createWorkReport(
+            @PathVariable("id") Long taskId,
+            @Valid @RequestBody WorkReportRequest workReportRequest
+    ) {
+        Long workReportId = workReportCreateService.execute(taskId, workReportRequest);
+        return ResponseEntity.created(URI.create("/work-report/detail/" + workReportId))
+                .body(MessageResponse.of("업무 보고가 등록되었습니다."));
     }
 
     @PatchMapping("/approve/{id}")
