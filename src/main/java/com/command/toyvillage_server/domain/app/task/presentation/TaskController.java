@@ -49,7 +49,7 @@ public class TaskController {
     @GetMapping
     public TaskListResponse getList(
             @RequestParam(required = false) TaskStatus status,
-            @PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.DESC)
+            @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC)
             Pageable pageable
     ) {
         return queryTaskListService.execute(status, pageable);
@@ -57,7 +57,7 @@ public class TaskController {
 
     @GetMapping("/my")
     public TaskListResponse getMyList(
-            @PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.DESC)
+            @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC)
             Pageable pageable
     ) {
         return queryMyTaskListService.execute(pageable);

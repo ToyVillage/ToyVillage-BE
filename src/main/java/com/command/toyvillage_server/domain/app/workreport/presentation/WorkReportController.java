@@ -75,7 +75,7 @@ public class WorkReportController {
     @GetMapping
     public WorkReportListResponse getWorkReportDetails(
             @RequestParam(required = false) Status status,
-            @PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.DESC)
+            @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC)
             Pageable pageable
     ) {
         return workReportAllQueryService.execute(status, pageable);
