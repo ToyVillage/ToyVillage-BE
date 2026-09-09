@@ -5,13 +5,13 @@ import lombok.Builder;
 
 @Builder
 public record FeedLogMyQueryResponse(
-        Long id,
+        Long feedId,
         String animalKind,
         String animalName
 ) {
     public static FeedLogMyQueryResponse from(FeedLog feedLog) {
         return FeedLogMyQueryResponse.builder()
-                .id(feedLog.getId())
+                .feedId(feedLog.getId())
                 .animalKind(feedLog.getAnimalManage().getAnimalKind().getKindName())
                 .animalName(feedLog.getAnimalManage().getAnimalName())
                 .build();
