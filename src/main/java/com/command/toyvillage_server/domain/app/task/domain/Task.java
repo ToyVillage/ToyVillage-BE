@@ -33,6 +33,7 @@ public class Task {
     private String content;
 
     @ManyToMany(fetch = FetchType.LAZY)
+    @OrderBy("id")
     @JoinTable(
             name = "tbl_task_assignee",
             joinColumns = @JoinColumn(name = "task_id", nullable = false),

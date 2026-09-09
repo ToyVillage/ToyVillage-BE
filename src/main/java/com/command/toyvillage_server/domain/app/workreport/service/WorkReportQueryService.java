@@ -7,6 +7,7 @@ import com.command.toyvillage_server.domain.app.workreport.exception.WorkNotFoun
 import com.command.toyvillage_server.domain.app.workreport.presentation.dto.response.WorkReportResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -14,6 +15,7 @@ public class WorkReportQueryService {
     private final WorkReportRepository workReportRepository;
     private final UserFacade userFacade;
 
+    @Transactional(readOnly = true)
     public WorkReportResponse execute(Long taskId) {
         Long currentUserId = userFacade.getCurrentUserId();
 
