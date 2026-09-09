@@ -44,7 +44,7 @@ public class QueryTaskListService {
 
         return switch (status) {
             case COMPLETED -> taskRepository.findAllCompleted(pageable);
-            case IN_PROGRESS -> taskRepository.findAllInProgress(pageable);
+            case IN_PROGRESS -> taskRepository.findAllInProgress(today, pageable);
             case EXPIRED -> taskRepository.findAllExpired(today, pageable);
         };
     }

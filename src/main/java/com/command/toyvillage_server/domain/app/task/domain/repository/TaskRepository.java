@@ -40,8 +40,12 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
                   and w.status = com.command.toyvillage_server.domain.app.workreport.domain.Status.APPROVED
                   and w.appAdmin member of t.assignees
             )
+              and t.finishDate >= :today
             """)
-    Page<Task> findAllInProgress(Pageable pageable);
+    Page<Task> findAllInProgress(
+            @Param("today") LocalDate today,
+            Pageable pageable
+    );
 
     @Query("""
             select t from Task t
