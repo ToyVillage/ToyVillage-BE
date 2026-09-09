@@ -75,6 +75,6 @@ public class WorkReportCreateService {
         }
 
         String constraintName = constraintViolation.getConstraintName();
-        return constraintName == null || constraintName.toLowerCase().contains(DUPLICATE_CONSTRAINT);
+        return constraintName != null && constraintName.toLowerCase().contains(DUPLICATE_CONSTRAINT);
     }
 }

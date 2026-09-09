@@ -37,6 +37,30 @@ JOIN tbl_app_admin a ON a.role = 'EMPLOYEE'
 WHERE t.assignee_type = 'ALL';
 
 -- ---------------------------------------------------------------------------
+-- 2-4. 담당자를 한 명도 이관하지 못한 업무지시가 있으면 중단한다.
+--      팀에 직원이 없거나(TEAM) 직원 계정이 하나도 없는 경우(ALL) 조인 결과가 비는데,
+--      그대로 진행하면 5번에서 레거시 컬럼을 지우면서 배정 정보가 복구 불가능하게 사라진다.
+--      아래 쿼리로 대상을 확인하고 담당자를 지정하거나 업무지시를 정리한 뒤 다시 실행한다.
+--
+--      SELECT t.task_id, t.task_title, t.assignee_type, t.assignee_id, t.assignee_team_id
+--      FROM tbl_task t
+--      LEFT JOIN tbl_task_assignee ta ON ta.task_id = t.task_id
+--      WHERE ta.task_id IS NULL;
+-- ---------------------------------------------------------------------------
+DROP PROCEDURE IF EXISTS tv_migration_abort;
+CREATE PROCEDURE tv_migration_abort()
+    SIGNAL SQLSTATE '45000'
+    SET MESSAGE_TEXT = '담당자를 이관하지 못한 업무지시가 있어 중단했습니다. 스크립트 2-4 주석의 쿼리로 대상을 확인하세요.';
+
+SET @orphan = (SELECT COUNT(*) FROM tbl_task t
+    LEFT JOIN tbl_task_assignee ta ON ta.task_id = t.task_id
+    WHERE ta.task_id IS NULL);
+SET @sql = IF(@orphan > 0, 'CALL tv_migration_abort()', 'DO 0');
+PREPARE st FROM @sql; EXECUTE st; DEALLOCATE PREPARE st;
+
+DROP PROCEDURE IF EXISTS tv_migration_abort;
+
+-- ---------------------------------------------------------------------------
 -- 3. 업무보고: 업무지시당 1건 -> 담당자별 1건
 -- ---------------------------------------------------------------------------
 -- 3-1. 작성자 컬럼 신설 (없을 때만)
