@@ -2,6 +2,8 @@ package com.command.toyvillage_server.domain.app.workreport.domain;
 
 import com.command.toyvillage_server.domain.app.auth.admin.domain.AppAdmin;
 import com.command.toyvillage_server.domain.app.task.domain.Task;
+import com.command.toyvillage_server.domain.app.workreport.exception.WorkAlreadyApprovedException;
+import com.command.toyvillage_server.domain.app.workreport.exception.WorkNotFoundException;
 import com.command.toyvillage_server.domain.web.file.domain.File;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -77,12 +79,14 @@ public class WorkReport {
         this.rejectionReason = null;
     }
 
-    public boolean isOwnedBy(Long appAdminId) {
-        return appAdmin.getId().equals(appAdminId);
-    }
+    public void validateEditableBy(Long appAdminId) {
+        if (!appAdmin.getId().equals(appAdminId)) {
+            throw WorkNotFoundException.EXCEPTION;
+        }
 
-    public boolean isApproved() {
-        return status == Status.APPROVED;
+        if (status == Status.APPROVED) {
+            throw WorkAlreadyApprovedException.EXCEPTION;
+        }
     }
 
     public void approve(){

@@ -50,12 +50,10 @@ public class UpdateTaskService {
                 .map(AppAdmin::getId)
                 .collect(Collectors.toSet());
 
-        List<WorkReport> removed = workReportRepository.findAllByTask_Id(taskId).stream()
+        List<WorkReport> removedAssigneeReports = workReportRepository.findAllByTask_Id(taskId).stream()
                 .filter(workReport -> !assigneeIds.contains(workReport.getAppAdmin().getId()))
                 .toList();
 
-        if (!removed.isEmpty()) {
-            workReportRepository.deleteAll(removed);
-        }
+        workReportRepository.deleteAll(removedAssigneeReports);
     }
 }

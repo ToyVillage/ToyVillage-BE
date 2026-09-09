@@ -80,7 +80,7 @@ public class Task {
         this.assignees = new ArrayList<>(assignees);
         this.finishDate = finishDate;
         this.priority = priority;
-        this.visibility = defaultIfNull(visibility);
+        this.visibility = visibilityOrDefault(visibility);
         this.files = files == null ? new ArrayList<>() : new ArrayList<>(files);
     }
 
@@ -101,7 +101,7 @@ public class Task {
         this.assignees.addAll(assignees);
         this.finishDate = finishDate;
         this.priority = priority;
-        this.visibility = defaultIfNull(visibility);
+        this.visibility = visibilityOrDefault(visibility);
         if (files != null) {
             this.files.clear();
             this.files.addAll(files);
@@ -109,7 +109,7 @@ public class Task {
     }
 
     public TaskVisibility getVisibility() {
-        return defaultIfNull(visibility);
+        return visibilityOrDefault(visibility);
     }
 
     public String getAssigneeName() {
@@ -121,7 +121,7 @@ public class Task {
                 .anyMatch(assignee -> assignee.getId().equals(appAdminId));
     }
 
-    private static TaskVisibility defaultIfNull(TaskVisibility visibility) {
+    private static TaskVisibility visibilityOrDefault(TaskVisibility visibility) {
         return visibility == null ? TaskVisibility.ALL : visibility;
     }
 
