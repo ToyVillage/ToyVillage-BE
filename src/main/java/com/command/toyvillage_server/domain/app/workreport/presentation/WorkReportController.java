@@ -3,7 +3,7 @@ package com.command.toyvillage_server.domain.app.workreport.presentation;
 import com.command.toyvillage_server.domain.app.workreport.domain.Status;
 import com.command.toyvillage_server.domain.app.workreport.presentation.dto.request.WorkRejectRequest;
 import com.command.toyvillage_server.domain.app.workreport.presentation.dto.request.WorkReportRequest;
-import com.command.toyvillage_server.domain.app.workreport.presentation.dto.response.WorkReportAllResponse;
+import com.command.toyvillage_server.domain.app.workreport.presentation.dto.response.WorkReportListResponse;
 import com.command.toyvillage_server.domain.app.workreport.presentation.dto.response.WorkReportDetailResponse;
 import com.command.toyvillage_server.domain.app.workreport.presentation.dto.response.WorkReportResponse;
 import com.command.toyvillage_server.domain.app.workreport.service.WorkApproveService;
@@ -17,9 +17,11 @@ import com.command.toyvillage_server.domain.app.workreport.service.WorkReportDet
 import com.command.toyvillage_server.global.common.response.MessageResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -71,7 +73,11 @@ public class WorkReportController {
         return workReportDetailQueryService.execute(workReportId);
     }
     @GetMapping
-    public List<WorkReportAllResponse> getWorkReportDetails(@RequestParam(required = false)Status status) {
-        return workReportAllQueryService.execute(status);
+    public WorkReportListResponse getWorkReportDetails(
+            @RequestParam(required = false) Status status,
+            @PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.DESC)
+            Pageable pageable
+    ) {
+        return workReportAllQueryService.execute(status, pageable);
     }
 }
