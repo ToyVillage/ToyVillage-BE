@@ -115,16 +115,13 @@ SET @sql = (SELECT IF(COUNT(*) = 0,
 PREPARE st FROM @sql; EXECUTE st; DEALLOCATE PREPARE st;
 
 -- ---------------------------------------------------------------------------
--- 4. 업무지시 공개 범위 (기존 행은 전체 공개로 간주)
+-- 4. 이전 빌드에서 만들어졌을 수 있는 공개 범위 컬럼 제거
+--    (기능이 폐기되어 더 이상 사용하지 않는다. develop 스키마에는 원래 없다.)
 -- ---------------------------------------------------------------------------
-SET @sql = (SELECT IF(COUNT(*) = 0,
-    'ALTER TABLE tbl_task ADD COLUMN visibility VARCHAR(20) NULL',
-    'DO 0')
+SET @sql = (SELECT IF(COUNT(*) = 1, 'ALTER TABLE tbl_task DROP COLUMN visibility', 'DO 0')
     FROM information_schema.columns
     WHERE table_schema = DATABASE() AND table_name = 'tbl_task' AND column_name = 'visibility');
 PREPARE st FROM @sql; EXECUTE st; DEALLOCATE PREPARE st;
-
-UPDATE tbl_task SET visibility = 'ALL' WHERE visibility IS NULL;
 
 -- ---------------------------------------------------------------------------
 -- 5. 단일 담당자 컬럼 제거

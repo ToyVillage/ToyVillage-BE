@@ -1,7 +1,6 @@
 package com.command.toyvillage_server.domain.app.task.presentation.dto.request;
 
 import com.command.toyvillage_server.domain.app.task.domain.TaskPriority;
-import com.command.toyvillage_server.domain.app.task.domain.TaskVisibility;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -27,8 +26,6 @@ public record TaskRequest(
 
         @NotNull(message = "업무지시 우선순위를 선택해주세요.")
         TaskPriority priority,
-
-        TaskVisibility visibility,
 
         List<String> files
 ) {

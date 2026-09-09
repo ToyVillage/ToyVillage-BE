@@ -2,7 +2,6 @@ package com.command.toyvillage_server.domain.app.workreport.presentation.dto.res
 
 import com.command.toyvillage_server.domain.app.task.domain.Task;
 import com.command.toyvillage_server.domain.app.task.domain.TaskPriority;
-import com.command.toyvillage_server.domain.app.task.domain.TaskVisibility;
 import com.command.toyvillage_server.domain.app.workreport.domain.Status;
 import com.command.toyvillage_server.domain.app.workreport.domain.WorkReport;
 import com.command.toyvillage_server.domain.web.file.presentation.dto.response.FileResponse;
@@ -23,7 +22,6 @@ public record WorkReportDetailResponse(
         Status status,
         String rejectionReason,
         TaskPriority priority,
-        TaskVisibility visibility,
         LocalDate finishDate
 ) {
     public static WorkReportDetailResponse from(WorkReport workReport) {
@@ -44,7 +42,6 @@ public record WorkReportDetailResponse(
                 .status(workReport.getStatus())
                 .rejectionReason(workReport.getRejectionReason())
                 .priority(task.getPriority())
-                .visibility(task.getVisibility())
                 .finishDate(task.getFinishDate())
                 .build();
     }
