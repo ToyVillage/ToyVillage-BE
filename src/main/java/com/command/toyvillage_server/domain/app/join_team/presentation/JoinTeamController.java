@@ -26,7 +26,7 @@ public class JoinTeamController {
         joinTeamService.execute(appAdminId, teamId);
 
         return ResponseEntity.ok(
-                MessageResponse.of("앱 관리자가 팀에 배정되었습니다.")
+                MessageResponse.of("유저가 팀에 배정되었습니다.")
         );
     }
 
