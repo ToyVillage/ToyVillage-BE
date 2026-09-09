@@ -48,6 +48,10 @@ public class Task {
     @Column(nullable = false)
     private TaskPriority priority;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "visibility", length = 20)
+    private TaskVisibility visibility;
+
     @CreatedDate
     @Column(nullable = false, name = "created_at")
     private LocalDateTime createdAt;
@@ -67,6 +71,7 @@ public class Task {
             List<AppAdmin> assignees,
             LocalDate finishDate,
             TaskPriority priority,
+            TaskVisibility visibility,
             List<File> files
     ) {
         validateAssignees(assignees);
@@ -76,6 +81,7 @@ public class Task {
         this.assignees = new ArrayList<>(assignees);
         this.finishDate = finishDate;
         this.priority = priority;
+        this.visibility = defaultIfNull(visibility);
         this.files = files == null ? new ArrayList<>() : new ArrayList<>(files);
     }
 
@@ -85,6 +91,7 @@ public class Task {
             List<AppAdmin> assignees,
             LocalDate finishDate,
             TaskPriority priority,
+            TaskVisibility visibility,
             List<File> files
     ) {
         validateAssignees(assignees);
@@ -95,10 +102,15 @@ public class Task {
         this.assignees.addAll(assignees);
         this.finishDate = finishDate;
         this.priority = priority;
+        this.visibility = defaultIfNull(visibility);
         if (files != null) {
             this.files.clear();
             this.files.addAll(files);
         }
+    }
+
+    public TaskVisibility getVisibility() {
+        return defaultIfNull(visibility);
     }
 
     public String getAssigneeName() {
@@ -108,6 +120,10 @@ public class Task {
     public boolean isAssignee(Long appAdminId) {
         return assignees.stream()
                 .anyMatch(assignee -> assignee.getId().equals(appAdminId));
+    }
+
+    private static TaskVisibility defaultIfNull(TaskVisibility visibility) {
+        return visibility == null ? TaskVisibility.ALL : visibility;
     }
 
     private static void validateAssignees(List<AppAdmin> assignees) {

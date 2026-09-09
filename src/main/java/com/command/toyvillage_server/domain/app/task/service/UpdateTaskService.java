@@ -38,6 +38,7 @@ public class UpdateTaskService {
                 assignees,
                 request.finishDate(),
                 request.priority(),
+                request.visibility(),
                 files
         );
 

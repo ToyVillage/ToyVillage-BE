@@ -29,6 +29,7 @@ public class CreateTaskService {
                 .assignees(assignees)
                 .finishDate(request.finishDate())
                 .priority(request.priority())
+                .visibility(request.visibility())
                 .files(files)
                 .build();
 

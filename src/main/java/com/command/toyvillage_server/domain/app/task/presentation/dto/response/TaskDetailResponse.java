@@ -4,6 +4,7 @@ import com.command.toyvillage_server.domain.app.auth.admin.domain.AppAdmin;
 import com.command.toyvillage_server.domain.app.task.domain.Task;
 import com.command.toyvillage_server.domain.app.task.domain.TaskPriority;
 import com.command.toyvillage_server.domain.app.task.domain.TaskStatus;
+import com.command.toyvillage_server.domain.app.task.domain.TaskVisibility;
 import com.command.toyvillage_server.domain.app.workreport.domain.Status;
 import com.command.toyvillage_server.domain.app.workreport.domain.WorkReport;
 import com.command.toyvillage_server.domain.web.file.presentation.dto.response.FileResponse;
@@ -25,6 +26,7 @@ public record TaskDetailResponse(
         int assigneeCount,
         TaskStatus status,
         TaskPriority priority,
+        TaskVisibility visibility,
         LocalDate finishDate,
         LocalDateTime createdAt,
         List<FileResponse> files,
@@ -55,6 +57,7 @@ public record TaskDetailResponse(
                         today
                 ))
                 .priority(task.getPriority())
+                .visibility(task.getVisibility())
                 .finishDate(task.getFinishDate())
                 .createdAt(task.getCreatedAt())
                 .files(task.getFiles().stream().map(FileResponse::from).toList())
