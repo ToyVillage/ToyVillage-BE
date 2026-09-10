@@ -38,7 +38,7 @@ public class FeedLog {
     private Integer feed_amount;
 
     @Column(nullable = false , name = "significant")
-    private Integer significant;
+    private String significant;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "writer_id")
@@ -47,7 +47,7 @@ public class FeedLog {
 
     @Builder
     public FeedLog(AppAdmin appAdmin,AnimalManage animalManage, LocalDate feedDate, LocalDateTime feedStartTime,
-                   String feedType, Integer feed_amount, Integer significant) {
+                   String feedType, Integer feed_amount, String significant) {
         this.appAdmin = appAdmin;
         this.animalManage = animalManage;
         this.feedDate = feedDate;
@@ -58,7 +58,7 @@ public class FeedLog {
     }
 
     public void update(LocalDate feedDate, LocalDateTime feedStartTime,
-                       String feedType, Integer feed_amount, Integer significant) {
+                       String feedType, Integer feed_amount, String significant) {
         this.feedDate = feedDate;
         this.feedStartTime = feedStartTime;
         this.feedType = feedType;
