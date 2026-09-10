@@ -33,10 +33,9 @@ public class FeedLogCreateService {
         FeedLog feedLog = FeedLog.builder()
                 .appAdmin(writer)
                 .animalManage(animalManage)
-                .feedDate(feedLogRequest.feedDate())
-                .feedStartTime(feedLogRequest.feedStartTime())
+                .feedDateTime(feedLogRequest.feedDateTime())
                 .feedType(feedLogRequest.feedType())
-                .feed_amount(feedLogRequest.feed_amount())
+                .feed_amount(feedLogRequest.feedAmount())
                 .significant(feedLogRequest.significant())
                 .build();
 

@@ -23,7 +23,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -40,7 +39,7 @@ public class FeedLogController {
 
     //admin
     @GetMapping("/admin")
-    public List<FeedLogAdminQueryListResponse> getFeedLogList(
+    public FeedLogAdminQueryListResponse getFeedLogList(
             @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date
     ) {
         return feedLogAdminQueryListService.execute(date);
@@ -54,14 +53,14 @@ public class FeedLogController {
     }
 
     @GetMapping("/admin/history/{animalManageId}")
-    public List<FeedLogAdminSalaryHistoryListQueryResponse> getAdminFeedLogHistory(
+    public FeedLogAdminSalaryHistoryListQueryResponse getAdminFeedLogHistory(
             @PathVariable("animalManageId") Long animalManageId
     ) {
         return feedLogAdminSalaryHistoryListQueryService.execute(animalManageId);
     }
 
     @GetMapping("/animal/{animalManageId}")
-    public List<FeedLogQueryResponse> getFeedLogsByAnimal(
+    public FeedLogQueryResponse getFeedLogsByAnimal(
             @PathVariable("animalManageId") Long animalManageId
     ) {
         return feedLogQueryService.execute(animalManageId);
@@ -86,7 +85,7 @@ public class FeedLogController {
     }
 
     @GetMapping("/me")
-    public List<FeedLogMyQueryResponse> getFeedLog(){
+    public FeedLogMyQueryResponse getFeedLog(){
         return feedLogMyQueryService.execute();
     }
 

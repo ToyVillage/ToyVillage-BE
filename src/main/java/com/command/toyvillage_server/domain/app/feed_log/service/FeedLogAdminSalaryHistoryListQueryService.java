@@ -8,8 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 @Service
 @RequiredArgsConstructor
 public class FeedLogAdminSalaryHistoryListQueryService {
@@ -17,14 +15,13 @@ public class FeedLogAdminSalaryHistoryListQueryService {
     private final FeedLogRepository feedLogRepository;
 
     @Transactional(readOnly = true)
-    public List<FeedLogAdminSalaryHistoryListQueryResponse> execute(Long animalManageId) {
+    public FeedLogAdminSalaryHistoryListQueryResponse execute(Long animalManageId) {
         if (!animalManageRepository.existsById(animalManageId)) {
             throw AnimalManageNotFoundException.EXCEPTION;
         }
 
-        return feedLogRepository.findAllByAnimalManage_IdOrderByFeedDateDescFeedStartTimeDescIdDesc(animalManageId)
-                .stream()
-                .map(FeedLogAdminSalaryHistoryListQueryResponse::from)
-                .toList();
+        return FeedLogAdminSalaryHistoryListQueryResponse.from(
+                feedLogRepository.findAllByAnimalManage_IdOrderByFeedDateTimeDescIdDesc(animalManageId)
+        );
     }
 }

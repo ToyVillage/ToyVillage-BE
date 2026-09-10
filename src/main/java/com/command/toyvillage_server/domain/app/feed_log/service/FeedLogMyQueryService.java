@@ -6,7 +6,6 @@ import com.command.toyvillage_server.domain.app.feed_log.presentation.dto.respon
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -15,13 +14,12 @@ public class FeedLogMyQueryService {
     private final UserFacade userFacade;
 
     @Transactional(readOnly = true)
-    public List<FeedLogMyQueryResponse> execute(){
+    public FeedLogMyQueryResponse execute(){
         Long userId = userFacade.getCurrentUserId();
 
-        return feedLogRepository.findAllByAppAdmin_IdOrderByIdDesc(userId)
-                .stream()
-                .map(FeedLogMyQueryResponse::from)
-                .toList();
+        return FeedLogMyQueryResponse.from(
+                feedLogRepository.findAllByAppAdmin_IdOrderByIdDesc(userId)
+        );
     }
 
 }

@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -15,10 +14,10 @@ public class FeedLogAdminQueryListService {
     private final FeedLogRepository feedLogRepository;
 
     @Transactional(readOnly = true)
-    public List<FeedLogAdminQueryListResponse> execute(LocalDate date) {
-        return feedLogRepository.findAllByFeedDate(date)
-                .stream()
-                .map(FeedLogAdminQueryListResponse::from)
-                .toList();
+    public FeedLogAdminQueryListResponse execute(LocalDate date) {
+        return FeedLogAdminQueryListResponse.from(
+                feedLogRepository.findAllByFeedDateTimeGreaterThanEqualAndFeedDateTimeLessThan(
+                        date.atStartOfDay(), date.plusDays(1).atStartOfDay())
+        );
     }
 }
