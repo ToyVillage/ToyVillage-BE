@@ -136,6 +136,12 @@ public class SecurityConfig {
                             .hasAnyRole("APP_ADMIN", "EMPLOYEE")
                     .requestMatchers("/animal-manage", "/animal-manage/**").hasRole("APP_ADMIN")
 
+                    // feed log
+                    .requestMatchers(HttpMethod.GET, "/feedLog/admin", "/feedLog/admin/**")
+                            .hasRole("APP_ADMIN")
+                    .requestMatchers("/feedLog", "/feedLog/**")
+                            .hasAnyRole("APP_ADMIN", "EMPLOYEE")
+
                     // work log
                     .requestMatchers(HttpMethod.POST, "/work-log/template").hasRole("APP_ADMIN")
                     .requestMatchers(HttpMethod.DELETE, "/work-log/template/**").hasRole("APP_ADMIN")
