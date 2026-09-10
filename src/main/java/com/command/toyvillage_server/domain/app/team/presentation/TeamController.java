@@ -2,8 +2,10 @@ package com.command.toyvillage_server.domain.app.team.presentation;
 
 import com.command.toyvillage_server.domain.app.team.presentation.dto.request.TeamRequest;
 import com.command.toyvillage_server.domain.app.team.presentation.dto.response.TeamResponse;
+import com.command.toyvillage_server.domain.app.team.presentation.dto.response.TeamTreeResponse;
 import com.command.toyvillage_server.domain.app.team.service.QueryTeamDetailService;
 import com.command.toyvillage_server.domain.app.team.service.QueryTeamListService;
+import com.command.toyvillage_server.domain.app.team.service.QueryTeamTreeService;
 import com.command.toyvillage_server.domain.app.team.service.TeamCreateService;
 import com.command.toyvillage_server.domain.app.team.service.TeamDeleteService;
 import com.command.toyvillage_server.domain.app.team.service.TeamUpdateService;
@@ -32,6 +34,7 @@ public class TeamController {
     private final TeamDeleteService teamDeleteService;
     private final QueryTeamListService queryTeamListService;
     private final QueryTeamDetailService queryTeamDetailService;
+    private final QueryTeamTreeService queryTeamTreeService;
 
     @PostMapping
     public ResponseEntity<MessageResponse> createTeam(@RequestBody @Valid TeamRequest request) {
@@ -45,6 +48,11 @@ public class TeamController {
     @GetMapping
     public List<TeamResponse> getTeamList() {
         return queryTeamListService.execute();
+    }
+
+    @GetMapping("/tree")
+    public TeamTreeResponse getTeamTree() {
+        return queryTeamTreeService.execute();
     }
 
     @GetMapping("/{teamId}")

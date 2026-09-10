@@ -2,6 +2,8 @@ package com.command.toyvillage_server.domain.app.workreport.domain;
 
 import com.command.toyvillage_server.domain.app.auth.admin.domain.AppAdmin;
 import com.command.toyvillage_server.domain.app.task.domain.Task;
+import com.command.toyvillage_server.domain.app.workreport.exception.WorkAlreadyApprovedException;
+import com.command.toyvillage_server.domain.app.workreport.exception.WorkNotFoundException;
 import com.command.toyvillage_server.domain.web.file.domain.File;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -15,24 +17,31 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-@Table(name = "tbl_work_report")
+@Table(
+        name = "tbl_work_report",
+        uniqueConstraints = @UniqueConstraint(
+                name = "uk_work_report_task_app_admin",
+                columnNames = {"task_id", "app_admin_id"}
+        )
+)
 public class WorkReport {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "work_report_id",nullable = false)
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "task_id", nullable = false, unique = true)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "task_id", nullable = false)
     private Task task;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "app_admin_id", nullable = false)
     private AppAdmin appAdmin;
 
-    @Column(name = "content",nullable = false,length = 1024)
+    @Column(name = "content", nullable = false, length = 2000)
     private String content;
 
-    @Column(name = "note")
+    @Column(name = "note", length = 2000)
     private String note;
 
     @OneToMany
@@ -51,8 +60,9 @@ public class WorkReport {
     private String rejectionReason;
 
     @Builder
-    public WorkReport(Task task,String content, String note, List<File> files) {
+    public WorkReport(Task task, AppAdmin appAdmin, String content, String note, List<File> files) {
         this.task = task;
+        this.appAdmin = appAdmin;
         this.content = content;
         this.note = note;
         this.files = files == null ? new ArrayList<>() : new ArrayList<>(files);
@@ -64,6 +74,18 @@ public class WorkReport {
         if (files != null) {
             this.files.clear();
             this.files.addAll(files);
+        }
+        this.status = Status.PENDING;
+        this.rejectionReason = null;
+    }
+
+    public void validateEditableBy(Long appAdminId) {
+        if (!appAdmin.getId().equals(appAdminId)) {
+            throw WorkNotFoundException.EXCEPTION;
+        }
+
+        if (status == Status.APPROVED) {
+            throw WorkAlreadyApprovedException.EXCEPTION;
         }
     }
 

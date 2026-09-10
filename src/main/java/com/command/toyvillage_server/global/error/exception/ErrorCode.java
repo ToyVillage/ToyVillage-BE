@@ -103,12 +103,17 @@ public enum ErrorCode {
 
     // team
     TEAM_NOT_FOUND(404, "존재하지 않는 팀입니다."),
+    JOIN_TEAM_TARGET_INVALID(400, "팀에 배정할 수 없는 사용자입니다."),
 
     // work
     WORK_NOT_FOUND(404, "존재하지 않는 업무관리입니다."),
     WORK_REPORT_ALREADY_EXISTS(409, "해당 업무에 대한 업무 보고가 이미 존재합니다."),
     WORK_ALREADY_APPROVED(409, "이미 승인된 업무관리입니다."),
     WORK_ALREADY_REJECTED(409, "이미 반려된 업무관리입니다."),
+
+    // task
+    TASK_NOT_FOUND(404, "존재하지 않는 업무지시입니다."),
+    TASK_TARGET_INVALID(400, "업무지시 대상이 올바르지 않습니다."),
 
     // animal management
     ANIMAL_KIND_NOT_FOUND(404, "존재하지 않는 종입니다."),

@@ -24,7 +24,8 @@ public class EmployeeCreateService {
         AppAdmin employee = AppAdmin.createEmployee(
                 request.username(),
                 request.name(),
-                passwordEncoder.encode(request.username())
+                passwordEncoder.encode(request.username()),
+                request.position()
         );
         appAdminRepository.save(employee);
     }

@@ -1,7 +1,7 @@
 package com.command.toyvillage_server.domain.app.task.domain;
 
 import com.command.toyvillage_server.domain.app.auth.admin.domain.AppAdmin;
-import com.command.toyvillage_server.domain.app.team.domain.Team;
+import com.command.toyvillage_server.domain.app.task.exception.TaskTargetInvalidException;
 import com.command.toyvillage_server.domain.web.file.domain.File;
 import jakarta.persistence.*;
 import lombok.*;
@@ -28,21 +28,17 @@ public class Task {
     @Column(nullable = false, length = 100, name = "task_title")
     private String title;
 
-    @Lob
-    @Column(name = "task_content")
+    @Column(name = "task_content", columnDefinition = "TEXT")
     private String content;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false, name = "assignee_type")
-    private TaskAssigneeType assigneeType;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "assignee_id")
-    private AppAdmin assignee;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "assignee_team_id")
-    private Team assigneeTeam;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @OrderBy("id")
+    @JoinTable(
+            name = "tbl_task_assignee",
+            joinColumns = @JoinColumn(name = "task_id", nullable = false),
+            inverseJoinColumns = @JoinColumn(name = "app_admin_id", nullable = false)
+    )
+    private List<AppAdmin> assignees = new ArrayList<>();
 
     @Column(nullable = false, name = "finish_date")
     private LocalDate finishDate;
@@ -67,18 +63,16 @@ public class Task {
     public Task(
             String title,
             String content,
-            TaskAssigneeType assigneeType,
-            AppAdmin assignee,
-            Team assigneeTeam,
+            List<AppAdmin> assignees,
             LocalDate finishDate,
             TaskPriority priority,
             List<File> files
     ) {
+        validateAssignees(assignees);
+
         this.title = title;
         this.content = content;
-        this.assigneeType = assigneeType;
-        this.assignee = assignee;
-        this.assigneeTeam = assigneeTeam;
+        this.assignees = new ArrayList<>(assignees);
         this.finishDate = finishDate;
         this.priority = priority;
         this.files = files == null ? new ArrayList<>() : new ArrayList<>(files);
@@ -87,23 +81,33 @@ public class Task {
     public void update(
             String title,
             String content,
-            TaskAssigneeType assigneeType,
-            AppAdmin assignee,
-            Team assigneeTeam,
+            List<AppAdmin> assignees,
             LocalDate finishDate,
             TaskPriority priority,
             List<File> files
     ) {
+        validateAssignees(assignees);
+
         this.title = title;
         this.content = content;
-        this.assigneeType = assigneeType;
-        this.assignee = assignee;
-        this.assigneeTeam = assigneeTeam;
+        this.assignees.clear();
+        this.assignees.addAll(assignees);
         this.finishDate = finishDate;
         this.priority = priority;
         if (files != null) {
             this.files.clear();
             this.files.addAll(files);
+        }
+    }
+
+    public boolean isAssignee(Long appAdminId) {
+        return assignees.stream()
+                .anyMatch(assignee -> assignee.getId().equals(appAdminId));
+    }
+
+    private static void validateAssignees(List<AppAdmin> assignees) {
+        if (assignees == null || assignees.isEmpty()) {
+            throw TaskTargetInvalidException.EXCEPTION;
         }
     }
 }

@@ -40,21 +40,35 @@ public class AppAdmin {
     @Column(nullable = false)
     private AppAdminRole role;
 
+    @Column(name = "position", length = 30)
+    private String position;
+
     public static AppAdmin createAppAdmin(String username, String name, String encodedPassword) {
-        return create(username, name, encodedPassword, AppAdminRole.APP_ADMIN);
+        return create(username, name, encodedPassword, AppAdminRole.APP_ADMIN, null);
     }
 
-    public static AppAdmin createEmployee(String username, String name, String encodedPassword) {
-        return create(username, name, encodedPassword, AppAdminRole.EMPLOYEE);
+    public static AppAdmin createEmployee(String username, String name, String encodedPassword, String position) {
+        return create(username, name, encodedPassword, AppAdminRole.EMPLOYEE, position);
     }
 
-    private static AppAdmin create(String username, String name, String encodedPassword, AppAdminRole role) {
+    private static AppAdmin create(
+            String username,
+            String name,
+            String encodedPassword,
+            AppAdminRole role,
+            String position
+    ) {
         return AppAdmin.builder()
                 .username(username)
                 .name(name)
                 .password(encodedPassword)
                 .role(role)
+                .position(position)
                 .build();
+    }
+
+    public boolean isAppAdmin() {
+        return role == AppAdminRole.APP_ADMIN;
     }
 
     public void changePassword(String encodedPassword) {

@@ -66,6 +66,12 @@ public class SecurityConfig {
                             .hasAnyRole("APP_ADMIN", "EMPLOYEE")
                     .requestMatchers("/app/admin", "/app/admin/**").hasRole("APP_ADMIN")
 
+                    // task
+                    .requestMatchers(HttpMethod.GET, "/tasks/*")
+                            .hasAnyRole("APP_ADMIN", "EMPLOYEE")
+                    .requestMatchers("/tasks", "/tasks/**")
+                            .hasRole("APP_ADMIN")
+
                     // faq
                     .requestMatchers(HttpMethod.GET, "/faq", "/faq/**").permitAll()
                     .requestMatchers("/faq", "/faq/**").hasRole("WEB_ADMIN")
