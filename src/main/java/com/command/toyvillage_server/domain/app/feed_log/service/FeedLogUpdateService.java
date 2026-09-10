@@ -1,5 +1,6 @@
 package com.command.toyvillage_server.domain.app.feed_log.service;
 
+import com.command.toyvillage_server.domain.app.auth.admin.facade.UserFacade;
 import com.command.toyvillage_server.domain.app.feed_log.domain.FeedLog;
 import com.command.toyvillage_server.domain.app.feed_log.domain.repository.FeedLogRepository;
 import com.command.toyvillage_server.domain.app.feed_log.exception.FeedLogNotFoundException;
@@ -12,10 +13,11 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class FeedLogUpdateService {
     private final FeedLogRepository feedLogRepository;
+    private final UserFacade userFacade;
 
     @Transactional
     public void execute(Long id, FeedLogRequest feedLogRequest) {
-        FeedLog feedLog = feedLogRepository.findById(id)
+        FeedLog feedLog = feedLogRepository.findByIdAndAppAdmin_Id(id, userFacade.getCurrentUserId())
                 .orElseThrow(() -> FeedLogNotFoundException.EXCEPTION);
 
         feedLog.update(
