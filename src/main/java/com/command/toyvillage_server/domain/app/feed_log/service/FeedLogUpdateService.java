@@ -21,8 +21,7 @@ public class FeedLogUpdateService {
                 .orElseThrow(() -> FeedLogNotFoundException.EXCEPTION);
 
         feedLog.update(
-                feedLogRequest.feedDate(),
-                feedLogRequest.feedStartTime(),
+                feedLogRequest.feedDateTime(),
                 feedLogRequest.feedType(),
                 feedLogRequest.feed_amount(),
                 feedLogRequest.significant()

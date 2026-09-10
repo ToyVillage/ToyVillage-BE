@@ -16,7 +16,8 @@ public class FeedLogAdminQueryListService {
 
     @Transactional(readOnly = true)
     public List<FeedLogAdminQueryListResponse> execute(LocalDate date) {
-        return feedLogRepository.findAllByFeedDate(date)
+        return feedLogRepository.findAllByFeedDateTimeGreaterThanEqualAndFeedDateTimeLessThan(
+                        date.atStartOfDay(), date.plusDays(1).atStartOfDay())
                 .stream()
                 .map(FeedLogAdminQueryListResponse::from)
                 .toList();

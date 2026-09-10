@@ -22,7 +22,7 @@ public class FeedLogAdminSalaryHistoryListQueryService {
             throw AnimalManageNotFoundException.EXCEPTION;
         }
 
-        return feedLogRepository.findAllByAnimalManage_IdOrderByFeedDateDescFeedStartTimeDescIdDesc(animalManageId)
+        return feedLogRepository.findAllByAnimalManage_IdOrderByFeedDateTimeDescIdDesc(animalManageId)
                 .stream()
                 .map(FeedLogAdminSalaryHistoryListQueryResponse::from)
                 .toList();

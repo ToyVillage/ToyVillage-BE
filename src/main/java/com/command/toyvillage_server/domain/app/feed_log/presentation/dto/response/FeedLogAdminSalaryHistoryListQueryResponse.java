@@ -3,7 +3,6 @@ package com.command.toyvillage_server.domain.app.feed_log.presentation.dto.respo
 import com.command.toyvillage_server.domain.app.feed_log.domain.FeedLog;
 import lombok.Builder;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Builder
@@ -12,8 +11,7 @@ public record FeedLogAdminSalaryHistoryListQueryResponse(
         String name,
         String feedType,
         Integer feedAmount,
-        LocalDate feedDate,
-        LocalDateTime feedStartTime,
+        LocalDateTime feedDateTime,
         String significant
 ) {
     public static FeedLogAdminSalaryHistoryListQueryResponse from(FeedLog feedLog) {
@@ -22,8 +20,7 @@ public record FeedLogAdminSalaryHistoryListQueryResponse(
                 .name(feedLog.getAppAdmin().getName())
                 .feedType(feedLog.getFeedType())
                 .feedAmount(feedLog.getFeed_amount())
-                .feedDate(feedLog.getFeedDate())
-                .feedStartTime(feedLog.getFeedStartTime())
+                .feedDateTime(feedLog.getFeedDateTime())
                 .significant(feedLog.getSignificant())
                 .build();
     }
