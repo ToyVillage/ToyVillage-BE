@@ -1,11 +1,13 @@
 package com.command.toyvillage_server.domain.app.feed_log.presentation;
 
 import com.command.toyvillage_server.domain.app.feed_log.presentation.dto.request.FeedLogRequest;
+import com.command.toyvillage_server.domain.app.feed_log.presentation.dto.response.FeedLogAdminDetailsQueryResponse;
 import com.command.toyvillage_server.domain.app.feed_log.presentation.dto.response.FeedLogAdminQueryListResponse;
 import com.command.toyvillage_server.domain.app.feed_log.presentation.dto.response.FeedLogMyQueryResponse;
 import com.command.toyvillage_server.domain.app.feed_log.presentation.dto.response.FeedLogDetailsQueryResponse;
 import com.command.toyvillage_server.domain.app.feed_log.presentation.dto.response.FeedLogQueryResponse;
 import com.command.toyvillage_server.domain.app.feed_log.service.FeedLogCreateService;
+import com.command.toyvillage_server.domain.app.feed_log.service.FeedLogAdminDetailsQueryService;
 import com.command.toyvillage_server.domain.app.feed_log.service.FeedLogAdminQueryListService;
 import com.command.toyvillage_server.domain.app.feed_log.service.FeedLogMyQueryService;
 import com.command.toyvillage_server.domain.app.feed_log.service.FeedLogDetailsQueryService;
@@ -31,13 +33,31 @@ public class FeedLogController {
     private final FeedLogDetailsQueryService feedLogDetailsQueryService;
     private final FeedLogQueryService feedLogQueryService;
     private final FeedLogAdminQueryListService feedLogAdminQueryListService;
+    private final FeedLogAdminDetailsQueryService feedLogAdminDetailsQueryService;
 
+    //admin
     @GetMapping("/admin")
     public List<FeedLogAdminQueryListResponse> getFeedLogList(
             @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date
     ) {
         return feedLogAdminQueryListService.execute(date);
     }
+
+    @GetMapping("/admin/{feedLogId}")
+    public FeedLogAdminDetailsQueryResponse getAdminFeedLogDetail(
+            @PathVariable("feedLogId") Long feedLogId
+    ) {
+        return feedLogAdminDetailsQueryService.execute(feedLogId);
+    }
+
+    @GetMapping("/animal/{animalManageId}")
+    public List<FeedLogQueryResponse> getFeedLogsByAnimal(
+            @PathVariable("animalManageId") Long animalManageId
+    ) {
+        return feedLogQueryService.execute(animalManageId);
+    }
+
+    //직원
 
     @PostMapping("/{animalManageId}")
     public void createFeedLog(
@@ -68,10 +88,4 @@ public class FeedLogController {
         return feedLogDetailsQueryService.execute(feedLogId);
     }
 
-    @GetMapping("/animal/{animalManageId}")
-    public List<FeedLogQueryResponse> getFeedLogsByAnimal(
-            @PathVariable("animalManageId") Long animalManageId
-    ) {
-        return feedLogQueryService.execute(animalManageId);
-    }
 }
