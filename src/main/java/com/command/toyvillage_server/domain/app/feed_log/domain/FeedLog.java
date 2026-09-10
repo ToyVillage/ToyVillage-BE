@@ -38,7 +38,7 @@ public class FeedLog {
     private Integer feed_amount;
 
     @Column(nullable = false , name = "significant")
-    private Integer significant;
+    private String significant;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "writer_id")

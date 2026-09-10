@@ -13,7 +13,7 @@ public record FeedLogDetailsQueryResponse(
         Integer feedAmount,
         LocalDate feedDate,
         LocalDateTime feedStartTime,
-        Integer significant
+        String significant
 ) {
     public static FeedLogDetailsQueryResponse from(FeedLog feedLog) {
         return FeedLogDetailsQueryResponse.builder()
