@@ -45,8 +45,8 @@ public class WorkReportController {
             @PathVariable("id") Long taskId,
             @Valid @RequestBody WorkReportRequest workReportRequest
     ) {
-        Long workReportId = workReportCreateService.execute(taskId, workReportRequest);
-        return ResponseEntity.created(URI.create("/work-report/detail/" + workReportId))
+        workReportCreateService.execute(taskId, workReportRequest);
+        return ResponseEntity.created(URI.create("/work-report/" + taskId))
                 .body(MessageResponse.of("업무 보고가 등록되었습니다."));
     }
 
