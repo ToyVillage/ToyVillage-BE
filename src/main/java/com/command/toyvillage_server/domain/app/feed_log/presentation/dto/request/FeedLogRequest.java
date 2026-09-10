@@ -15,7 +15,7 @@ public record FeedLogRequest(
         String feedType,
         @NotNull(message = "급여량을 입력해주세요.")
         Integer feed_amount,
-        @NotNull(message = "특이사항 값을 입력해주세요.")
-        Integer significant
+        @NotNull(message = "특이사항 입력해주세요.")
+        String significant
 ) {
 }

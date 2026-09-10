@@ -7,17 +7,19 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Builder
-public record FeedLogDetailsQueryResponse(
+public record FeedLogAdminSalaryHistoryListQueryResponse(
         Long feedLogId,
+        String name,
         String feedType,
         Integer feedAmount,
         LocalDate feedDate,
         LocalDateTime feedStartTime,
         String significant
 ) {
-    public static FeedLogDetailsQueryResponse from(FeedLog feedLog) {
-        return FeedLogDetailsQueryResponse.builder()
+    public static FeedLogAdminSalaryHistoryListQueryResponse from(FeedLog feedLog) {
+        return FeedLogAdminSalaryHistoryListQueryResponse.builder()
                 .feedLogId(feedLog.getId())
+                .name(feedLog.getAppAdmin().getName())
                 .feedType(feedLog.getFeedType())
                 .feedAmount(feedLog.getFeed_amount())
                 .feedDate(feedLog.getFeedDate())
