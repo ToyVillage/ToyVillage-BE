@@ -8,7 +8,6 @@ import com.command.toyvillage_server.domain.app.feed_log.presentation.dto.respon
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -18,16 +17,15 @@ public class FeedLogQueryService {
     private final UserFacade userFacade;
 
     @Transactional(readOnly = true)
-    public List<FeedLogQueryResponse> execute(Long animalManageId) {
+    public FeedLogQueryResponse execute(Long animalManageId) {
         Long userId = userFacade.getCurrentUserId();
 
         if (!animalManageRepository.existsById(animalManageId)) {
             throw AnimalManageNotFoundException.EXCEPTION;
         }
 
-        return feedLogRepository.findAllByAnimalManage_IdAndAppAdmin_IdOrderByIdDesc(animalManageId, userId)
-                .stream()
-                .map(FeedLogQueryResponse::from)
-                .toList();
+        return FeedLogQueryResponse.from(
+                feedLogRepository.findAllByAnimalManage_IdAndAppAdmin_IdOrderByIdDesc(animalManageId, userId)
+        );
     }
 }

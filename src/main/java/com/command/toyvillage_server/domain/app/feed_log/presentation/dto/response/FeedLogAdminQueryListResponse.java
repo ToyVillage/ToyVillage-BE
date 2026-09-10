@@ -3,30 +3,39 @@ package com.command.toyvillage_server.domain.app.feed_log.presentation.dto.respo
 import com.command.toyvillage_server.domain.app.feed_log.domain.FeedLog;
 import lombok.Builder;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Builder
 public record FeedLogAdminQueryListResponse(
-        Long feedLogId,
-        String name,
-        String animalKind,
-        String animalName,
-        String feedType,
-        Integer feedAmount,
-        LocalDate feedDate,
-        LocalDateTime feedStartTime
+        List<FeedLogResponse> feedLogs
 ) {
-    public static FeedLogAdminQueryListResponse from(FeedLog feedLog) {
+    public static FeedLogAdminQueryListResponse from(List<FeedLog> feedLogs) {
         return FeedLogAdminQueryListResponse.builder()
-                .feedLogId(feedLog.getId())
-                .name(feedLog.getAppAdmin().getName())
-                .animalKind(feedLog.getAnimalManage().getAnimalKind().getKindName())
-                .animalName(feedLog.getAnimalManage().getAnimalName())
-                .feedType(feedLog.getFeedType())
-                .feedAmount(feedLog.getFeed_amount())
-                .feedDate(feedLog.getFeedDate())
-                .feedStartTime(feedLog.getFeedStartTime())
+                .feedLogs(feedLogs.stream().map(FeedLogResponse::from).toList())
                 .build();
+    }
+
+    @Builder
+    private record FeedLogResponse(
+            Long feedLogId,
+            String name,
+            String animalKind,
+            String animalName,
+            String feedType,
+            Integer feedAmount,
+            LocalDateTime feedDateTime
+    ) {
+        public static FeedLogResponse from(FeedLog feedLog) {
+            return FeedLogResponse.builder()
+                    .feedLogId(feedLog.getId())
+                    .name(feedLog.getAppAdmin().getName())
+                    .animalKind(feedLog.getAnimalManage().getAnimalKind().getKindName())
+                    .animalName(feedLog.getAnimalManage().getAnimalName())
+                    .feedType(feedLog.getFeedType())
+                    .feedAmount(feedLog.getFeed_amount())
+                    .feedDateTime(feedLog.getFeedDateTime())
+                    .build();
+        }
     }
 }

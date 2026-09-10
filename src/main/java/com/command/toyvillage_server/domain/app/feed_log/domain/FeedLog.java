@@ -8,7 +8,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -21,15 +20,12 @@ public class FeedLog {
     @Column(nullable = false, name = "feed_log_id")
     private Long id;
 
-    @Column(nullable = false,name = "feed_date")
-    private LocalDate feedDate;
+    @Column(nullable = false,name = "feed_date_time")
+    private LocalDateTime feedDateTime;
 
     @JoinColumn(name = "animal_manage_id", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private AnimalManage animalManage;
-
-    @Column(nullable = false, name = "feed_start_time")
-    private LocalDateTime feedStartTime;
 
     @Column(nullable = false, name = "feed_type")
     private String feedType;
@@ -46,21 +42,19 @@ public class FeedLog {
 
 
     @Builder
-    public FeedLog(AppAdmin appAdmin,AnimalManage animalManage, LocalDate feedDate, LocalDateTime feedStartTime,
+    public FeedLog(AppAdmin appAdmin,AnimalManage animalManage, LocalDateTime feedDateTime,
                    String feedType, Integer feed_amount, String significant) {
         this.appAdmin = appAdmin;
         this.animalManage = animalManage;
-        this.feedDate = feedDate;
-        this.feedStartTime = feedStartTime;
+        this.feedDateTime = feedDateTime;
         this.feedType = feedType;
         this.feed_amount = feed_amount;
         this.significant = significant;
     }
 
-    public void update(LocalDate feedDate, LocalDateTime feedStartTime,
+    public void update(LocalDateTime feedDateTime,
                        String feedType, Integer feed_amount, String significant) {
-        this.feedDate = feedDate;
-        this.feedStartTime = feedStartTime;
+        this.feedDateTime = feedDateTime;
         this.feedType = feedType;
         this.feed_amount = feed_amount;
         this.significant = significant;
