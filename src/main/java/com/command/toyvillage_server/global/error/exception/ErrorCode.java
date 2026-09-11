@@ -118,7 +118,8 @@ public enum ErrorCode {
     // animal management
     ANIMAL_KIND_NOT_FOUND(404, "존재하지 않는 종입니다."),
     ANIMAL_LEGAL_STATUS_NOT_FOUND(404, "존재하지 않는 법정지정분류입니다."),
-    ANIMAL_MANAGE_NOT_FOUND(404, "존재하지 않는 개체입니다.");
+    ANIMAL_MANAGE_NOT_FOUND(404, "존재하지 않는 개체입니다."),
+    ANIMAL_OBSERVATION_NOT_FOUND(404, "존재하지 않는 관찰 및 특이사항입니다.");
 
     private final int statusCode;
     private final String errorMessage;
