@@ -17,6 +17,9 @@ import com.command.toyvillage_server.domain.app.animal_manage.service.CreateAnim
 import com.command.toyvillage_server.domain.app.animal_manage.service.CreateAnimalManageService;
 import com.command.toyvillage_server.domain.app.animal_manage.service.CreateAnimalObservationService;
 import com.command.toyvillage_server.domain.app.animal_manage.service.DeleteAnimalObservationService;
+import com.command.toyvillage_server.domain.app.animal_manage.service.DeleteAnimalKindService;
+import com.command.toyvillage_server.domain.app.animal_manage.service.DeleteAnimalLegalStatusService;
+import com.command.toyvillage_server.domain.app.animal_manage.service.DeleteAnimalManageService;
 import com.command.toyvillage_server.domain.app.animal_manage.service.QueryAnimalLegalStatusListService;
 import com.command.toyvillage_server.domain.app.animal_manage.service.QueryAnimalKindListService;
 import com.command.toyvillage_server.domain.app.animal_manage.service.QueryAnimalKindService;
@@ -58,8 +61,11 @@ public class AnimalManageController {
     private final UpdateAnimalLegalStatusService updateAnimalLegalStatusService;
     private final QueryAnimalLegalStatusListService queryAnimalLegalStatusListService;
     private final CreateAnimalObservationService createAnimalObservationService;
+    private final DeleteAnimalLegalStatusService deleteAnimalLegalStatusService;
     private final QueryAnimalObservationListService queryAnimalObservationListService;
     private final QueryAnimalObservationService queryAnimalObservationService;
+    private final DeleteAnimalKindService deleteAnimalKindService;
+    private final DeleteAnimalManageService deleteAnimalManageService;
     private final UpdateAnimalObservationService updateAnimalObservationService;
     private final DeleteAnimalObservationService deleteAnimalObservationService;
 
@@ -101,6 +107,13 @@ public class AnimalManageController {
         return MessageResponse.of("종 수정 성공");
     }
 
+    @DeleteMapping("/kind/{animalKindId}")
+    public MessageResponse deleteAnimalKind(@PathVariable Long animalKindId) {
+        deleteAnimalKindService.execute(animalKindId);
+
+        return MessageResponse.of("종 삭제 성공");
+    }
+
     @GetMapping("/kind/{animalKindId}/animal")
     public Page<AnimalManageQueryListObjectResponse> getAnimalManageList(
         @PathVariable Long animalKindId,
@@ -139,6 +152,13 @@ public class AnimalManageController {
         return MessageResponse.of("개체 수정 성공");
     }
 
+    @DeleteMapping("/{animalManageId}")
+    public MessageResponse deleteAnimalManage(@PathVariable Long animalManageId) {
+        deleteAnimalManageService.execute(animalManageId);
+
+        return MessageResponse.of("개체 삭제 성공");
+    }
+
     @PostMapping("/legal-status")
     public ResponseEntity<MessageResponse> createAnimalLegalStatus(
         @RequestBody @Valid AnimalLegalStatusRequest request
@@ -163,6 +183,13 @@ public class AnimalManageController {
         updateAnimalLegalStatusService.execute(animalLegalStatusId, request);
 
         return MessageResponse.of("법정지정분류 수정 성공");
+    }
+
+    @DeleteMapping("/legal-status/{animalLegalStatusId}")
+    public MessageResponse deleteAnimalLegalStatus(@PathVariable Long animalLegalStatusId) {
+        deleteAnimalLegalStatusService.execute(animalLegalStatusId);
+
+        return MessageResponse.of("법정지정분류 삭제 성공");
     }
 
     @PostMapping("/{animalManageId}/observations")

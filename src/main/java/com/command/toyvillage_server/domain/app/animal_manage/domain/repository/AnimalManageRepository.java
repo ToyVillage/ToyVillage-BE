@@ -14,6 +14,8 @@ public interface AnimalManageRepository extends JpaRepository<AnimalManage, Long
 
     long countByAnimalKindId(Long animalKindId);
 
+    List<AnimalManage> findAllByAnimalKind_Id(Long animalKindId);
+
     @Query("SELECT a.animalKind.id, COUNT(a.id) FROM AnimalManage a " +
         "WHERE a.animalKind.id IN :animalKindIds GROUP BY a.animalKind.id")
     List<Object[]> countByAnimalKindIds(@Param("animalKindIds") List<Long> animalKindIds);

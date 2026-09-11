@@ -10,4 +10,6 @@ public interface AnimalLegalDesignationRepository extends JpaRepository<AnimalLe
     List<AnimalLegalDesignation> findAllByAnimalKind(AnimalKind animalKind);
 
     void deleteAllByAnimalKind(AnimalKind animalKind);
+
+    void deleteAllByAnimalLegalStatus_Id(Long animalLegalStatusId);
 }
