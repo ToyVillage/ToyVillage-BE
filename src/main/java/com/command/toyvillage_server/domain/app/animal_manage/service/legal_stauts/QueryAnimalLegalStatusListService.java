@@ -1,4 +1,4 @@
-package com.command.toyvillage_server.domain.app.animal_manage.service;
+package com.command.toyvillage_server.domain.app.animal_manage.service.legal_stauts;
 
 import com.command.toyvillage_server.domain.app.animal_manage.domain.repository.AnimalLegalStatusRepository;
 import com.command.toyvillage_server.domain.app.animal_manage.presentation.dto.response.AnimalLegalStatusResponse;

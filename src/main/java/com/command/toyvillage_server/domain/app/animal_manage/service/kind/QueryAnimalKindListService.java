@@ -1,4 +1,4 @@
-package com.command.toyvillage_server.domain.app.animal_manage.service;
+package com.command.toyvillage_server.domain.app.animal_manage.service.kind;
 
 import com.command.toyvillage_server.domain.app.animal_manage.domain.AnimalKind;
 import com.command.toyvillage_server.domain.app.animal_manage.domain.enums.AnimalTaxonomic;

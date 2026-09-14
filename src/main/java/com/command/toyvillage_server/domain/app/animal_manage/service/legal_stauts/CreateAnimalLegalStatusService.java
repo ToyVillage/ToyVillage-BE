@@ -1,8 +1,7 @@
-package com.command.toyvillage_server.domain.app.animal_manage.service;
+package com.command.toyvillage_server.domain.app.animal_manage.service.legal_stauts;
 
 import com.command.toyvillage_server.domain.app.animal_manage.domain.AnimalLegalStatus;
 import com.command.toyvillage_server.domain.app.animal_manage.domain.repository.AnimalLegalStatusRepository;
-import com.command.toyvillage_server.domain.app.animal_manage.exception.AnimalLegalStatusNotFoundException;
 import com.command.toyvillage_server.domain.app.animal_manage.presentation.dto.request.AnimalLegalStatusRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -10,14 +9,15 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class UpdateAnimalLegalStatusService {
+public class CreateAnimalLegalStatusService {
     private final AnimalLegalStatusRepository animalLegalStatusRepository;
 
     @Transactional
-    public void execute(Long animalLegalStatusId, AnimalLegalStatusRequest request) {
-        AnimalLegalStatus animalLegalStatus = animalLegalStatusRepository.findById(animalLegalStatusId)
-            .orElseThrow(() -> AnimalLegalStatusNotFoundException.EXCEPTION);
+    public void execute(AnimalLegalStatusRequest request) {
+        AnimalLegalStatus animalLegalStatus = AnimalLegalStatus.builder()
+            .kind(request.kind())
+            .build();
 
-        animalLegalStatus.update(request.kind());
+        animalLegalStatusRepository.save(animalLegalStatus);
     }
 }

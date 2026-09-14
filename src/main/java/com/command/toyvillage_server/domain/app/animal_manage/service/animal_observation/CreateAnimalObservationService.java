@@ -1,4 +1,4 @@
-package com.command.toyvillage_server.domain.app.animal_manage.service;
+package com.command.toyvillage_server.domain.app.animal_manage.service.animal_observation;
 
 import com.command.toyvillage_server.domain.app.animal_manage.domain.AnimalManage;
 import com.command.toyvillage_server.domain.app.animal_manage.domain.AnimalObservation;

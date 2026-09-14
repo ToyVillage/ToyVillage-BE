@@ -1,4 +1,4 @@
-package com.command.toyvillage_server.domain.app.animal_manage.service;
+package com.command.toyvillage_server.domain.app.animal_manage.service.kind;
 
 import com.command.toyvillage_server.domain.app.animal_manage.domain.AnimalKind;
 import com.command.toyvillage_server.domain.app.animal_manage.domain.AnimalManage;
@@ -6,6 +6,7 @@ import com.command.toyvillage_server.domain.app.animal_manage.domain.repository.
 import com.command.toyvillage_server.domain.app.animal_manage.domain.repository.AnimalLegalDesignationRepository;
 import com.command.toyvillage_server.domain.app.animal_manage.domain.repository.AnimalManageRepository;
 import com.command.toyvillage_server.domain.app.animal_manage.exception.AnimalKindNotFoundException;
+import com.command.toyvillage_server.domain.app.animal_manage.service.manage.DeleteAnimalManageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

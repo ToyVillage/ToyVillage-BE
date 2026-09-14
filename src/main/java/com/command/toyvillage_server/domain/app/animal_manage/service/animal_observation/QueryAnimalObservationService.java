@@ -1,26 +1,29 @@
-package com.command.toyvillage_server.domain.app.animal_manage.service;
+package com.command.toyvillage_server.domain.app.animal_manage.service.animal_observation;
 
 import com.command.toyvillage_server.domain.app.animal_manage.domain.AnimalObservation;
 import com.command.toyvillage_server.domain.app.animal_manage.domain.repository.AnimalObservationFileRepository;
 import com.command.toyvillage_server.domain.app.animal_manage.domain.repository.AnimalObservationRepository;
 import com.command.toyvillage_server.domain.app.animal_manage.exception.AnimalObservationNotFoundException;
+import com.command.toyvillage_server.domain.app.animal_manage.presentation.dto.response.AnimalObservationDetailResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class DeleteAnimalObservationService {
+public class QueryAnimalObservationService {
     private final AnimalObservationRepository animalObservationRepository;
     private final AnimalObservationFileRepository animalObservationFileRepository;
 
-    @Transactional
-    public void execute(Long animalManageId, Long observationId) {
+    @Transactional(readOnly = true)
+    public AnimalObservationDetailResponse execute(Long animalManageId, Long observationId) {
         AnimalObservation observation = animalObservationRepository
             .findByIdAndAnimalManageId(observationId, animalManageId)
             .orElseThrow(() -> AnimalObservationNotFoundException.EXCEPTION);
 
-        animalObservationFileRepository.deleteAllByAnimalObservationId(observationId);
-        animalObservationRepository.delete(observation);
+        return AnimalObservationDetailResponse.from(
+            observation,
+            animalObservationFileRepository.findAllByAnimalObservationId(observationId)
+        );
     }
 }
