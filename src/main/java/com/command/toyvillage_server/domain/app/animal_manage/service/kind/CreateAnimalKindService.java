@@ -1,10 +1,8 @@
 package com.command.toyvillage_server.domain.app.animal_manage.service.kind;
 
 import com.command.toyvillage_server.domain.app.animal_manage.domain.AnimalKind;
-import com.command.toyvillage_server.domain.app.animal_manage.domain.AnimalLegalDesignation;
 import com.command.toyvillage_server.domain.app.animal_manage.domain.AnimalLegalStatus;
 import com.command.toyvillage_server.domain.app.animal_manage.domain.repository.AnimalKindRepository;
-import com.command.toyvillage_server.domain.app.animal_manage.domain.repository.AnimalLegalDesignationRepository;
 import com.command.toyvillage_server.domain.app.animal_manage.domain.repository.AnimalLegalStatusRepository;
 import com.command.toyvillage_server.domain.app.animal_manage.exception.AnimalLegalStatusNotFoundException;
 import com.command.toyvillage_server.domain.app.animal_manage.presentation.dto.request.AnimalKindRequest;
@@ -21,7 +19,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CreateAnimalKindService {
     private final AnimalLegalStatusRepository animalLegalStatusRepository;
-    private final AnimalLegalDesignationRepository animalLegalDesignationRepository;
     private final AnimalKindRepository animalKindRepository;
     private final FileRepository fileRepository;
 
@@ -39,16 +36,11 @@ public class CreateAnimalKindService {
                 .orElseThrow(() -> FileNotFoundException.EXCEPTION))
             .build();
 
+        animalKind.replaceLegalDesignations(animalLegalStatuses.stream()
+            .map(AnimalLegalStatus::getKind)
+            .toList());
+
         animalKindRepository.save(animalKind);
-
-        List<AnimalLegalDesignation> animalLegalDesignations = animalLegalStatuses.stream()
-            .map(animalLegalStatus -> AnimalLegalDesignation.builder()
-                .animalKind(animalKind)
-                .animalLegalStatus(animalLegalStatus)
-                .build())
-            .toList();
-
-        animalLegalDesignationRepository.saveAll(animalLegalDesignations);
     }
 
     private List<AnimalLegalStatus> findAnimalLegalStatuses(List<Long> animalLegalStatusIds) {

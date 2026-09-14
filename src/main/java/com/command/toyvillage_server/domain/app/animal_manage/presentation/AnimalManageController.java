@@ -28,7 +28,6 @@ import com.command.toyvillage_server.domain.app.animal_manage.service.manage.Que
 import com.command.toyvillage_server.domain.app.animal_manage.service.animal_observation.QueryAnimalObservationListService;
 import com.command.toyvillage_server.domain.app.animal_manage.service.animal_observation.QueryAnimalObservationService;
 import com.command.toyvillage_server.domain.app.animal_manage.service.kind.UpdateAnimalKindService;
-import com.command.toyvillage_server.domain.app.animal_manage.service.legal_stauts.UpdateAnimalLegalStatusService;
 import com.command.toyvillage_server.domain.app.animal_manage.service.manage.UpdateAnimalManageService;
 import com.command.toyvillage_server.domain.app.animal_manage.service.animal_observation.UpdateAnimalObservationService;
 import com.command.toyvillage_server.global.common.response.MessageResponse;
@@ -57,7 +56,6 @@ public class AnimalManageController {
     private final QueryAnimalManageListService queryAnimalManageListService;
     private final QueryAnimalManageService queryAnimalManageService;
     private final CreateAnimalLegalStatusService createAnimalLegalStatusService;
-    private final UpdateAnimalLegalStatusService updateAnimalLegalStatusService;
     private final QueryAnimalLegalStatusListService queryAnimalLegalStatusListService;
     private final CreateAnimalObservationService createAnimalObservationService;
     private final DeleteAnimalLegalStatusService deleteAnimalLegalStatusService;
@@ -172,16 +170,6 @@ public class AnimalManageController {
     @GetMapping("/legal-status")
     public List<AnimalLegalStatusResponse> getAnimalLegalStatusList() {
         return queryAnimalLegalStatusListService.execute();
-    }
-
-    @PatchMapping("/legal-status/{animalLegalStatusId}")
-    public MessageResponse updateAnimalLegalStatus(
-        @PathVariable Long animalLegalStatusId,
-        @RequestBody @Valid AnimalLegalStatusRequest request
-    ) {
-        updateAnimalLegalStatusService.execute(animalLegalStatusId, request);
-
-        return MessageResponse.of("법정지정분류 수정 성공");
     }
 
     @DeleteMapping("/legal-status/{animalLegalStatusId}")

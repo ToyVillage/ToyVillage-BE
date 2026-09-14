@@ -1,18 +1,12 @@
 package com.command.toyvillage_server.domain.app.animal_manage.domain;
 
 import com.command.toyvillage_server.domain.app.auth.admin.domain.AppAdmin;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Entity
@@ -41,6 +35,9 @@ public class AnimalObservation {
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
+
+    @OneToMany(mappedBy = "animalObservation", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<AnimalObservationFile> files = new ArrayList<>();
 
     public void update(String title, String content) {
         this.title = title;

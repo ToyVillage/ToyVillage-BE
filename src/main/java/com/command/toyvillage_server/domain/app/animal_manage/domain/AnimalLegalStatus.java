@@ -17,8 +17,4 @@ public class AnimalLegalStatus {
 
     @Column(name = "kind", nullable = false)
     private String kind;
-
-    public void update(String kind) {
-        this.kind = kind;
-    }
 }
