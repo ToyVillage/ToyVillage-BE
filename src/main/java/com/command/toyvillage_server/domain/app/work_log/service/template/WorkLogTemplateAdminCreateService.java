@@ -55,7 +55,6 @@ public class WorkLogTemplateAdminCreateService {
                 .question(questionRequest.question())
                 .questionType(questionRequest.questionType())
                 .questionOrder(order)
-                .required(questionRequest.required())
                 .build();
 
             addChoices(question, questionRequest);
