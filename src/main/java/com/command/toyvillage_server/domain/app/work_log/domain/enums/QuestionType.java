@@ -6,8 +6,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Getter
 public enum QuestionType {
-    SHORT_TEXT("주관식", false, false),
-    LONG_TEXT("장문형", false, false),
+    TEXT("주관식", false, false),
     MULTIPLE_CHOICE("객관식", true, false),
     CHECK_BOX("체크박스", true, true),
     FILE_UPLOAD("파일 업로드", false, false);
