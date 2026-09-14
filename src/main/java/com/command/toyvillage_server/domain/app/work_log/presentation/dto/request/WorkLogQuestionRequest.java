@@ -16,8 +16,6 @@ public record WorkLogQuestionRequest(
     @NotNull(message = "질문 타입을 선택해주세요.")
     QuestionType questionType,
 
-    boolean required,
-
     @Valid
     List<WorkLogQuestionOptionRequest> options
 ) {

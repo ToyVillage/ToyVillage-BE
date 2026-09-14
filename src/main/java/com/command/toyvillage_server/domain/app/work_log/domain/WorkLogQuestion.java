@@ -46,9 +46,6 @@ public class WorkLogQuestion {
     @Column(name = "question_order", nullable = false)
     private Integer questionOrder;
 
-    @Column(nullable = false)
-    private boolean required;
-
     @OrderBy("number asc")
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<WorkLogQuestionOption> options;
@@ -57,13 +54,11 @@ public class WorkLogQuestion {
     private WorkLogQuestion(
         String question,
         QuestionType questionType,
-        Integer questionOrder,
-        boolean required
+        Integer questionOrder
     ) {
         this.question = question;
         this.questionType = questionType;
         this.questionOrder = questionOrder;
-        this.required = required;
         this.options = new ArrayList<>();
     }
 
