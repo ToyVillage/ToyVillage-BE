@@ -2,7 +2,6 @@ package com.command.toyvillage_server.domain.app.animal_manage.presentation.dto.
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-
 import java.util.List;
 
 public record AnimalObservationRequest(
