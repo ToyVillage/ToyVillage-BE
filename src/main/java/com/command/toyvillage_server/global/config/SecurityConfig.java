@@ -134,6 +134,8 @@ public class SecurityConfig {
                     // animal manage
                     .requestMatchers(HttpMethod.GET, "/animal-manage", "/animal-manage/**")
                             .hasAnyRole("APP_ADMIN", "EMPLOYEE")
+                    .requestMatchers(HttpMethod.POST, "/animal-manage/*/observations")
+                            .hasAnyRole("APP_ADMIN", "EMPLOYEE")
                     .requestMatchers("/animal-manage", "/animal-manage/**").hasRole("APP_ADMIN")
 
                     // work log

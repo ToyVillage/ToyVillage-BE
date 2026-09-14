@@ -5,6 +5,9 @@ import com.command.toyvillage_server.domain.web.file.domain.File;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
@@ -33,6 +36,12 @@ public class AnimalKind {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "file_id", nullable = false)
     private File kindImage;
+
+    @OneToMany(mappedBy = "animalKind", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<AnimalLegalDesignation> animalLegalDesignations = new ArrayList<>();
+
+    @OneToMany(mappedBy = "animalKind", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<AnimalManage> animalManages = new ArrayList<>();
 
     @Builder
     private AnimalKind(
@@ -65,5 +74,15 @@ public class AnimalKind {
         this.animalTaxonomic = animalTaxonomic;
         this.detailKind = detailKind;
         this.kindImage = kindImage;
+    }
+
+    public void replaceLegalDesignations(List<String> animalLegalStatuses) {
+        animalLegalDesignations.clear();
+        animalLegalStatuses.forEach(animalLegalStatus -> animalLegalDesignations.add(
+            AnimalLegalDesignation.builder()
+                .animalLegalStatus(animalLegalStatus)
+                .animalKind(this)
+                .build()
+        ));
     }
 }

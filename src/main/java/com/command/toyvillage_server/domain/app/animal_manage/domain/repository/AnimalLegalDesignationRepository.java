@@ -8,6 +8,4 @@ import java.util.List;
 
 public interface AnimalLegalDesignationRepository extends JpaRepository<AnimalLegalDesignation, Long> {
     List<AnimalLegalDesignation> findAllByAnimalKind(AnimalKind animalKind);
-
-    void deleteAllByAnimalKind(AnimalKind animalKind);
 }

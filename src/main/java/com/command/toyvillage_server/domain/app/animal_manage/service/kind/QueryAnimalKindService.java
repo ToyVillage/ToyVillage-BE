@@ -1,4 +1,4 @@
-package com.command.toyvillage_server.domain.app.animal_manage.service;
+package com.command.toyvillage_server.domain.app.animal_manage.service.kind;
 
 import com.command.toyvillage_server.domain.app.animal_manage.domain.AnimalKind;
 import com.command.toyvillage_server.domain.app.animal_manage.domain.AnimalLegalDesignation;
@@ -27,7 +27,6 @@ public class QueryAnimalKindService {
 
         List<String> legalStatuses = animalLegalDesignationRepository.findAllByAnimalKind(animalKind).stream()
             .map(AnimalLegalDesignation::getAnimalLegalStatus)
-            .map(animalLegalStatus -> animalLegalStatus.getKind())
             .toList();
 
         return AnimalKindQueryResponse.of(
