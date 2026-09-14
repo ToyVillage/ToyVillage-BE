@@ -17,13 +17,13 @@ public class FeedLogUpdateService {
 
     @Transactional
     public void execute(Long id, FeedLogRequest feedLogRequest) {
-        FeedLog feedLog = feedLogRepository.findByIdAndAppAdmin_Id(id, userFacade.getCurrentUserId())
+        FeedLog feedLog = feedLogRepository.findByIdAndAppAdmin_IdOrderByIdDesc(id, userFacade.getCurrentUserId())
                 .orElseThrow(() -> FeedLogNotFoundException.EXCEPTION);
 
         feedLog.update(
                 feedLogRequest.feedDateTime(),
                 feedLogRequest.feedType(),
-                feedLogRequest.feed_amount(),
+                feedLogRequest.feedAmount(),
                 feedLogRequest.significant()
         );
     }

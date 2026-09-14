@@ -17,7 +17,7 @@ public class FeedLogDetailsQueryService {
 
     @Transactional(readOnly = true)
     public FeedLogDetailsQueryResponse execute(Long id) {
-        FeedLog feedLog = feedLogRepository.findByIdAndAppAdmin_Id(id, userFacade.getCurrentUserId())
+        FeedLog feedLog = feedLogRepository.findByIdAndAppAdmin_IdOrderByIdDesc(id, userFacade.getCurrentUserId())
                 .orElseThrow(() -> FeedLogNotFoundException.EXCEPTION);
         return FeedLogDetailsQueryResponse.from(feedLog);
     }

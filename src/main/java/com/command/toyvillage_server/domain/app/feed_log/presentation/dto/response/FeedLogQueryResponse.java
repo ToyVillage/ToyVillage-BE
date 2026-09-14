@@ -28,7 +28,7 @@ public record FeedLogQueryResponse(
             return FeedLogResponse.builder()
                     .animalId(feedLog.getAnimalManage().getId())
                     .feedType(feedLog.getFeedType())
-                    .feedAmount(feedLog.getFeed_amount())
+                    .feedAmount(feedLog.getFeedAmount())
                     .feedDateTime(feedLog.getFeedDateTime())
                     .significant(feedLog.getSignificant())
                     .build();

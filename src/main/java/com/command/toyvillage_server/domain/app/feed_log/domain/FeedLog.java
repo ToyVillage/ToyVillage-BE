@@ -31,7 +31,7 @@ public class FeedLog {
     private String feedType;
 
     @Column(nullable = false, name = "feed_amount")
-    private Integer feed_amount;
+    private Integer feedAmount;
 
     @Column(nullable = false , name = "significant")
     private String significant;
@@ -48,7 +48,7 @@ public class FeedLog {
         this.animalManage = animalManage;
         this.feedDateTime = feedDateTime;
         this.feedType = feedType;
-        this.feed_amount = feed_amount;
+        this.feedAmount = feed_amount;
         this.significant = significant;
     }
 
@@ -56,7 +56,7 @@ public class FeedLog {
                        String feedType, Integer feed_amount, String significant) {
         this.feedDateTime = feedDateTime;
         this.feedType = feedType;
-        this.feed_amount = feed_amount;
+        this.feedAmount = feed_amount;
         this.significant = significant;
     }
 }

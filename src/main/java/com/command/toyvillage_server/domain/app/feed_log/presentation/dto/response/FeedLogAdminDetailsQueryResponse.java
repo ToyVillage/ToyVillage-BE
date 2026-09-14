@@ -22,7 +22,7 @@ public record FeedLogAdminDetailsQueryResponse(
                 .animalKind(feedLog.getAnimalManage().getAnimalKind().getKindName())
                 .animalName(feedLog.getAnimalManage().getAnimalName())
                 .feedType(feedLog.getFeedType())
-                .feedAmount(feedLog.getFeed_amount())
+                .feedAmount(feedLog.getFeedAmount())
                 .feedDateTime(feedLog.getFeedDateTime())
                 .build();
     }

@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public interface FeedLogRepository extends JpaRepository<FeedLog, Long> {
 
-    Optional<FeedLog> findByIdAndAppAdmin_Id(Long id, Long writerId);
+    Optional<FeedLog> findByIdAndAppAdmin_IdOrderByIdDesc(Long id, Long writerId);
 
     List<FeedLog> findAllByFeedDateTimeGreaterThanEqualAndFeedDateTimeLessThan(
             LocalDateTime startDateTime, LocalDateTime endDateTime);

@@ -30,7 +30,7 @@ public record FeedLogAdminSalaryHistoryListQueryResponse(
                     .feedLogId(feedLog.getId())
                     .name(feedLog.getAppAdmin().getName())
                     .feedType(feedLog.getFeedType())
-                    .feedAmount(feedLog.getFeed_amount())
+                    .feedAmount(feedLog.getFeedAmount())
                     .feedDateTime(feedLog.getFeedDateTime())
                     .significant(feedLog.getSignificant())
                     .build();
