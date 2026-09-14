@@ -26,7 +26,7 @@ import java.time.LocalDate;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/feedLog")
+@RequestMapping("/feed-log")
 public class FeedLogController {
     private final FeedLogCreateService feedLogCreateService;
     private final FeedLogUpdateService feedLogUpdateService;
