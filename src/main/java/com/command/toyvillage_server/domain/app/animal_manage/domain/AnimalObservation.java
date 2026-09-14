@@ -18,8 +18,6 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "tbl_animal_observation")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
-@Builder
 public class AnimalObservation {
 
     @Id
@@ -47,5 +45,20 @@ public class AnimalObservation {
     public void update(String title, String content) {
         this.title = title;
         this.content = content;
+    }
+
+    @Builder
+    private AnimalObservation(
+        AnimalManage animalManage,
+        AppAdmin author,
+        String title,
+        String content,
+        LocalDateTime createdAt
+    ) {
+        this.animalManage = animalManage;
+        this.author = author;
+        this.title = title;
+        this.content = content;
+        this.createdAt = createdAt;
     }
 }
