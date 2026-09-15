@@ -9,6 +9,7 @@ import io.swagger.v3.oas.models.security.SecurityScheme;
 import io.swagger.v3.oas.models.servers.Server;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -79,6 +80,24 @@ public class SwaggerConfig {
         provider.setPasswordEncoder(passwordEncoder);
 
         return new ProviderManager(provider);
+    }
+
+    @Bean
+    public GroupedOpenApi webApi() {
+        return GroupedOpenApi.builder()
+                .group("web")
+                .displayName("Web")
+                .packagesToScan("com.command.toyvillage_server.domain.web")
+                .build();
+    }
+
+    @Bean
+    public GroupedOpenApi appApi() {
+        return GroupedOpenApi.builder()
+                .group("app")
+                .displayName("App")
+                .packagesToScan("com.command.toyvillage_server.domain.app")
+                .build();
     }
 
     @Bean
