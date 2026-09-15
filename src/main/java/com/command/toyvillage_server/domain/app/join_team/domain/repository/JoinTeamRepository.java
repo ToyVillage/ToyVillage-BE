@@ -10,6 +10,8 @@ import java.util.Optional;
 public interface JoinTeamRepository extends JpaRepository<JoinTeam, Long> {
     Optional<JoinTeam> findByAppAdmin_Id(Long appAdminId);
 
+    Optional<JoinTeam> findByAppAdmin_IdAndTeam_Id(Long appAdminId, Long teamId);
+
     List<JoinTeam> findAllByTeam_Id(Long teamId);
 
     @Query("""
