@@ -54,6 +54,10 @@ redis:
   host: ${REDIS_HOST}
   port: ${REDIS_PORT}
 
+swagger:
+  username: ${SWAGGER_USERNAME}
+  password: ${SWAGGER_PASSWORD}
+
 jwt:
   web-secret-key: ${WEB_JWT_SECRET_KEY}
   app-secret-key: ${APP_JWT_SECRET_KEY}
