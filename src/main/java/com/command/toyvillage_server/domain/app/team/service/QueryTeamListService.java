@@ -27,7 +27,7 @@ public class QueryTeamListService {
 
         return teamRepository.findAllByOrderByIdAsc()
                 .stream()
-                .map(team -> TeamResponse.from(team, memberCountsByTeamId.getOrDefault(team.getId(), 0L)))
+                .map(team -> TeamResponse.of(team, memberCountsByTeamId.getOrDefault(team.getId(), 0L)))
                 .toList();
     }
 }

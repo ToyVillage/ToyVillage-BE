@@ -7,7 +7,7 @@ public record TeamResponse(
         String name,
         Long teamMemberCount
 ) {
-    public static TeamResponse from(Team team, Long teamMemberCount) {
+    public static TeamResponse of(Team team, Long teamMemberCount) {
         return new TeamResponse(
                 team.getId(),
                 team.getName(),
