@@ -1,15 +1,13 @@
 package com.command.toyvillage_server.domain.app.join_team.presentation;
 
+import com.command.toyvillage_server.domain.app.join_team.presentation.dto.request.JoinTeamRequest;
 import com.command.toyvillage_server.domain.app.join_team.service.JoinTeamService;
 import com.command.toyvillage_server.domain.app.join_team.service.LeaveTeamService;
 import com.command.toyvillage_server.global.common.response.MessageResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/join-team")
@@ -18,12 +16,12 @@ public class JoinTeamController {
     private final JoinTeamService joinTeamService;
     private final LeaveTeamService leaveTeamService;
 
-    @PutMapping("/{appAdminId}/{teamId}")
+    @PostMapping("/{teamId}")
     public ResponseEntity<MessageResponse> joinTeam(
-            @PathVariable Long appAdminId,
+            @RequestBody @Valid JoinTeamRequest request,
             @PathVariable Long teamId
     ) {
-        joinTeamService.execute(appAdminId, teamId);
+        joinTeamService.execute(request.appAdminIds(), teamId);
 
         return ResponseEntity.ok(
                 MessageResponse.of("유저가 팀에 배정되었습니다.")

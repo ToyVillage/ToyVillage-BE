@@ -13,6 +13,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class JoinTeamService {
@@ -21,24 +23,26 @@ public class JoinTeamService {
     private final TeamRepository teamRepository;
 
     @Transactional
-    public void execute(Long appAdminId, Long teamId) {
-        AppAdmin appAdmin = appAdminRepository.findById(appAdminId)
-                .orElseThrow(() -> AppAdminNotFoundException.EXCEPTION);
-
-        if (appAdmin.isAppAdmin()) {
-            throw JoinTeamTargetInvalidException.EXCEPTION;
-        }
-
+    public void execute(List<Long> appAdminIds, Long teamId) {
         Team team = teamRepository.findById(teamId)
                 .orElseThrow(() -> TeamNotFoundException.EXCEPTION);
 
-        JoinTeam joinTeam = joinTeamRepository.findByAppAdmin_Id(appAdmin.getId())
-                .map(savedJoinTeam -> {
-                    savedJoinTeam.updateTeam(team);
-                    return savedJoinTeam;
-                })
-                .orElseGet(() -> JoinTeam.create(appAdmin, team));
+        for (Long appAdminId : appAdminIds.stream().distinct().toList()) {
+            AppAdmin appAdmin = appAdminRepository.findById(appAdminId)
+                    .orElseThrow(() -> AppAdminNotFoundException.EXCEPTION);
 
-        joinTeamRepository.save(joinTeam);
+            if (appAdmin.isAppAdmin()) {
+                throw JoinTeamTargetInvalidException.EXCEPTION;
+            }
+
+            JoinTeam joinTeam = joinTeamRepository.findByAppAdmin_Id(appAdmin.getId())
+                    .map(savedJoinTeam -> {
+                        savedJoinTeam.updateTeam(team);
+                        return savedJoinTeam;
+                    })
+                    .orElseGet(() -> JoinTeam.create(appAdmin, team));
+
+            joinTeamRepository.save(joinTeam);
+        }
     }
 }
