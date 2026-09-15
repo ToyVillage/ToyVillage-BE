@@ -2,7 +2,6 @@ package com.command.toyvillage_server.domain.app.join_team.presentation.dto.requ
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-
 import java.util.List;
 
 public record TeamRequest(

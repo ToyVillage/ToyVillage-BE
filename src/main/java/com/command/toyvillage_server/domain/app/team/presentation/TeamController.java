@@ -1,9 +1,11 @@
 package com.command.toyvillage_server.domain.app.team.presentation;
 
 import com.command.toyvillage_server.domain.app.team.presentation.dto.request.TeamRequest;
+import com.command.toyvillage_server.domain.app.team.presentation.dto.response.TeamMemberResponse;
 import com.command.toyvillage_server.domain.app.team.presentation.dto.response.TeamResponse;
 import com.command.toyvillage_server.domain.app.team.presentation.dto.response.TeamTreeResponse;
 import com.command.toyvillage_server.domain.app.team.service.QueryTeamListService;
+import com.command.toyvillage_server.domain.app.team.service.QueryTeamMemberListService;
 import com.command.toyvillage_server.domain.app.team.service.QueryTeamTreeService;
 import com.command.toyvillage_server.domain.app.team.service.TeamCreateService;
 import com.command.toyvillage_server.domain.app.team.service.TeamDeleteService;
@@ -32,6 +34,7 @@ public class TeamController {
     private final TeamUpdateService teamUpdateService;
     private final TeamDeleteService teamDeleteService;
     private final QueryTeamListService queryTeamListService;
+    private final QueryTeamMemberListService queryTeamMemberListService;
     private final QueryTeamTreeService queryTeamTreeService;
 
     @PostMapping
@@ -51,6 +54,11 @@ public class TeamController {
     @GetMapping("/tree")
     public TeamTreeResponse getTeamTree() {
         return queryTeamTreeService.execute();
+    }
+
+    @GetMapping("/{teamId}/members")
+    public List<TeamMemberResponse> getTeamMembers(@PathVariable Long teamId) {
+        return queryTeamMemberListService.execute(teamId);
     }
 
     @PutMapping("/{teamId}")
