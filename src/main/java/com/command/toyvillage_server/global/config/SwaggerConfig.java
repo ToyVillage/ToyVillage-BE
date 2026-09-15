@@ -6,8 +6,10 @@ import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
+import io.swagger.v3.oas.models.servers.Server;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,6 +26,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
+
+import java.util.List;
 
 @Configuration
 @RequiredArgsConstructor
@@ -79,8 +83,27 @@ public class SwaggerConfig {
     }
 
     @Bean
+    public GroupedOpenApi webApi() {
+        return GroupedOpenApi.builder()
+                .group("web")
+                .displayName("Web")
+                .packagesToScan("com.command.toyvillage_server.domain.web")
+                .build();
+    }
+
+    @Bean
+    public GroupedOpenApi appApi() {
+        return GroupedOpenApi.builder()
+                .group("app")
+                .displayName("App")
+                .packagesToScan("com.command.toyvillage_server.domain.app")
+                .build();
+    }
+
+    @Bean
     public OpenAPI openAPI() {
         return new OpenAPI()
+                .servers(List.of(new Server().url("/")))
                 .info(new Info()
                         .title("ToyVillage API")
                         .description("ToyVillage 웹/앱 서버 API 문서")
