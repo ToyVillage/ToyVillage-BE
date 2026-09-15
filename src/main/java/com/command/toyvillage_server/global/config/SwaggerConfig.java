@@ -6,6 +6,7 @@ import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -14,7 +15,6 @@ import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -22,6 +22,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -47,8 +48,20 @@ public class SwaggerConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth.anyRequest().hasRole(SWAGGER_ROLE))
                 .authenticationManager(swaggerAuthenticationManager())
-                .httpBasic(Customizer.withDefaults())
+                .httpBasic(basic -> basic.authenticationEntryPoint(swaggerAuthenticationEntryPoint()))
                 .build();
+    }
+
+    /**
+     * 기본 BasicAuthenticationEntryPoint 는 sendError(401) 로 /error 에 포워딩하는데,
+     * /error 는 메인 JWT 체인을 타서 403 으로 덮어써진다.
+     * 그래서 포워딩 없이 401 + WWW-Authenticate 만 직접 내려 브라우저 로그인 창이 뜨게 한다.
+     */
+    private AuthenticationEntryPoint swaggerAuthenticationEntryPoint() {
+        return (request, response, authException) -> {
+            response.setHeader("WWW-Authenticate", "Basic realm=\"ToyVillage Swagger\"");
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        };
     }
 
     private AuthenticationManager swaggerAuthenticationManager() {
