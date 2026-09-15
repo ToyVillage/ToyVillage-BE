@@ -21,7 +21,7 @@ public class JoinTeamController {
             @RequestBody @Valid JoinTeamRequest request,
             @PathVariable Long teamId
     ) {
-        joinTeamService.execute(request.appAdminIds(), teamId);
+        joinTeamService.execute(request, teamId);
 
         return ResponseEntity.ok(
                 MessageResponse.of("유저가 팀에 배정되었습니다.")
