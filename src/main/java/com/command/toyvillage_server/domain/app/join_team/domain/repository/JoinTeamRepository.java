@@ -37,19 +37,6 @@ public interface JoinTeamRepository extends JpaRepository<JoinTeam, Long> {
     List<JoinTeam> findMembersByTeamId(@Param("teamId") Long teamId);
 
     @Query("""
-            select j.team.id as teamId, count(j) as memberCount
-            from JoinTeam j
-            group by j.team.id
-            """)
-    List<TeamMemberCount> countMembersByTeam();
-
-    interface TeamMemberCount {
-        Long getTeamId();
-
-        Long getMemberCount();
-    }
-
-    @Query("""
             select j from JoinTeam j
             join fetch j.team
             join fetch j.appAdmin
