@@ -4,12 +4,14 @@ import com.command.toyvillage_server.domain.app.team.domain.Team;
 
 public record TeamResponse(
         Long id,
-        String name
+        String name,
+        Long teamMemberCount
 ) {
-    public static TeamResponse from(Team team) {
+    public static TeamResponse from(Team team, Long teamMemberCount) {
         return new TeamResponse(
                 team.getId(),
-                team.getName()
+                team.getName(),
+                teamMemberCount
         );
     }
 }
