@@ -1,5 +1,6 @@
 package com.command.toyvillage_server.domain.app.feed_log.presentation;
 
+import com.command.toyvillage_server.domain.app.animal_manage.domain.enums.AnimalTaxonomic;
 import com.command.toyvillage_server.domain.app.feed_log.presentation.dto.request.FeedLogRequest;
 import com.command.toyvillage_server.domain.app.feed_log.presentation.dto.response.FeedLogAdminDetailsQueryResponse;
 import com.command.toyvillage_server.domain.app.feed_log.presentation.dto.response.FeedLogAdminSalaryHistoryListQueryResponse;
@@ -40,9 +41,10 @@ public class FeedLogController {
     //admin
     @GetMapping("/admin")
     public FeedLogAdminQueryListResponse getFeedLogList(
-            @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date
+            @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+            @RequestParam(value = "animalTaxonomic", required = false) AnimalTaxonomic animalTaxonomic
     ) {
-        return feedLogAdminQueryListService.execute(date);
+        return feedLogAdminQueryListService.execute(date, animalTaxonomic);
     }
 
     @GetMapping("/admin/{feedLogId}")
