@@ -64,6 +64,8 @@ public class SecurityConfig {
                     .requestMatchers("/app/auth/login", "/app/auth/reissue").permitAll()
                     .requestMatchers(HttpMethod.PATCH, "/app/auth/password")
                             .hasAnyRole("APP_ADMIN", "EMPLOYEE")
+                    .requestMatchers(HttpMethod.POST, "/app/auth/logout")
+                            .hasAnyRole("APP_ADMIN", "EMPLOYEE")
                     .requestMatchers("/app/admin", "/app/admin/**").hasRole("APP_ADMIN")
 
                     // task
