@@ -58,6 +58,9 @@ swagger:
   username: ${SWAGGER_USERNAME}
   password: ${SWAGGER_PASSWORD}
 
+springdoc:
+  use-fqn: true  # 스키마 이름을 패키지 포함 전체 이름으로 등록 (같은 이름의 중첩 DTO 충돌 방지)
+
 jwt:
   web-secret-key: ${WEB_JWT_SECRET_KEY}
   app-secret-key: ${APP_JWT_SECRET_KEY}

@@ -26,6 +26,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfigurationSource;
 
 import java.util.List;
 
@@ -41,6 +42,7 @@ public class SwaggerConfig {
 
     private final SwaggerProperties swaggerProperties;
     private final BCryptPasswordEncoder passwordEncoder;
+    private final CorsConfigurationSource corsConfigurationSource;
 
     @Bean
     @Order(1)
@@ -48,6 +50,7 @@ public class SwaggerConfig {
         return http
                 .securityMatcher(SWAGGER_PATHS)
                 .csrf(AbstractHttpConfigurer::disable)
+                .cors(cors -> cors.configurationSource(corsConfigurationSource))
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth.anyRequest().hasRole(SWAGGER_ROLE))
