@@ -22,14 +22,18 @@ public class QueryAnimalKindListService {
     private final AnimalManageRepository animalManageRepository;
 
     @Transactional(readOnly = true)
-    public AnimalKindQueryListResponse execute(AnimalTaxonomic animalTaxonomic, Pageable pageable) {
-        Page<AnimalKind> animalKinds;
+    public AnimalKindQueryListResponse execute(
+        AnimalTaxonomic animalTaxonomic,
+        String keyword,
+        Pageable pageable
+    ) {
+        String normalizedKeyword = keyword == null || keyword.isBlank() ? null : keyword.trim();
 
-        if (animalTaxonomic == null) {
-            animalKinds = animalKindRepository.findAll(pageable);
-        } else {
-            animalKinds = animalKindRepository.findAllByAnimalTaxonomic(animalTaxonomic, pageable);
-        }
+        Page<AnimalKind> animalKinds = animalKindRepository.findAllByFilter(
+            animalTaxonomic,
+            normalizedKeyword,
+            pageable
+        );
 
         Map<Long, Long> animalCounts = animalKinds.isEmpty()
             ? Map.of()

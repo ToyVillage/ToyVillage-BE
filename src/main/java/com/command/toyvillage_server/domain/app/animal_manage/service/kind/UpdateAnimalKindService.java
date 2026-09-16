@@ -46,6 +46,10 @@ public class UpdateAnimalKindService {
     }
 
     private List<AnimalLegalStatus> findAnimalLegalStatuses(List<Long> animalLegalStatusIds) {
+        if (animalLegalStatusIds == null || animalLegalStatusIds.isEmpty()) {
+            return List.of();
+        }
+
         List<AnimalLegalStatus> animalLegalStatuses = animalLegalStatusRepository.findAllById(animalLegalStatusIds);
 
         if (animalLegalStatuses.size() != new HashSet<>(animalLegalStatusIds).size()) {

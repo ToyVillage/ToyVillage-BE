@@ -84,9 +84,10 @@ public class AnimalManageController {
             sort = "id",
             direction = Sort.Direction.DESC
         ) Pageable pageable,
-        @RequestParam(value = "animalTaxonomic", required = false) AnimalTaxonomic animalTaxonomic
+        @RequestParam(value = "animalTaxonomic", required = false) AnimalTaxonomic animalTaxonomic,
+        @RequestParam(value = "keyword", required = false) String keyword
     ) {
-        return queryAnimalKindListService.execute(animalTaxonomic, pageable);
+        return queryAnimalKindListService.execute(animalTaxonomic, keyword, pageable);
     }
 
     @GetMapping("/kind/{animalKindId}")
@@ -118,9 +119,10 @@ public class AnimalManageController {
             size = 10,
             sort = "id",
             direction = Sort.Direction.DESC
-        ) Pageable pageable
+        ) Pageable pageable,
+        @RequestParam(value = "keyword", required = false) String keyword
     ) {
-        return queryAnimalManageListService.execute(animalKindId, pageable);
+        return queryAnimalManageListService.execute(animalKindId, keyword, pageable);
     }
 
     @PostMapping
