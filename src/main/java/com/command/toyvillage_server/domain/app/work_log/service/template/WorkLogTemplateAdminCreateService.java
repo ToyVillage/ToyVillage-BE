@@ -11,6 +11,7 @@ import com.command.toyvillage_server.domain.app.work_log.exception.WorkLogTempla
 import com.command.toyvillage_server.domain.app.work_log.presentation.dto.request.WorkLogQuestionOptionRequest;
 import com.command.toyvillage_server.domain.app.work_log.presentation.dto.request.WorkLogQuestionRequest;
 import com.command.toyvillage_server.domain.app.work_log.presentation.dto.request.WorkLogTemplateRequest;
+import com.command.toyvillage_server.domain.app.work_log.presentation.dto.response.WorkLogTemplateCreateResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,7 +24,7 @@ public class WorkLogTemplateAdminCreateService {
     private final WorkLogTemplateRepository workLogTemplateRepository;
 
     @Transactional
-    public void execute(WorkLogTemplateRequest request) {
+    public WorkLogTemplateCreateResponse execute(WorkLogTemplateRequest request) {
         if (workLogTemplateRepository.existsByTemplateTitle(request.templateTitle())) {
             throw WorkLogTemplateAlreadyExistsException.EXCEPTION;
         }
@@ -36,6 +37,10 @@ public class WorkLogTemplateAdminCreateService {
         addQuestions(template, request.questions());
 
         workLogTemplateRepository.save(template);
+
+        return WorkLogTemplateCreateResponse.builder()
+            .templateId(template.getId())
+            .build();
     }
 
     private void addSections(WorkLogTemplate template, List<String> sectionNames) {
