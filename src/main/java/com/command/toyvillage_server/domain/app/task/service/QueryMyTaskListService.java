@@ -3,7 +3,7 @@ package com.command.toyvillage_server.domain.app.task.service;
 import com.command.toyvillage_server.domain.app.auth.admin.facade.UserFacade;
 import com.command.toyvillage_server.domain.app.task.domain.Task;
 import com.command.toyvillage_server.domain.app.task.domain.repository.TaskRepository;
-import com.command.toyvillage_server.domain.app.task.presentation.dto.response.TaskListResponse;
+import com.command.toyvillage_server.domain.app.task.presentation.dto.response.MyTaskListResponse;
 import com.command.toyvillage_server.domain.app.workreport.domain.WorkReport;
 import com.command.toyvillage_server.domain.app.workreport.domain.repository.WorkReportRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,8 +24,9 @@ public class QueryMyTaskListService {
     private final UserFacade userFacade;
 
     @Transactional(readOnly = true)
-    public TaskListResponse execute(Pageable pageable) {
-        Page<Task> tasks = taskRepository.findAllAssignedTo(userFacade.getCurrentUserId(), pageable);
+    public MyTaskListResponse execute(Pageable pageable) {
+        Long appAdminId = userFacade.getCurrentUserId();
+        Page<Task> tasks = taskRepository.findAllAssignedTo(appAdminId, pageable);
 
         List<Long> taskIds = tasks.map(Task::getId).toList();
         Map<Long, List<WorkReport>> workReportsByTaskId = taskIds.isEmpty()
@@ -33,6 +34,6 @@ public class QueryMyTaskListService {
                 : workReportRepository.findAllByTask_IdIn(taskIds).stream()
                         .collect(Collectors.groupingBy(workReport -> workReport.getTask().getId()));
 
-        return TaskListResponse.from(tasks, workReportsByTaskId, LocalDate.now());
+        return MyTaskListResponse.from(tasks, workReportsByTaskId, appAdminId, LocalDate.now());
     }
 }

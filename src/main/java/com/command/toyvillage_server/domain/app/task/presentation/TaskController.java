@@ -2,6 +2,7 @@ package com.command.toyvillage_server.domain.app.task.presentation;
 
 import com.command.toyvillage_server.domain.app.task.domain.TaskStatus;
 import com.command.toyvillage_server.domain.app.task.presentation.dto.request.TaskRequest;
+import com.command.toyvillage_server.domain.app.task.presentation.dto.response.MyTaskListResponse;
 import com.command.toyvillage_server.domain.app.task.presentation.dto.response.TaskDetailResponse;
 import com.command.toyvillage_server.domain.app.task.presentation.dto.response.TaskListResponse;
 import com.command.toyvillage_server.domain.app.task.service.CreateTaskService;
@@ -56,7 +57,7 @@ public class TaskController {
     }
 
     @GetMapping("/my")
-    public TaskListResponse getMyList(
+    public MyTaskListResponse getMyList(
             @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC)
             Pageable pageable
     ) {
