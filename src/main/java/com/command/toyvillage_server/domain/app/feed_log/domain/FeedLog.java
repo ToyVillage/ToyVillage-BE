@@ -31,7 +31,7 @@ public class FeedLog {
     private String feedType;
 
     @Column(nullable = false, name = "feed_amount")
-    private Integer feedAmount;
+    private Float feedAmount;
 
     @Column(nullable = false , name = "significant")
     private String significant;
@@ -43,7 +43,7 @@ public class FeedLog {
 
     @Builder
     public FeedLog(AppAdmin appAdmin,AnimalManage animalManage, LocalDateTime feedDateTime,
-                   String feedType, Integer feed_amount, String significant) {
+                   String feedType, Float feed_amount, String significant) {
         this.appAdmin = appAdmin;
         this.animalManage = animalManage;
         this.feedDateTime = feedDateTime;
@@ -53,7 +53,7 @@ public class FeedLog {
     }
 
     public void update(LocalDateTime feedDateTime,
-                       String feedType, Integer feed_amount, String significant) {
+                       String feedType, Float feed_amount, String significant) {
         this.feedDateTime = feedDateTime;
         this.feedType = feedType;
         this.feedAmount = feed_amount;

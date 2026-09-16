@@ -21,7 +21,7 @@ public record FeedLogAdminSalaryHistoryListQueryResponse(
             Long feedLogId,
             String name,
             String feedType,
-            Integer feedAmount,
+            Float feedAmount,
             LocalDateTime feedDateTime,
             String significant
     ) {

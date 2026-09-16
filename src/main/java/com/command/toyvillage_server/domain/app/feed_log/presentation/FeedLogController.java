@@ -19,6 +19,9 @@ import com.command.toyvillage_server.domain.app.feed_log.service.FeedLogUpdateSe
 import com.command.toyvillage_server.global.common.response.MessageResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -42,9 +45,10 @@ public class FeedLogController {
     @GetMapping("/admin")
     public FeedLogAdminQueryListResponse getFeedLogList(
             @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
-            @RequestParam(value = "animalTaxonomic", required = false) AnimalTaxonomic animalTaxonomic
+            @RequestParam(value = "animalTaxonomic", required = false) AnimalTaxonomic animalTaxonomic,
+            @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable
     ) {
-        return feedLogAdminQueryListService.execute(date, animalTaxonomic);
+        return feedLogAdminQueryListService.execute(date, animalTaxonomic, pageable);
     }
 
     @GetMapping("/admin/{feedLogId}")
