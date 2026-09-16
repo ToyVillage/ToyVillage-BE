@@ -15,13 +15,13 @@ public record AnimalKindQueryResponse(
     String scientificName,
     AnimalTaxonomic animalTaxonomic,
     String detailKind,
-    List<String> legalStatuses,
+    List<AnimalLegalStatusResponse> legalStatuses,
     long animalCount,
     FileResponse kindImage
 ) {
     public static AnimalKindQueryResponse of(
         AnimalKind animalKind,
-        List<String> legalStatuses,
+        List<AnimalLegalStatusResponse> legalStatuses,
         long animalCount
     ) {
         return AnimalKindQueryResponse.builder()
