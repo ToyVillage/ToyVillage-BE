@@ -13,7 +13,8 @@ public record FeedLogAdminDetailsQueryResponse(
         String animalName,
         String feedType,
         Integer feedAmount,
-        LocalDateTime feedDateTime
+        LocalDateTime feedDateTime,
+        String significant
 ) {
     public static FeedLogAdminDetailsQueryResponse from(FeedLog feedLog) {
         return FeedLogAdminDetailsQueryResponse.builder()
@@ -24,6 +25,7 @@ public record FeedLogAdminDetailsQueryResponse(
                 .feedType(feedLog.getFeedType())
                 .feedAmount(feedLog.getFeedAmount())
                 .feedDateTime(feedLog.getFeedDateTime())
+                .significant(feedLog.getSignificant())
                 .build();
     }
 }
