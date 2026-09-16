@@ -12,7 +12,7 @@ public record FeedLogRequest(
         @NotBlank(message = "급여 종류를 입력해주세요.")
         String feedType,
         @PositiveOrZero(message = "급여량은 0 이상이어야 합니다.")
-        Integer feedAmount,
+        Float feedAmount,
         String significant
 ) {
 }

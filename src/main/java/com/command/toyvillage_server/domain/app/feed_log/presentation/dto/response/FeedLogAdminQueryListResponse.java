@@ -23,7 +23,7 @@ public record FeedLogAdminQueryListResponse(
             String animalKind,
             String animalName,
             String feedType,
-            Integer feedAmount,
+            Float feedAmount,
             LocalDateTime feedDateTime
     ) {
         public static FeedLogResponse from(FeedLog feedLog) {
