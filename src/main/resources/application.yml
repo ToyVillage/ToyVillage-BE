@@ -16,6 +16,10 @@ spring:
         default_batch_fetch_size: 100
         jdbc:
           time_zone: Asia/Seoul
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    baseline-version: 1
   data:
     web:
       pageable:
