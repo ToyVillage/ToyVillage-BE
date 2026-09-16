@@ -22,7 +22,7 @@ public record FeedLogAdminQueryListResponse(
     @Builder
     private record FeedLogResponse(
             Long feedLogId,
-            String name,
+            String staffName,
             String animalKind,
             String animalName,
             String feedType,
@@ -32,7 +32,7 @@ public record FeedLogAdminQueryListResponse(
         public static FeedLogResponse from(FeedLog feedLog) {
             return FeedLogResponse.builder()
                     .feedLogId(feedLog.getId())
-                    .name(feedLog.getAppAdmin().getName())
+                    .staffName(feedLog.getAppAdmin().getName())
                     .animalKind(feedLog.getAnimalManage().getAnimalKind().getKindName())
                     .animalName(feedLog.getAnimalManage().getAnimalName())
                     .feedType(feedLog.getFeedType())

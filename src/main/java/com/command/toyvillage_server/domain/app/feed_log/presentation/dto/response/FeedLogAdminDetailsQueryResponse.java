@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Builder
 public record FeedLogAdminDetailsQueryResponse(
         Long animalId,
-        String name,
+        String staffName,
         String animalKind,
         String animalName,
         FileResponse animalImageUrl,
@@ -21,7 +21,7 @@ public record FeedLogAdminDetailsQueryResponse(
     public static FeedLogAdminDetailsQueryResponse from(FeedLog feedLog) {
         return FeedLogAdminDetailsQueryResponse.builder()
                 .animalId(feedLog.getAnimalManage().getId())
-                .name(feedLog.getAppAdmin().getName())
+                .staffName(feedLog.getAppAdmin().getName())
                 .animalKind(feedLog.getAnimalManage().getAnimalKind().getKindName())
                 .animalName(feedLog.getAnimalManage().getAnimalName())
                 .animalImageUrl(FileResponse.from(feedLog.getAnimalManage().getAnimalImage()))

@@ -19,7 +19,7 @@ public record FeedLogAdminSalaryHistoryListQueryResponse(
     @Builder
     private record FeedLogResponse(
             Long feedLogId,
-            String name,
+            String staffName,
             String feedType,
             Float feedAmount,
             LocalDateTime feedDateTime,
@@ -28,7 +28,7 @@ public record FeedLogAdminSalaryHistoryListQueryResponse(
         public static FeedLogResponse from(FeedLog feedLog) {
             return FeedLogResponse.builder()
                     .feedLogId(feedLog.getId())
-                    .name(feedLog.getAppAdmin().getName())
+                    .staffName(feedLog.getAppAdmin().getName())
                     .feedType(feedLog.getFeedType())
                     .feedAmount(feedLog.getFeedAmount())
                     .feedDateTime(feedLog.getFeedDateTime())
