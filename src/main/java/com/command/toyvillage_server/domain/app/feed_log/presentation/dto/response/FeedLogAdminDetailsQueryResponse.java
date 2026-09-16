@@ -1,6 +1,7 @@
 package com.command.toyvillage_server.domain.app.feed_log.presentation.dto.response;
 
 import com.command.toyvillage_server.domain.app.feed_log.domain.FeedLog;
+import com.command.toyvillage_server.domain.web.file.domain.File;
 import lombok.Builder;
 
 import java.time.LocalDateTime;
@@ -11,6 +12,7 @@ public record FeedLogAdminDetailsQueryResponse(
         String name,
         String animalKind,
         String animalName,
+        File animalImageUrl,
         String feedType,
         Float feedAmount,
         LocalDateTime feedDateTime,
@@ -22,6 +24,7 @@ public record FeedLogAdminDetailsQueryResponse(
                 .name(feedLog.getAppAdmin().getName())
                 .animalKind(feedLog.getAnimalManage().getAnimalKind().getKindName())
                 .animalName(feedLog.getAnimalManage().getAnimalName())
+                .animalImageUrl(feedLog.getAnimalManage().getAnimalImage())
                 .feedType(feedLog.getFeedType())
                 .feedAmount(feedLog.getFeedAmount())
                 .feedDateTime(feedLog.getFeedDateTime())
