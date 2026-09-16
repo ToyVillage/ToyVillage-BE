@@ -2,10 +2,7 @@ package com.command.toyvillage_server.domain.app.work_log.presentation;
 
 import com.command.toyvillage_server.domain.app.work_log.presentation.dto.request.WorkLogTemplateRequest;
 import com.command.toyvillage_server.domain.app.work_log.presentation.dto.request.WorkLogWriteRequest;
-import com.command.toyvillage_server.domain.app.work_log.presentation.dto.response.WorkLogDetailResponse;
-import com.command.toyvillage_server.domain.app.work_log.presentation.dto.response.WorkLogListResponse;
-import com.command.toyvillage_server.domain.app.work_log.presentation.dto.response.WorkLogTemplateQueryListObjectResponse;
-import com.command.toyvillage_server.domain.app.work_log.presentation.dto.response.WorkLogTemplateResponse;
+import com.command.toyvillage_server.domain.app.work_log.presentation.dto.response.*;
 import com.command.toyvillage_server.domain.app.work_log.service.template.WorkLogTemplateAdminCreateService;
 import com.command.toyvillage_server.domain.app.work_log.service.template.WorkLogTemplateAdminDeleteService;
 import com.command.toyvillage_server.domain.app.work_log.service.template.WorkLogTemplateQueryListService;
@@ -46,14 +43,10 @@ public class WorkLogController {
     private final WorkLogDeleteService workLogDeleteService;
 
     @PostMapping("/template")
-    public ResponseEntity<MessageResponse> createWorkLogTemplate(
+    public WorkLogTemplateCreateResponse createWorkLogTemplate(
         @RequestBody @Valid WorkLogTemplateRequest request
     ) {
-        workLogTemplateAdminCreateService.execute(request);
-
-        return ResponseEntity
-            .status(HttpStatus.CREATED)
-            .body(MessageResponse.of("업무일지 양식 생성 성공"));
+        return workLogTemplateAdminCreateService.execute(request);
     }
 
     @GetMapping("/template")

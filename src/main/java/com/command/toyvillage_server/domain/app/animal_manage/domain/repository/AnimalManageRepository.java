@@ -12,6 +12,12 @@ import java.util.List;
 public interface AnimalManageRepository extends JpaRepository<AnimalManage, Long> {
     Page<AnimalManage> findAllByAnimalKindId(Long animalKindId, Pageable pageable);
 
+    Page<AnimalManage> findAllByAnimalKindIdAndAnimalNameContainingIgnoreCase(
+        Long animalKindId,
+        String animalName,
+        Pageable pageable
+    );
+
     long countByAnimalKindId(Long animalKindId);
 
     @Query("SELECT a.animalKind.id, COUNT(a.id) FROM AnimalManage a " +

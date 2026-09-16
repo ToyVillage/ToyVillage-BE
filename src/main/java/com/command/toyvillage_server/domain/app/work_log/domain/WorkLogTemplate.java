@@ -1,15 +1,7 @@
 package com.command.toyvillage_server.domain.app.work_log.domain;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OrderBy;
-import jakarta.persistence.Table;
+import com.command.toyvillage_server.domain.app.auth.admin.domain.AppAdmin;
+import jakarta.persistence.*;
 import com.command.toyvillage_server.domain.app.work_log.exception.WorkLogAnswerRequiredException;
 import com.command.toyvillage_server.domain.app.work_log.exception.WorkLogQuestionNotFoundException;
 import com.command.toyvillage_server.domain.app.work_log.exception.WorkLogSectionNotFoundException;
@@ -58,9 +50,14 @@ public class WorkLogTemplate {
     @Column(name = "delete_yn", nullable = false)
     private boolean deleteYn;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "app_admin_id", nullable = false)
+    private AppAdmin appAdmin;
+
     @Builder
-    private WorkLogTemplate(String templateTitle) {
+    private WorkLogTemplate(String templateTitle, AppAdmin appAdmin) {
         this.templateTitle = templateTitle;
+        this.appAdmin = appAdmin;
         this.deleteYn = false;
     }
 

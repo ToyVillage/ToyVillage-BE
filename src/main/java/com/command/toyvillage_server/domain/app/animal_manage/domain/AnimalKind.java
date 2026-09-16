@@ -30,7 +30,7 @@ public class AnimalKind {
     @Enumerated(EnumType.STRING)
     private AnimalTaxonomic animalTaxonomic;
 
-    @Column(name = "detail_kind",  nullable = false)
+    @Column(name = "detail_kind")
     private String detailKind;
 
     @ManyToOne(fetch = FetchType.LAZY)

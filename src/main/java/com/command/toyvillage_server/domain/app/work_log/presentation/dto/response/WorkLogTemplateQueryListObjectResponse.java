@@ -9,12 +9,14 @@ import java.time.LocalDate;
 public record WorkLogTemplateQueryListObjectResponse(
     Long templateId,
     String templateTitle,
+    String writer,
     LocalDate createdAt
 ) {
     public static WorkLogTemplateQueryListObjectResponse from(WorkLogTemplate template) {
         return WorkLogTemplateQueryListObjectResponse.builder()
             .templateId(template.getId())
             .templateTitle(template.getTemplateTitle())
+            .writer(template.getAppAdmin().getUsername())
             .createdAt(template.getCreatedAt())
             .build();
     }

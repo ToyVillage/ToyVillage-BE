@@ -17,12 +17,22 @@ public class QueryAnimalManageListService {
     private final AnimalKindRepository animalKindRepository;
 
     @Transactional(readOnly = true)
-    public Page<AnimalManageQueryListObjectResponse> execute(Long animalKindId, Pageable pageable) {
+    public Page<AnimalManageQueryListObjectResponse> execute(
+        Long animalKindId,
+        String keyword,
+        Pageable pageable
+    ) {
         if (!animalKindRepository.existsById(animalKindId)) {
             throw AnimalKindNotFoundException.EXCEPTION;
         }
 
-        return animalManageRepository.findAllByAnimalKindId(animalKindId, pageable)
+        if (keyword == null || keyword.isBlank()) {
+            return animalManageRepository.findAllByAnimalKindId(animalKindId, pageable)
+                .map(AnimalManageQueryListObjectResponse::from);
+        }
+
+        return animalManageRepository
+            .findAllByAnimalKindIdAndAnimalNameContainingIgnoreCase(animalKindId, keyword.trim(), pageable)
             .map(AnimalManageQueryListObjectResponse::from);
     }
 }

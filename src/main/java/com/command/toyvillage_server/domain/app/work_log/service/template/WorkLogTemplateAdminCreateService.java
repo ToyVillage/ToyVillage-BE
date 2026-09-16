@@ -1,5 +1,9 @@
 package com.command.toyvillage_server.domain.app.work_log.service.template;
 
+import com.command.toyvillage_server.domain.app.auth.admin.domain.AppAdmin;
+import com.command.toyvillage_server.domain.app.auth.admin.domain.repository.AppAdminRepository;
+import com.command.toyvillage_server.domain.app.auth.admin.exception.AppAdminNotFoundException;
+import com.command.toyvillage_server.domain.app.auth.admin.facade.UserFacade;
 import com.command.toyvillage_server.domain.app.work_log.domain.WorkLogQuestionOption;
 import com.command.toyvillage_server.domain.app.work_log.domain.WorkLogSection;
 import com.command.toyvillage_server.domain.app.work_log.domain.WorkLogTemplate;
@@ -11,6 +15,7 @@ import com.command.toyvillage_server.domain.app.work_log.exception.WorkLogTempla
 import com.command.toyvillage_server.domain.app.work_log.presentation.dto.request.WorkLogQuestionOptionRequest;
 import com.command.toyvillage_server.domain.app.work_log.presentation.dto.request.WorkLogQuestionRequest;
 import com.command.toyvillage_server.domain.app.work_log.presentation.dto.request.WorkLogTemplateRequest;
+import com.command.toyvillage_server.domain.app.work_log.presentation.dto.response.WorkLogTemplateCreateResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,21 +26,31 @@ import java.util.List;
 @RequiredArgsConstructor
 public class WorkLogTemplateAdminCreateService {
     private final WorkLogTemplateRepository workLogTemplateRepository;
+    private final AppAdminRepository appAdminRepository;
+    private final UserFacade userFacade;
 
     @Transactional
-    public void execute(WorkLogTemplateRequest request) {
+    public WorkLogTemplateCreateResponse execute(WorkLogTemplateRequest request) {
         if (workLogTemplateRepository.existsByTemplateTitle(request.templateTitle())) {
             throw WorkLogTemplateAlreadyExistsException.EXCEPTION;
         }
 
+        AppAdmin appAdmin = appAdminRepository.findById(userFacade.getCurrentUserId())
+            .orElseThrow(() -> AppAdminNotFoundException.EXCEPTION);
+
         WorkLogTemplate template = WorkLogTemplate.builder()
             .templateTitle(request.templateTitle())
+            .appAdmin(appAdmin)
             .build();
 
         addSections(template, request.sections());
         addQuestions(template, request.questions());
 
         workLogTemplateRepository.save(template);
+
+        return WorkLogTemplateCreateResponse.builder()
+            .templateId(template.getId())
+            .build();
     }
 
     private void addSections(WorkLogTemplate template, List<String> sectionNames) {
