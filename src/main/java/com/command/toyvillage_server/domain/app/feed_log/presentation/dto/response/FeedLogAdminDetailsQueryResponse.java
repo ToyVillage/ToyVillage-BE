@@ -12,7 +12,7 @@ public record FeedLogAdminDetailsQueryResponse(
         String animalKind,
         String animalName,
         String feedType,
-        Integer feedAmount,
+        Float feedAmount,
         LocalDateTime feedDateTime,
         String significant
 ) {

@@ -20,7 +20,7 @@ public record FeedLogQueryResponse(
     private record FeedLogResponse(
             Long animalId,
             String feedType,
-            Integer feedAmount,
+            Float feedAmount,
             LocalDateTime feedDateTime,
             String significant
     ) {

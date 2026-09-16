@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 public record FeedLogDetailsQueryResponse(
         Long feedLogId,
         String feedType,
-        Integer feedAmount,
+        Float feedAmount,
         LocalDateTime feedDateTime,
         String significant
 ) {
