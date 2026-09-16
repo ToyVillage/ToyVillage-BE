@@ -4,7 +4,7 @@ import com.command.toyvillage_server.domain.app.feed_log.domain.FeedLog;
 import lombok.Builder;
 import org.springframework.data.domain.Page;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 @Builder
@@ -27,7 +27,7 @@ public record FeedLogAdminQueryListResponse(
             String animalName,
             String feedType,
             Float feedAmount,
-            LocalDateTime feedDateTime
+            OffsetDateTime feedDateTime
     ) {
         public static FeedLogResponse from(FeedLog feedLog) {
             return FeedLogResponse.builder()
@@ -37,7 +37,7 @@ public record FeedLogAdminQueryListResponse(
                     .animalName(feedLog.getAnimalManage().getAnimalName())
                     .feedType(feedLog.getFeedType())
                     .feedAmount(feedLog.getFeedAmount())
-                    .feedDateTime(feedLog.getFeedDateTime())
+                    .feedDateTime(feedLog.getFeedDateTimeKst())
                     .build();
         }
     }

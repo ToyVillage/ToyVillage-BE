@@ -4,7 +4,7 @@ import com.command.toyvillage_server.domain.app.feed_log.domain.FeedLog;
 import com.command.toyvillage_server.domain.web.file.presentation.dto.response.FileResponse;
 import lombok.Builder;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 @Builder
 public record FeedLogAdminDetailsQueryResponse(
@@ -15,7 +15,7 @@ public record FeedLogAdminDetailsQueryResponse(
         FileResponse animalImageUrl,
         String feedType,
         Float feedAmount,
-        LocalDateTime feedDateTime,
+        OffsetDateTime feedDateTime,
         String significant
 ) {
     public static FeedLogAdminDetailsQueryResponse from(FeedLog feedLog) {
@@ -27,7 +27,7 @@ public record FeedLogAdminDetailsQueryResponse(
                 .animalImageUrl(FileResponse.from(feedLog.getAnimalManage().getAnimalImage()))
                 .feedType(feedLog.getFeedType())
                 .feedAmount(feedLog.getFeedAmount())
-                .feedDateTime(feedLog.getFeedDateTime())
+                .feedDateTime(feedLog.getFeedDateTimeKst())
                 .significant(feedLog.getSignificant())
                 .build();
     }
