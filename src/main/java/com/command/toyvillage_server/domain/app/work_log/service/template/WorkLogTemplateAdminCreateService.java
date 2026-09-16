@@ -1,5 +1,9 @@
 package com.command.toyvillage_server.domain.app.work_log.service.template;
 
+import com.command.toyvillage_server.domain.app.auth.admin.domain.AppAdmin;
+import com.command.toyvillage_server.domain.app.auth.admin.domain.repository.AppAdminRepository;
+import com.command.toyvillage_server.domain.app.auth.admin.exception.AppAdminNotFoundException;
+import com.command.toyvillage_server.domain.app.auth.admin.facade.UserFacade;
 import com.command.toyvillage_server.domain.app.work_log.domain.WorkLogQuestionOption;
 import com.command.toyvillage_server.domain.app.work_log.domain.WorkLogSection;
 import com.command.toyvillage_server.domain.app.work_log.domain.WorkLogTemplate;
@@ -22,6 +26,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class WorkLogTemplateAdminCreateService {
     private final WorkLogTemplateRepository workLogTemplateRepository;
+    private final AppAdminRepository appAdminRepository;
+    private final UserFacade userFacade;
 
     @Transactional
     public WorkLogTemplateCreateResponse execute(WorkLogTemplateRequest request) {
@@ -29,8 +35,12 @@ public class WorkLogTemplateAdminCreateService {
             throw WorkLogTemplateAlreadyExistsException.EXCEPTION;
         }
 
+        AppAdmin appAdmin = appAdminRepository.findById(userFacade.getCurrentUserId())
+            .orElseThrow(() -> AppAdminNotFoundException.EXCEPTION);
+
         WorkLogTemplate template = WorkLogTemplate.builder()
             .templateTitle(request.templateTitle())
+            .appAdmin(appAdmin)
             .build();
 
         addSections(template, request.sections());

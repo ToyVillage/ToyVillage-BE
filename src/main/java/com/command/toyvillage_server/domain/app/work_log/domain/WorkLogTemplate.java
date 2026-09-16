@@ -55,8 +55,9 @@ public class WorkLogTemplate {
     private AppAdmin appAdmin;
 
     @Builder
-    private WorkLogTemplate(String templateTitle) {
+    private WorkLogTemplate(String templateTitle, AppAdmin appAdmin) {
         this.templateTitle = templateTitle;
+        this.appAdmin = appAdmin;
         this.deleteYn = false;
     }
 
