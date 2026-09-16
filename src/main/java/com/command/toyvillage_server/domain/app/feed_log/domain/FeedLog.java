@@ -9,16 +9,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
 
 @Entity
 @Table(name = "tbl_feed_log")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class FeedLog {
-    private static final ZoneOffset KST_OFFSET = ZoneOffset.ofHours(9);
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, name = "feed_log_id")
@@ -62,9 +58,5 @@ public class FeedLog {
         this.feedType = feedType;
         this.feedAmount = feed_amount;
         this.significant = significant;
-    }
-
-    public OffsetDateTime getFeedDateTimeKst() {
-        return feedDateTime.atOffset(KST_OFFSET);
     }
 }

@@ -4,12 +4,18 @@ spring:
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      connection-init-sql: SET time_zone = '+09:00'
+  jackson:
+    time-zone: Asia/Seoul
   jpa:
     hibernate:
       ddl-auto: update
     properties:
       hibernate:
         default_batch_fetch_size: 100
+        jdbc:
+          time_zone: Asia/Seoul
   data:
     web:
       pageable:

@@ -3,7 +3,7 @@ package com.command.toyvillage_server.domain.app.feed_log.presentation.dto.respo
 import com.command.toyvillage_server.domain.app.feed_log.domain.FeedLog;
 import lombok.Builder;
 
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Builder
@@ -21,7 +21,7 @@ public record FeedLogQueryResponse(
             Long animalId,
             String feedType,
             Float feedAmount,
-            OffsetDateTime feedDateTime,
+            LocalDateTime feedDateTime,
             String significant
     ) {
         public static FeedLogResponse from(FeedLog feedLog) {
@@ -29,7 +29,7 @@ public record FeedLogQueryResponse(
                     .animalId(feedLog.getAnimalManage().getId())
                     .feedType(feedLog.getFeedType())
                     .feedAmount(feedLog.getFeedAmount())
-                    .feedDateTime(feedLog.getFeedDateTimeKst())
+                    .feedDateTime(feedLog.getFeedDateTime())
                     .significant(feedLog.getSignificant())
                     .build();
         }

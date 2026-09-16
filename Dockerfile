@@ -20,4 +20,4 @@ COPY --from=builder /app/build/libs/toyvillage.jar ./toyvillage.jar
 
 EXPOSE 8080
 
-ENTRYPOINT ["java", "-Dspring.profiles.active=prod", "-jar", "toyvillage.jar"]
+ENTRYPOINT ["java", "-Duser.timezone=Asia/Seoul", "-Dspring.profiles.active=prod", "-jar", "toyvillage.jar"]
