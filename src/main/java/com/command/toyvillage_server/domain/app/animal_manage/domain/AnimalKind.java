@@ -76,7 +76,7 @@ public class AnimalKind {
         this.kindImage = kindImage;
     }
 
-    public void replaceLegalDesignations(List<String> animalLegalStatuses) {
+    public void replaceLegalDesignations(List<AnimalLegalStatus> animalLegalStatuses) {
         animalLegalDesignations.clear();
         animalLegalStatuses.forEach(animalLegalStatus -> animalLegalDesignations.add(
             AnimalLegalDesignation.builder()

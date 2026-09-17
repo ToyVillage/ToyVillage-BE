@@ -1,5 +1,6 @@
 package com.command.toyvillage_server.domain.app.animal_manage.service.legal_stauts;
 
+import com.command.toyvillage_server.domain.app.animal_manage.domain.AnimalLegalStatus;
 import com.command.toyvillage_server.domain.app.animal_manage.domain.repository.AnimalLegalStatusRepository;
 import com.command.toyvillage_server.domain.app.animal_manage.exception.AnimalLegalStatusNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -13,10 +14,9 @@ public class DeleteAnimalLegalStatusService {
 
     @Transactional
     public void execute(Long animalLegalStatusId) {
-        if (!animalLegalStatusRepository.existsById(animalLegalStatusId)) {
-            throw AnimalLegalStatusNotFoundException.EXCEPTION;
-        }
+        AnimalLegalStatus animalLegalStatus = animalLegalStatusRepository.findById(animalLegalStatusId)
+            .orElseThrow(() -> AnimalLegalStatusNotFoundException.EXCEPTION);
 
-        animalLegalStatusRepository.deleteById(animalLegalStatusId);
+        animalLegalStatusRepository.delete(animalLegalStatus);
     }
 }
