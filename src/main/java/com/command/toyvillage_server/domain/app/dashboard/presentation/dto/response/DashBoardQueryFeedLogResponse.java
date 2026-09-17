@@ -7,12 +7,14 @@ import java.time.LocalDateTime;
 
 @Builder
 public record DashBoardQueryFeedLogResponse(
+        Long feedLogId,
         String animalKind,
         String animalName,
         LocalDateTime feedDateTime
 ) {
     public static DashBoardQueryFeedLogResponse from(FeedLog feedLog) {
         return DashBoardQueryFeedLogResponse.builder()
+                .feedLogId(feedLog.getId())
                 .animalKind(feedLog.getAnimalManage().getAnimalKind().getKindName())
                 .animalName(feedLog.getAnimalManage().getAnimalName())
                 .feedDateTime(feedLog.getFeedDateTime())
