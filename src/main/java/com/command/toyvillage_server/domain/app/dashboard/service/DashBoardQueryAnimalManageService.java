@@ -31,6 +31,9 @@ public class DashBoardQueryAnimalManageService {
                         endDateTime,
                         pageable
                 )
-                .map(DashBoardQueryAnimalManageResponse::from);
+                .map(animalObservation -> DashBoardQueryAnimalManageResponse.of(
+                        animalObservation,
+                        animalObservation.getAnimalManage()
+                ));
     }
 }
