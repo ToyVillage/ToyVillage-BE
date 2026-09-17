@@ -12,8 +12,9 @@ public class AnimalLegalDesignation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "animal_legal_status", nullable = false)
-    private String animalLegalStatus;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "animal_legal_status_id", nullable = false)
+    private AnimalLegalStatus animalLegalStatus;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "animal_kind_id", nullable = false)
@@ -21,7 +22,7 @@ public class AnimalLegalDesignation {
 
     @Builder
     private AnimalLegalDesignation(
-        String animalLegalStatus,
+        AnimalLegalStatus animalLegalStatus,
         AnimalKind animalKind
     ) {
         this.animalLegalStatus = animalLegalStatus;

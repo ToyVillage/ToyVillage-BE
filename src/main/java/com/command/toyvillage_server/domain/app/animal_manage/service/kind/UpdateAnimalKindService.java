@@ -40,9 +40,7 @@ public class UpdateAnimalKindService {
                 .orElseThrow(() -> FileNotFoundException.EXCEPTION)
         );
 
-        animalKind.replaceLegalDesignations(animalLegalStatuses.stream()
-            .map(AnimalLegalStatus::getKind)
-            .toList());
+        animalKind.replaceLegalDesignations(animalLegalStatuses);
     }
 
     private List<AnimalLegalStatus> findAnimalLegalStatuses(List<Long> animalLegalStatusIds) {

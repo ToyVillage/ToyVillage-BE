@@ -36,9 +36,7 @@ public class CreateAnimalKindService {
                 .orElseThrow(() -> FileNotFoundException.EXCEPTION))
             .build();
 
-        animalKind.replaceLegalDesignations(animalLegalStatuses.stream()
-            .map(AnimalLegalStatus::getKind)
-            .toList());
+        animalKind.replaceLegalDesignations(animalLegalStatuses);
 
         animalKindRepository.save(animalKind);
     }

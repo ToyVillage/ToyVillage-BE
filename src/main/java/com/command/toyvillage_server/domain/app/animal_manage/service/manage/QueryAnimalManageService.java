@@ -26,6 +26,7 @@ public class QueryAnimalManageService {
         List<String> legalStatuses = animalLegalDesignationRepository
             .findAllByAnimalKind(animalManage.getAnimalKind()).stream()
             .map(AnimalLegalDesignation::getAnimalLegalStatus)
+            .map(animalLegalStatus -> animalLegalStatus.getKind())
             .toList();
 
         return AnimalManageQueryResponse.of(animalManage, legalStatuses);
