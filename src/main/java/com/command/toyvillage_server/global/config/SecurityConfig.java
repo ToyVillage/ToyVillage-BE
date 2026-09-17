@@ -106,7 +106,8 @@ public class SecurityConfig {
                     .requestMatchers("/popup", "/popup/**").hasRole("WEB_ADMIN")
 
                     // dashboard
-                    .requestMatchers(HttpMethod.GET, "/dashboard").hasRole("APP_ADMIN")
+                    .requestMatchers(HttpMethod.GET, "/dashboard", "/dashboard/**")
+                            .hasRole("APP_ADMIN")
 
                     // team settings
                     .requestMatchers("/team", "/team/**").hasRole("APP_ADMIN")

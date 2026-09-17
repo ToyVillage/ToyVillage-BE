@@ -1,10 +1,10 @@
 package com.command.toyvillage_server.domain.app.dashboard.presentation.dto.response;
 
 public record DashBoardCountResponse(
-        Integer feedLogCount,
-        Integer animalCount,
-        Integer workReportCount,
-        Integer workLogCount
+        Long feedLogCount,
+        Long animalCount,
+        Long workReportCount,
+        Long workLogCount
 ) {
     public static DashBoardCountResponse of(
             long feedLogCount,
@@ -13,10 +13,10 @@ public record DashBoardCountResponse(
             long workLogCount
     ) {
         return new DashBoardCountResponse(
-                Math.toIntExact(feedLogCount),
-                Math.toIntExact(animalCount),
-                Math.toIntExact(workReportCount),
-                Math.toIntExact(workLogCount)
+                feedLogCount,
+                animalCount,
+                workReportCount,
+                workLogCount
         );
     }
 }

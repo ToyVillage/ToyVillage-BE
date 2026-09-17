@@ -8,8 +8,67 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public interface TaskRepository extends JpaRepository<Task, Long> {
+
+    @Query("""
+            select count(task)
+            from Task task
+            where task.createdAt >= :startDateTime
+              and task.createdAt < :endDateTime
+              and size(task.assignees) = (
+                  select count(workReport)
+                  from WorkReport workReport
+                  where workReport.task = task
+                    and workReport.status = com.command.toyvillage_server.domain.app.workreport.domain.Status.APPROVED
+                    and workReport.appAdmin member of task.assignees
+              )
+            """)
+    long countCompletedCreatedBetween(
+            @Param("startDateTime") LocalDateTime startDateTime,
+            @Param("endDateTime") LocalDateTime endDateTime
+    );
+
+    @Query("""
+            select count(task)
+            from Task task
+            where task.createdAt >= :startDateTime
+              and task.createdAt < :endDateTime
+              and size(task.assignees) <> (
+                  select count(workReport)
+                  from WorkReport workReport
+                  where workReport.task = task
+                    and workReport.status = com.command.toyvillage_server.domain.app.workreport.domain.Status.APPROVED
+                    and workReport.appAdmin member of task.assignees
+              )
+              and task.finishDate >= :today
+            """)
+    long countInProgressCreatedBetween(
+            @Param("startDateTime") LocalDateTime startDateTime,
+            @Param("endDateTime") LocalDateTime endDateTime,
+            @Param("today") LocalDate today
+    );
+
+    @Query("""
+            select count(task)
+            from Task task
+            where task.createdAt >= :startDateTime
+              and task.createdAt < :endDateTime
+              and size(task.assignees) <> (
+                  select count(workReport)
+                  from WorkReport workReport
+                  where workReport.task = task
+                    and workReport.status = com.command.toyvillage_server.domain.app.workreport.domain.Status.APPROVED
+                    and workReport.appAdmin member of task.assignees
+              )
+              and task.finishDate < :today
+            """)
+    long countExpiredCreatedBetween(
+            @Param("startDateTime") LocalDateTime startDateTime,
+            @Param("endDateTime") LocalDateTime endDateTime,
+            @Param("today") LocalDate today
+    );
 
     @Query("""
             select t from Task t
