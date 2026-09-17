@@ -1,6 +1,6 @@
 package com.command.toyvillage_server.domain.app.dashboard.service;
 
-import com.command.toyvillage_server.domain.app.animal_manage.domain.repository.AnimalManageRepository;
+import com.command.toyvillage_server.domain.app.animal_manage.domain.repository.AnimalKindRepository;
 import com.command.toyvillage_server.domain.app.dashboard.presentation.dto.response.DashBoardCountResponse;
 import com.command.toyvillage_server.domain.app.feed_log.domain.repository.FeedLogRepository;
 import com.command.toyvillage_server.domain.app.work_log.domain.repository.WorkLogRepository;
@@ -17,7 +17,7 @@ import java.time.temporal.TemporalAdjusters;
 @RequiredArgsConstructor
 public class DashBoardCountService {
     private final FeedLogRepository feedLogRepository;
-    private final AnimalManageRepository animalManageRepository;
+    private final AnimalKindRepository animalKindRepository;
     private final WorkReportRepository workReportRepository;
     private final WorkLogRepository workLogRepository;
 
@@ -33,7 +33,7 @@ public class DashBoardCountService {
                         startDateTime,
                         endDateTime
                 ),
-                animalManageRepository.countByCreatedAtGreaterThanEqualAndCreatedAtLessThan(
+                animalKindRepository.countByCreatedAtGreaterThanEqualAndCreatedAtLessThan(
                         startDateTime,
                         endDateTime
                 ),
