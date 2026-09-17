@@ -43,6 +43,7 @@ public class WorkLogController {
     private final WorkLogDeleteService workLogDeleteService;
 
     @PostMapping("/template")
+    @ResponseStatus(HttpStatus.CREATED)
     public WorkLogTemplateCreateResponse createWorkLogTemplate(
         @RequestBody @Valid WorkLogTemplateRequest request
     ) {
