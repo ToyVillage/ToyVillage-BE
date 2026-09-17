@@ -49,8 +49,4 @@ public class JoinTeam {
     public static JoinTeam create(AppAdmin appAdmin, Team team) {
         return new JoinTeam(appAdmin, team);
     }
-
-    public void updateTeam(Team team) {
-        this.team = team;
-    }
 }

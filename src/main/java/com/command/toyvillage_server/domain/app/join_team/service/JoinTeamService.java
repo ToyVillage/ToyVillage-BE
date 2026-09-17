@@ -34,14 +34,11 @@ public class JoinTeamService {
                 throw JoinTeamTargetInvalidException.EXCEPTION;
             }
 
-            JoinTeam joinTeam = joinTeamRepository.findByAppAdmin_Id(appAdmin.getId())
-                    .map(savedJoinTeam -> {
-                        savedJoinTeam.updateTeam(team);
-                        return savedJoinTeam;
-                    })
-                    .orElseGet(() -> JoinTeam.create(appAdmin, team));
+            if (joinTeamRepository.existsByAppAdmin_IdAndTeam_Id(appAdmin.getId(), teamId)) {
+                continue;
+            }
 
-            joinTeamRepository.save(joinTeam);
+            joinTeamRepository.save(JoinTeam.create(appAdmin, team));
         }
     }
 }
