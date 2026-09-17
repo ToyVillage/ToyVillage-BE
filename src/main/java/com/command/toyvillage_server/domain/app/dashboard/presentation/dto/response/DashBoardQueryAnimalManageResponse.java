@@ -7,11 +7,13 @@ import java.time.LocalDateTime;
 
 @Builder
 public record DashBoardQueryAnimalManageResponse(
+        Long animalObservationId,
         String title,
         LocalDateTime createdAt
 ) {
     public static DashBoardQueryAnimalManageResponse from(AnimalObservation animalObservation) {
         return DashBoardQueryAnimalManageResponse.builder()
+                .animalObservationId(animalObservation.getId())
                 .title(animalObservation.getTitle())
                 .createdAt(animalObservation.getCreatedAt())
                 .build();
