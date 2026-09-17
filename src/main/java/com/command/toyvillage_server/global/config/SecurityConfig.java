@@ -105,6 +105,10 @@ public class SecurityConfig {
                     .requestMatchers(HttpMethod.GET, "/popup", "/popup/**").permitAll()
                     .requestMatchers("/popup", "/popup/**").hasRole("WEB_ADMIN")
 
+                    // dashboard
+                    .requestMatchers(HttpMethod.GET, "/dashboard", "/dashboard/**")
+                            .hasRole("APP_ADMIN")
+
                     // team settings
                     .requestMatchers("/team", "/team/**").hasRole("APP_ADMIN")
                     .requestMatchers("/join-team", "/join-team/**").hasRole("APP_ADMIN")

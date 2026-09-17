@@ -13,6 +13,11 @@ import java.util.Optional;
 
 public interface FeedLogRepository extends JpaRepository<FeedLog, Long> {
 
+    long countByFeedDateTimeGreaterThanEqualAndFeedDateTimeLessThan(
+            LocalDateTime startDateTime,
+            LocalDateTime endDateTime
+    );
+
     Optional<FeedLog> findByIdAndAppAdmin_IdOrderByIdDesc(Long id, Long writerId);
 
     @EntityGraph(attributePaths = {"appAdmin", "animalManage.animalKind"})
