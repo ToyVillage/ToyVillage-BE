@@ -18,6 +18,7 @@ public record FeedLogQueryResponse(
 
     @Builder
     private record FeedLogResponse(
+            Long feedLogId,
             Long animalId,
             String feedType,
             Float feedAmount,
@@ -26,6 +27,7 @@ public record FeedLogQueryResponse(
     ) {
         public static FeedLogResponse from(FeedLog feedLog) {
             return FeedLogResponse.builder()
+                    .feedLogId(feedLog.getId())
                     .animalId(feedLog.getAnimalManage().getId())
                     .feedType(feedLog.getFeedType())
                     .feedAmount(feedLog.getFeedAmount())
