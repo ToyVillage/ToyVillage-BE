@@ -7,15 +7,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 public interface AnimalManageRepository extends JpaRepository<AnimalManage, Long> {
-    long countByCreatedAtGreaterThanEqualAndCreatedAtLessThan(
-        LocalDateTime startDateTime,
-        LocalDateTime endDateTime
-    );
-
     Page<AnimalManage> findAllByAnimalKindId(Long animalKindId, Pageable pageable);
 
     Page<AnimalManage> findAllByAnimalKindIdAndAnimalNameContainingIgnoreCase(

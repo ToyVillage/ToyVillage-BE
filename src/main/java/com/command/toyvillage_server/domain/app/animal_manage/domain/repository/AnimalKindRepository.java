@@ -8,7 +8,14 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDateTime;
+
 public interface AnimalKindRepository extends JpaRepository<AnimalKind, Long> {
+    long countByCreatedAtGreaterThanEqualAndCreatedAtLessThan(
+        LocalDateTime startDateTime,
+        LocalDateTime endDateTime
+    );
+
     Page<AnimalKind> findAllByAnimalTaxonomic(AnimalTaxonomic animalTaxonomic, Pageable pageable);
 
     @Query(
