@@ -7,9 +7,9 @@ import java.time.LocalDateTime;
 
 @Builder
 public record DashBoardQueryFeedLogResponse(
-    String animalKind,
-    String animalName,
-    LocalDateTime feedDateTime
+        String animalKind,
+        String animalName,
+        LocalDateTime feedDateTime
 ) {
     public static DashBoardQueryFeedLogResponse from(FeedLog feedLog) {
         return DashBoardQueryFeedLogResponse.builder()

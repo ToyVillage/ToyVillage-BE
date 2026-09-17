@@ -48,5 +48,4 @@ public class DashBoardController {
     ) {
         return dashBoardQueryAnimalManageService.execute(pageable);
     }
-
 }
