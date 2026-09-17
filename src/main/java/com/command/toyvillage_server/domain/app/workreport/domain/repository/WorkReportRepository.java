@@ -6,11 +6,17 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
 public interface WorkReportRepository extends JpaRepository<WorkReport, Long> {
+    long countByCreatedAtGreaterThanEqualAndCreatedAtLessThan(
+            LocalDateTime startDateTime,
+            LocalDateTime endDateTime
+    );
+
     Optional<WorkReport> findByTask_IdAndAppAdmin_Id(Long taskId, Long appAdminId);
     Page<WorkReport> findAllByStatus(Status status, Pageable pageable);
 

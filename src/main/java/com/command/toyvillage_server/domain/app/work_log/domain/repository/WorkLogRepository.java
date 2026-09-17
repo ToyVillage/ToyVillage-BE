@@ -8,6 +8,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.time.LocalDate;
 
 public interface WorkLogRepository extends JpaRepository<WorkLog, Long> {
+    long countByWriteAtGreaterThanEqualAndWriteAtLessThan(
+        LocalDate startDate,
+        LocalDate endDate
+    );
+
     Page<WorkLog> findByAppAdminId(Long appAdminId, Pageable pageable);
 
     Page<WorkLog> findByWriteAt(LocalDate writeAt, Pageable pageable);

@@ -10,13 +10,17 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(
         name = "tbl_work_report",
         uniqueConstraints = @UniqueConstraint(
@@ -58,6 +62,10 @@ public class WorkReport {
 
     @Column(name = "rejection_reason" , length = 1000)
     private String rejectionReason;
+
+    @CreatedDate
+    @Column(name = "created_at", updatable = false)
+    private LocalDateTime createdAt;
 
     @Builder
     public WorkReport(Task task, AppAdmin appAdmin, String content, String note, List<File> files) {
