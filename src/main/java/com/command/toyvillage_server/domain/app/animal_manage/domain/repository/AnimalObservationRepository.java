@@ -9,6 +9,11 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 public interface AnimalObservationRepository extends JpaRepository<AnimalObservation, Long> {
+    long countByCreatedAtGreaterThanEqualAndCreatedAtLessThan(
+        LocalDateTime startDateTime,
+        LocalDateTime endDateTime
+    );
+
     Page<AnimalObservation> findAllByCreatedAtGreaterThanEqualAndCreatedAtLessThan(
         LocalDateTime startDateTime,
         LocalDateTime endDateTime,
