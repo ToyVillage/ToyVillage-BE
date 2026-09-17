@@ -21,8 +21,8 @@ import lombok.NoArgsConstructor;
 @Table(
         name = "tbl_join_team",
         uniqueConstraints = @UniqueConstraint(
-                name = "uk_join_team_app_admin",
-                columnNames = "app_admin_id"
+                name = "uk_join_team_app_admin_team",
+                columnNames = {"app_admin_id", "team_id"}
         )
 )
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
