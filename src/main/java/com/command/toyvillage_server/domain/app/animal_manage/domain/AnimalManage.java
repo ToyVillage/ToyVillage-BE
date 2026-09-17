@@ -4,7 +4,10 @@ import com.command.toyvillage_server.domain.app.animal_manage.domain.enums.Anima
 import com.command.toyvillage_server.domain.web.file.domain.File;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +17,7 @@ import java.util.List;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Entity
 @Table(name = "tbl_animal_manage")
+@EntityListeners(AuditingEntityListener.class)
 public class AnimalManage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,6 +40,10 @@ public class AnimalManage {
 
     @Column(name = "other_info")
     private String otherInfo;
+
+    @CreatedDate
+    @Column(name = "created_at", updatable = false)
+    private LocalDateTime createdAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "file_id", nullable = false)
