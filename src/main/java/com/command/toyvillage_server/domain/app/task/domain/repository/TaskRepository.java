@@ -120,4 +120,53 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
             @Param("today") LocalDate today,
             Pageable pageable
     );
+
+    @Query("""
+            select t from Task t
+            join t.assignees a
+            where a.id = :appAdminId
+              and size(t.assignees) = (
+                select count(w) from WorkReport w
+                where w.task = t
+                  and w.status = com.command.toyvillage_server.domain.app.workreport.domain.Status.APPROVED
+                  and w.appAdmin member of t.assignees
+            )
+            """)
+    Page<Task> findAllAssignedToCompleted(@Param("appAdminId") Long appAdminId, Pageable pageable);
+
+    @Query("""
+            select t from Task t
+            join t.assignees a
+            where a.id = :appAdminId
+              and size(t.assignees) <> (
+                select count(w) from WorkReport w
+                where w.task = t
+                  and w.status = com.command.toyvillage_server.domain.app.workreport.domain.Status.APPROVED
+                  and w.appAdmin member of t.assignees
+            )
+              and t.finishDate >= :today
+            """)
+    Page<Task> findAllAssignedToInProgress(
+            @Param("appAdminId") Long appAdminId,
+            @Param("today") LocalDate today,
+            Pageable pageable
+    );
+
+    @Query("""
+            select t from Task t
+            join t.assignees a
+            where a.id = :appAdminId
+              and size(t.assignees) <> (
+                select count(w) from WorkReport w
+                where w.task = t
+                  and w.status = com.command.toyvillage_server.domain.app.workreport.domain.Status.APPROVED
+                  and w.appAdmin member of t.assignees
+            )
+              and t.finishDate < :today
+            """)
+    Page<Task> findAllAssignedToExpired(
+            @Param("appAdminId") Long appAdminId,
+            @Param("today") LocalDate today,
+            Pageable pageable
+    );
 }
