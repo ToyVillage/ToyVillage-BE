@@ -41,8 +41,11 @@ public class NoticeController {
     }
 
     @GetMapping
-    public NoticeListResponseDto getList(@PageableDefault(page = 0, size = 10) Pageable pageable) {
-        return queryNoticeListService.execute(pageable);
+    public NoticeListResponseDto getList(
+        @RequestParam(required = false) Long teamId,
+        @PageableDefault(page = 0, size = 10) Pageable pageable
+    ) {
+        return queryNoticeListService.execute(teamId, pageable);
     }
 
 
