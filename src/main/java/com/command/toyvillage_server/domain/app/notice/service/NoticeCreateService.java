@@ -43,7 +43,6 @@ public class NoticeCreateService {
 
         Notice notice = Notice.create(
             request.getTitle(),
-            request.getKind(),
             request.getContent(),
             files
         );

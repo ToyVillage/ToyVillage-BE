@@ -61,7 +61,7 @@ public class NoticeUpdateService {
             .map(team -> NoticeTeam.create(notice, team))
             .toList());
 
-        notice.update(dto.getTitle(), dto.getKind(), dto.getContent(), files);
+        notice.update(dto.getTitle(), dto.getContent(), files);
         noticeRepository.save(notice);
     }
 }
