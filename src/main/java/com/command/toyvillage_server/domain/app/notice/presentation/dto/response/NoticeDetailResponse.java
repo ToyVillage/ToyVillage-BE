@@ -1,7 +1,7 @@
 package com.command.toyvillage_server.domain.app.notice.presentation.dto.response;
 
-import com.command.toyvillage_server.domain.app.notice.domain.Kind;
 import com.command.toyvillage_server.domain.app.notice.domain.Notice;
+import com.command.toyvillage_server.domain.app.notice.domain.NoticeTeam;
 import com.command.toyvillage_server.domain.web.file.presentation.dto.response.FileResponse;
 import lombok.Builder;
 
@@ -12,16 +12,16 @@ import java.util.List;
 public record NoticeDetailResponse(
     Long id,
     String title,
-    Kind kind,
+    List<NoticeTeamResponse> teams,
     String content,
     LocalDate createdAt,
     List<FileResponse> files
 ) {
-    public static NoticeDetailResponse from(Notice notice) {
+    public static NoticeDetailResponse from(Notice notice, List<NoticeTeam> noticeTeams) {
         return NoticeDetailResponse.builder()
             .id(notice.getId())
             .title(notice.getTitle())
-            .kind(notice.getKind())
+            .teams(noticeTeams.stream().map(NoticeTeamResponse::from).toList())
             .content(notice.getContent())
             .createdAt(notice.getCreatedAt())
             .files(

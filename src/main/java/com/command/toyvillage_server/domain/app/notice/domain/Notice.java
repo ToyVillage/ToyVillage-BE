@@ -21,10 +21,6 @@ public class Notice {
     @Column(nullable = false, name = "title")
     private String title;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false, name = "kind")
-    private Kind kind;
-
     @Column(nullable = false, name = "content")
     private String content;
 
@@ -39,9 +35,8 @@ public class Notice {
     )
     private List<File> files = new ArrayList<>();
 
-    public void update(String title, Kind kind, String content, List<File> files) {
+    public void update(String title, String content, List<File> files) {
         this.title = title;
-        this.kind = kind;
         this.content = content;
         if (files != null) {
             this.files.clear();
@@ -49,15 +44,14 @@ public class Notice {
         }
     }
 
-    private Notice(String title, Kind kind, String content,  List<File> files) {
+    private Notice(String title, String content, List<File> files) {
         this.title = title;
-        this.kind = kind;
         this.content = content;
         this.createdAt = LocalDate.now();
         this.files = new ArrayList<>(files);
     }
 
-    public static Notice create(String title, Kind kind, String content,  List<File> files) {
-        return new Notice(title, kind, content,  files);
+    public static Notice create(String title, String content, List<File> files) {
+        return new Notice(title, content, files);
     }
 }
