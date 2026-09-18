@@ -51,9 +51,11 @@ public class NoticeUpdateService {
 
         List<NoticeTeam> noticeTeams = noticeTeamRepository.findAllByNotice_IdOrderByIdAsc(id);
         Set<Long> existingTeamIds = noticeTeams.stream()
+            .filter(noticeTeam -> noticeTeam.getTeam() != null)
             .map(noticeTeam -> noticeTeam.getTeam().getId())
             .collect(Collectors.toSet());
         noticeTeamRepository.deleteAll(noticeTeams.stream()
+            .filter(noticeTeam -> noticeTeam.getTeam() != null)
             .filter(noticeTeam -> !teamIds.contains(noticeTeam.getTeam().getId()))
             .toList());
         noticeTeamRepository.saveAll(teams.stream()

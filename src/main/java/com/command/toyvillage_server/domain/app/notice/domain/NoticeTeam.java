@@ -24,7 +24,7 @@ public class NoticeTeam {
     private Notice notice;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "team_id", nullable = false)
+    @JoinColumn(name = "team_id")
     private Team team;
 
     private NoticeTeam(Notice notice, Team team) {
@@ -34,5 +34,9 @@ public class NoticeTeam {
 
     public static NoticeTeam create(Notice notice, Team team) {
         return new NoticeTeam(notice, team);
+    }
+
+    public void clearTeam() {
+        this.team = null;
     }
 }
