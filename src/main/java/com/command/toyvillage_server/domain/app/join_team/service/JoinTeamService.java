@@ -3,11 +3,9 @@ package com.command.toyvillage_server.domain.app.join_team.service;
 import com.command.toyvillage_server.domain.app.auth.admin.domain.AppAdmin;
 import com.command.toyvillage_server.domain.app.auth.admin.domain.repository.AppAdminRepository;
 import com.command.toyvillage_server.domain.app.auth.admin.exception.AppAdminNotFoundException;
-import com.command.toyvillage_server.domain.app.join_team.domain.JoinTeam;
 import com.command.toyvillage_server.domain.app.join_team.domain.repository.JoinTeamRepository;
 import com.command.toyvillage_server.domain.app.join_team.exception.JoinTeamTargetInvalidException;
 import com.command.toyvillage_server.domain.app.join_team.presentation.dto.request.TeamRequest;
-import com.command.toyvillage_server.domain.app.team.domain.Team;
 import com.command.toyvillage_server.domain.app.team.domain.repository.TeamRepository;
 import com.command.toyvillage_server.domain.app.team.exception.TeamNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -23,8 +21,9 @@ public class JoinTeamService {
 
     @Transactional
     public void execute(TeamRequest request, Long teamId) {
-        Team team = teamRepository.findById(teamId)
-                .orElseThrow(() -> TeamNotFoundException.EXCEPTION);
+        if (!teamRepository.existsById(teamId)) {
+            throw TeamNotFoundException.EXCEPTION;
+        }
 
         for (Long appAdminId : request.appAdminIds().stream().distinct().toList()) {
             AppAdmin appAdmin = appAdminRepository.findById(appAdminId)
@@ -34,16 +33,7 @@ public class JoinTeamService {
                 throw JoinTeamTargetInvalidException.EXCEPTION;
             }
 
-            if (joinTeamRepository.existsByAppAdmin_IdAndTeam_Id(appAdmin.getId(), teamId)) {
-                continue;
-            }
-
-            joinTeamRepository.save(
-                    JoinTeam.builder()
-                            .appAdmin(appAdmin)
-                            .team(team)
-                            .build()
-            );
+            joinTeamRepository.insertIfAbsent(appAdmin.getId(), teamId);
         }
     }
 }
