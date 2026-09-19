@@ -38,7 +38,12 @@ public class JoinTeamService {
                 continue;
             }
 
-            joinTeamRepository.save(JoinTeam.create(appAdmin, team));
+            joinTeamRepository.save(
+                    JoinTeam.builder()
+                            .appAdmin(appAdmin)
+                            .team(team)
+                            .build()
+            );
         }
     }
 }

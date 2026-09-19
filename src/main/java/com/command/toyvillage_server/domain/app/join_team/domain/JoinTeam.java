@@ -13,6 +13,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -41,12 +42,9 @@ public class JoinTeam {
     @JoinColumn(name = "team_id", nullable = false)
     private Team team;
 
-    private JoinTeam(AppAdmin appAdmin, Team team) {
+    @Builder
+    public JoinTeam(AppAdmin appAdmin, Team team) {
         this.appAdmin = appAdmin;
         this.team = team;
-    }
-
-    public static JoinTeam create(AppAdmin appAdmin, Team team) {
-        return new JoinTeam(appAdmin, team);
     }
 }
