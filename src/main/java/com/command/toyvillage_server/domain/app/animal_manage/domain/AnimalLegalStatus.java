@@ -3,9 +3,6 @@ package com.command.toyvillage_server.domain.app.animal_manage.domain;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Getter
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -21,7 +18,4 @@ public class AnimalLegalStatus {
     @Column(name = "kind", nullable = false)
     private String kind;
 
-    @Builder.Default
-    @OneToMany(mappedBy = "animalLegalStatus", cascade = CascadeType.REMOVE, orphanRemoval = true)
-    private List<AnimalLegalDesignation> animalLegalDesignations = new ArrayList<>();
 }
