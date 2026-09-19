@@ -64,6 +64,7 @@ public record TaskListResponse(
                     .status(TaskStatus.of(task.getAssignees().size(), approved, task.getFinishDate(), today))
                     .priority(task.getPriority())
                     .finishDate(task.getFinishDate())
+                    .createdAt(task.getCreatedAt())
                     .build();
         }
     }
