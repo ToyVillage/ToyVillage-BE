@@ -1,8 +1,10 @@
 package com.command.toyvillage_server.domain.app.animal_manage.service.kind;
 
 import com.command.toyvillage_server.domain.app.animal_manage.domain.AnimalKind;
+import com.command.toyvillage_server.domain.app.animal_manage.domain.AnimalLegalDesignation;
 import com.command.toyvillage_server.domain.app.animal_manage.domain.AnimalLegalStatus;
 import com.command.toyvillage_server.domain.app.animal_manage.domain.repository.AnimalKindRepository;
+import com.command.toyvillage_server.domain.app.animal_manage.domain.repository.AnimalLegalDesignationRepository;
 import com.command.toyvillage_server.domain.app.animal_manage.domain.repository.AnimalLegalStatusRepository;
 import com.command.toyvillage_server.domain.app.animal_manage.exception.AnimalKindNotFoundException;
 import com.command.toyvillage_server.domain.app.animal_manage.exception.AnimalLegalStatusNotFoundException;
@@ -21,6 +23,7 @@ import java.util.List;
 public class UpdateAnimalKindService {
     private final AnimalKindRepository animalKindRepository;
     private final AnimalLegalStatusRepository animalLegalStatusRepository;
+    private final AnimalLegalDesignationRepository animalLegalDesignationRepository;
     private final FileRepository fileRepository;
 
     @Transactional
@@ -40,7 +43,14 @@ public class UpdateAnimalKindService {
                 .orElseThrow(() -> FileNotFoundException.EXCEPTION)
         );
 
-        animalKind.replaceLegalDesignations(animalLegalStatuses);
+        animalLegalDesignationRepository.deleteAllByAnimalKindId(animalKindId);
+        animalLegalDesignationRepository.flush();
+        animalLegalDesignationRepository.saveAll(animalLegalStatuses.stream()
+            .map(animalLegalStatus -> AnimalLegalDesignation.builder()
+                .animalKind(animalKind)
+                .animalLegalStatus(animalLegalStatus)
+                .build())
+            .toList());
     }
 
     private List<AnimalLegalStatus> findAnimalLegalStatuses(List<Long> animalLegalStatusIds) {

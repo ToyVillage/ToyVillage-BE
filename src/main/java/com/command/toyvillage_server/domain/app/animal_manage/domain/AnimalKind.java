@@ -46,9 +46,6 @@ public class AnimalKind {
     private File kindImage;
 
     @OneToMany(mappedBy = "animalKind", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<AnimalLegalDesignation> animalLegalDesignations = new ArrayList<>();
-
-    @OneToMany(mappedBy = "animalKind", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<AnimalManage> animalManages = new ArrayList<>();
 
     @Builder
@@ -84,13 +81,4 @@ public class AnimalKind {
         this.kindImage = kindImage;
     }
 
-    public void replaceLegalDesignations(List<AnimalLegalStatus> animalLegalStatuses) {
-        animalLegalDesignations.clear();
-        animalLegalStatuses.forEach(animalLegalStatus -> animalLegalDesignations.add(
-            AnimalLegalDesignation.builder()
-                .animalLegalStatus(animalLegalStatus)
-                .animalKind(this)
-                .build()
-        ));
-    }
 }

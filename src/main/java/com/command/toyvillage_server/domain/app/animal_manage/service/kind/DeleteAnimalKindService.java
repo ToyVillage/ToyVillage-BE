@@ -2,6 +2,7 @@ package com.command.toyvillage_server.domain.app.animal_manage.service.kind;
 
 import com.command.toyvillage_server.domain.app.animal_manage.domain.AnimalKind;
 import com.command.toyvillage_server.domain.app.animal_manage.domain.repository.AnimalKindRepository;
+import com.command.toyvillage_server.domain.app.animal_manage.domain.repository.AnimalLegalDesignationRepository;
 import com.command.toyvillage_server.domain.app.animal_manage.exception.AnimalKindNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -11,12 +12,14 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class DeleteAnimalKindService {
     private final AnimalKindRepository animalKindRepository;
+    private final AnimalLegalDesignationRepository animalLegalDesignationRepository;
 
     @Transactional
     public void execute(Long animalKindId) {
         AnimalKind animalKind = animalKindRepository.findById(animalKindId)
             .orElseThrow(() -> AnimalKindNotFoundException.EXCEPTION);
 
+        animalLegalDesignationRepository.deleteAllByAnimalKindId(animalKindId);
         animalKindRepository.delete(animalKind);
     }
 }
