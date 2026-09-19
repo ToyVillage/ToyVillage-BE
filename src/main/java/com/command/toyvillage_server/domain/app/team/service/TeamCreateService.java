@@ -14,7 +14,9 @@ public class TeamCreateService {
 
     @Transactional
     public void execute(TeamRequest request) {
-        Team team = Team.create(request.name());
+        Team team = Team.builder()
+                .name(request.name())
+                .build();
 
         teamRepository.save(team);
     }
