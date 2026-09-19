@@ -5,8 +5,6 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @Entity
@@ -35,9 +33,6 @@ public class AnimalObservation {
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
-
-    @OneToMany(mappedBy = "animalObservation", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<AnimalObservationFile> files = new ArrayList<>();
 
     public void update(String title, String content) {
         this.title = title;
