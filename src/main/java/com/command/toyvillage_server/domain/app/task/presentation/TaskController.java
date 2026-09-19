@@ -58,10 +58,11 @@ public class TaskController {
 
     @GetMapping("/my")
     public MyTaskListResponse getMyList(
+            @RequestParam(required = false) TaskStatus status,
             @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC)
             Pageable pageable
     ) {
-        return queryMyTaskListService.execute(pageable);
+        return queryMyTaskListService.execute(status, pageable);
     }
 
     @GetMapping("/{id}")
