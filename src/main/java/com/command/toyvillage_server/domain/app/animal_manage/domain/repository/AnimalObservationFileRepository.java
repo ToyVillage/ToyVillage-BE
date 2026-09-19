@@ -10,4 +10,6 @@ public interface AnimalObservationFileRepository extends JpaRepository<AnimalObs
     List<AnimalObservationFile> findAllByAnimalObservationIdIn(List<Long> animalObservationIds);
 
     void deleteAllByAnimalObservationId(Long animalObservationId);
+
+    void deleteAllByAnimalObservation_AnimalManage_Id(Long animalManageId);
 }

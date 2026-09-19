@@ -8,8 +8,6 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -45,12 +43,6 @@ public class AnimalKind {
     @JoinColumn(name = "file_id", nullable = false)
     private File kindImage;
 
-    @OneToMany(mappedBy = "animalKind", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<AnimalLegalDesignation> animalLegalDesignations = new ArrayList<>();
-
-    @OneToMany(mappedBy = "animalKind", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<AnimalManage> animalManages = new ArrayList<>();
-
     @Builder
     private AnimalKind(
         String kindName,
@@ -84,13 +76,4 @@ public class AnimalKind {
         this.kindImage = kindImage;
     }
 
-    public void replaceLegalDesignations(List<AnimalLegalStatus> animalLegalStatuses) {
-        animalLegalDesignations.clear();
-        animalLegalStatuses.forEach(animalLegalStatus -> animalLegalDesignations.add(
-            AnimalLegalDesignation.builder()
-                .animalLegalStatus(animalLegalStatus)
-                .animalKind(this)
-                .build()
-        ));
-    }
 }

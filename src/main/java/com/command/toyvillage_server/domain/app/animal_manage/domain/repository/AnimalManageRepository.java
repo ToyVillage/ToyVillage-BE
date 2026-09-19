@@ -10,6 +10,8 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface AnimalManageRepository extends JpaRepository<AnimalManage, Long> {
+    List<AnimalManage> findAllByAnimalKindId(Long animalKindId);
+
     Page<AnimalManage> findAllByAnimalKindId(Long animalKindId, Pageable pageable);
 
     Page<AnimalManage> findAllByAnimalKindIdAndAnimalNameContainingIgnoreCase(

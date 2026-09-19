@@ -5,9 +5,6 @@ import com.command.toyvillage_server.domain.web.file.domain.File;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Getter
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -40,10 +37,6 @@ public class AnimalManage {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "file_id", nullable = false)
     private File animalImage;
-
-    @Builder.Default
-    @OneToMany(mappedBy = "animalManage", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<AnimalObservation> observations = new ArrayList<>();
 
     public void update(
         AnimalKind animalKind,
