@@ -9,6 +9,7 @@ import lombok.Builder;
 import org.springframework.data.domain.Page;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -42,7 +43,8 @@ public record TaskListResponse(
             int assigneeCount,
             TaskStatus status,
             TaskPriority priority,
-            LocalDate finishDate
+            LocalDate finishDate,
+            LocalDateTime createdAt
     ) {
         private static TaskResponse of(Task task, List<WorkReport> workReports, LocalDate today) {
             Set<Long> assigneeIds = task.getAssignees().stream()
@@ -62,6 +64,7 @@ public record TaskListResponse(
                     .status(TaskStatus.of(task.getAssignees().size(), approved, task.getFinishDate(), today))
                     .priority(task.getPriority())
                     .finishDate(task.getFinishDate())
+                    .createdAt(task.getCreatedAt())
                     .build();
         }
     }
