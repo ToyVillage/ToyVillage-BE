@@ -8,6 +8,7 @@ import com.command.toyvillage_server.domain.app.workreport.domain.WorkReport;
 import lombok.Builder;
 import org.springframework.data.domain.Page;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -44,7 +45,8 @@ public record MyTaskListResponse(
             TaskStatus status,
             Status myReportStatus,
             TaskPriority priority,
-            LocalDate finishDate
+            LocalDate finishDate,
+            LocalDateTime createdAt
     ) {
         private static MyTaskResponse of(
                 Task task,
@@ -70,6 +72,7 @@ public record MyTaskListResponse(
                     .myReportStatus(myReportStatus(workReports, appAdminId))
                     .priority(task.getPriority())
                     .finishDate(task.getFinishDate())
+                    .createdAt(task.getCreatedAt())
                     .build();
         }
 
