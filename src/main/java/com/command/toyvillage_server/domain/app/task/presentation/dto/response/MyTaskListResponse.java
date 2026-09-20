@@ -72,6 +72,7 @@ public record MyTaskListResponse(
                     .myReportStatus(myReportStatus(workReports, appAdminId))
                     .priority(task.getPriority())
                     .finishDate(task.getFinishDate())
+                    .createdAt(task.getCreatedAt())
                     .build();
         }
 
