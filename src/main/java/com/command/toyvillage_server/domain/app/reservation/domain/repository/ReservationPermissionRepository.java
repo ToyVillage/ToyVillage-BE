@@ -11,10 +11,13 @@ import java.util.Optional;
 public interface ReservationPermissionRepository extends JpaRepository<ReservationPermission, Long> {
     boolean existsByReservation_IdAndAppAdmin_Id(Long reservationId, Long appAdminId);
 
-    @Query("select rp.reservation from ReservationPermission rp where rp.appAdmin.id = :appAdminId")
+    @Query("""
+            select rp.reservation from ReservationPermission rp
+            where rp.appAdmin.id = :appAdminId and rp.appAdmin.deleteStatus = false
+            """)
     List<Reservation> findReservationsByAppAdminId(@Param("appAdminId") Long appAdminId);
 
-    List<ReservationPermission> findAllByReservation_Id(Long reservationId);
+    List<ReservationPermission> findAllByReservation_IdAndAppAdmin_DeleteStatusFalse(Long reservationId);
 
     void deleteAllByReservation_Id(Long reservationId);
 

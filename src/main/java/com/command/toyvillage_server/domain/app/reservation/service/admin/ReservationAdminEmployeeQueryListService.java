@@ -34,7 +34,7 @@ public class ReservationAdminEmployeeQueryListService {
         List<ReservationPermissionResponse> assigned = new ArrayList<>();
         List<ReservationPermissionResponse> assignable = new ArrayList<>();
 
-        for (AppAdmin employee : appAdminRepository.findByRoleOrderByNameAsc(AppAdminRole.EMPLOYEE)) {
+        for (AppAdmin employee : appAdminRepository.findByRoleAndDeleteStatusFalseOrderByNameAsc(AppAdminRole.EMPLOYEE)) {
             if (assignedIds.contains(employee.getId())) {
                 assigned.add(toResponse(employee));
             } else {
@@ -56,7 +56,7 @@ public class ReservationAdminEmployeeQueryListService {
 
         Set<Long> assignedIds = new HashSet<>();
 
-        for (ReservationPermission permission : reservationPermissionRepository.findAllByReservation_Id(reservationId)) {
+        for (ReservationPermission permission : reservationPermissionRepository.findAllByReservation_IdAndAppAdmin_DeleteStatusFalse(reservationId)) {
             assignedIds.add(permission.getAppAdmin().getId());
         }
 
