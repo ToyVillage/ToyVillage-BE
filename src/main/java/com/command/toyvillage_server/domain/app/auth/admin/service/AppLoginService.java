@@ -21,7 +21,7 @@ public class AppLoginService {
 
     @Transactional(readOnly = true)
     public AppLoginResponse execute(AppLoginRequest request) {
-        AppAdmin appAdmin = appAdminRepository.findByUsername(request.username())
+        AppAdmin appAdmin = appAdminRepository.findByUsernameAndDeleteStatusFalse(request.username())
                 .orElseThrow(() -> LoginInfoNotMatchedException.EXCEPTION);
 
         if (!passwordEncoder.matches(request.password(), appAdmin.getPassword())) {
