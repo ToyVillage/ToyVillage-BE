@@ -14,7 +14,7 @@ public class EmployeeDeleteService {
 
     @Transactional
     public void execute(Long appAdminId) {
-        AppAdmin appAdmin = appAdminRepository.findById(appAdminId)
+        AppAdmin appAdmin = appAdminRepository.findByIdAndDeleteStatusFalse(appAdminId)
             .orElseThrow(() -> AppAdminNotFoundException.EXCEPTION);
 
         appAdmin.changeDeleteStatus();
