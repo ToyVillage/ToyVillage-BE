@@ -14,6 +14,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
 @Getter
 @Builder
 @Entity
@@ -46,6 +48,9 @@ public class AppAdmin {
     @Column(nullable = false, name = "delete_status")
     private boolean deleteStatus;
 
+    @Column(name = "create_at")
+    private LocalDate createAt;
+
     public static AppAdmin createEmployee(String username, String name, String encodedPassword, String position) {
         return create(username, name, encodedPassword, AppAdminRole.EMPLOYEE, position);
     }
@@ -64,6 +69,7 @@ public class AppAdmin {
                 .role(role)
                 .position(position)
                 .deleteStatus(false)
+                .createAt(LocalDate.now())
                 .build();
     }
 
