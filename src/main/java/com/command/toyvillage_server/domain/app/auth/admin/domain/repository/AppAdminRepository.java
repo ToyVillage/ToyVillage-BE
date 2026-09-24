@@ -10,9 +10,23 @@ import java.util.Optional;
 public interface AppAdminRepository extends JpaRepository<AppAdmin, Long> {
     Optional<AppAdmin> findByUsername(String username);
 
+    Optional<AppAdmin> findByUsernameAndDeleteStatusFalse(String username);
+
+    Optional<AppAdmin> findByIdAndDeleteStatusFalse(Long id);
+
+    Optional<AppAdmin> findByIdAndRoleAndDeleteStatusFalse(Long id, AppAdminRole role);
+
+    List<AppAdmin> findAllByIdInAndDeleteStatusFalse(List<Long> ids);
+
+    boolean existsByIdAndDeleteStatusFalse(Long id);
+
     boolean existsByUsername(String username);
 
     List<AppAdmin> findByRoleOrderByNameAsc(AppAdminRole role);
 
+    List<AppAdmin> findByRoleAndDeleteStatusFalseOrderByNameAsc(AppAdminRole role);
+
     List<AppAdmin> findAllByRoleOrderByIdAsc(AppAdminRole role);
+
+    List<AppAdmin> findAllByRoleAndDeleteStatusFalseOrderByIdAsc(AppAdminRole role);
 }
