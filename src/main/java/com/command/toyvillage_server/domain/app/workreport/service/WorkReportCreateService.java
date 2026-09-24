@@ -46,7 +46,7 @@ public class WorkReportCreateService {
             throw WorkReportAlreadyExistsException.EXCEPTION;
         }
 
-        AppAdmin appAdmin = appAdminRepository.findById(currentUserId)
+        AppAdmin appAdmin = appAdminRepository.findByIdAndDeleteStatusFalse(currentUserId)
                 .orElseThrow(() -> AppAdminNotFoundException.EXCEPTION);
 
         List<File> files = fileFacade.findAllByKeys(workReportRequest.fileKey());
