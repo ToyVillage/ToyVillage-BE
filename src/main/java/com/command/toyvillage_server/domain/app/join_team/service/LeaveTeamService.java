@@ -24,7 +24,7 @@ public class LeaveTeamService {
         }
 
         for (Long appAdminId : request.appAdminIds().stream().distinct().toList()) {
-            if (!appAdminRepository.existsById(appAdminId)) {
+            if (!appAdminRepository.existsByIdAndDeleteStatusFalse(appAdminId)) {
                 throw AppAdminNotFoundException.EXCEPTION;
             }
 

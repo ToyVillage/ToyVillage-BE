@@ -14,6 +14,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
 @Getter
 @Builder
 @Entity
@@ -43,9 +45,11 @@ public class AppAdmin {
     @Column(name = "position", length = 30)
     private String position;
 
-    public static AppAdmin createAppAdmin(String username, String name, String encodedPassword) {
-        return create(username, name, encodedPassword, AppAdminRole.APP_ADMIN, null);
-    }
+    @Column(nullable = false, name = "delete_status")
+    private boolean deleteStatus;
+
+    @Column(name = "create_at")
+    private LocalDate createAt;
 
     public static AppAdmin createEmployee(String username, String name, String encodedPassword, String position) {
         return create(username, name, encodedPassword, AppAdminRole.EMPLOYEE, position);
@@ -64,6 +68,8 @@ public class AppAdmin {
                 .password(encodedPassword)
                 .role(role)
                 .position(position)
+                .deleteStatus(false)
+                .createAt(LocalDate.now())
                 .build();
     }
 
@@ -73,5 +79,9 @@ public class AppAdmin {
 
     public void changePassword(String encodedPassword) {
         this.password = encodedPassword;
+    }
+
+    public void changeDeleteStatus() {
+        this.deleteStatus = true;
     }
 }

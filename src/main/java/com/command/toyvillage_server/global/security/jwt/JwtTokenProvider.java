@@ -58,7 +58,7 @@ public class JwtTokenProvider {
     }
 
     public TokenResponse receiveAppToken(String username) {
-        AppAdmin appAdmin = appAdminRepository.findByUsername(username)
+        AppAdmin appAdmin = appAdminRepository.findByUsernameAndDeleteStatusFalse(username)
                 .orElseThrow(() -> AppAdminNotFoundException.EXCEPTION);
 
         return TokenResponse.of(

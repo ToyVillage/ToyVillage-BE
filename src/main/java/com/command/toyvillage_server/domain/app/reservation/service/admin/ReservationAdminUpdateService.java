@@ -57,7 +57,7 @@ public class ReservationAdminUpdateService {
         appAdminIds.stream()
             .distinct()
             .forEach(appAdminId -> {
-                AppAdmin appAdmin = appAdminRepository.findById(appAdminId)
+                AppAdmin appAdmin = appAdminRepository.findByIdAndDeleteStatusFalse(appAdminId)
                     .orElseThrow(() -> AppAdminNotFoundException.EXCEPTION);
 
                 reservationPermissionRepository.save(
