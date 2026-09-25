@@ -39,7 +39,11 @@ public class AppAdminController {
         return queryEmployeeListService.execute();
     }
 
+<<<<<<< HEAD
     @DeleteMapping("/employees{appAdminId}")
+=======
+    @DeleteMapping("/employee{appAdminId}")
+>>>>>>> origin/feature/#191-featAuthByAdmin
     public ResponseEntity<MessageResponse> deleteEmployee(@PathVariable Long appAdminId) {
         employeeDeleteService.execute(appAdminId);
         return ResponseEntity.ok(MessageResponse.of("직원 계정이 삭제되었습니다."));
