@@ -11,6 +11,7 @@ import java.util.List;
 public record WorkReportResponse(
         Long id,
         Long taskId,
+        String title,
         String content,
         String note,
         List<FileResponse> files,
@@ -21,6 +22,7 @@ public record WorkReportResponse(
         return WorkReportResponse.builder()
                 .id(workReport.getId())
                 .taskId(workReport.getTask().getId())
+                .title(workReport.getTask().getTitle())
                 .content(workReport.getContent())
                 .note(workReport.getNote())
                 .files(
