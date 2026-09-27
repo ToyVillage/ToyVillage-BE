@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,28 +28,32 @@ public class QueryTeamTreeService {
     @Transactional(readOnly = true)
     public TeamTreeResponse execute() {
         List<AppAdmin> employees = appAdminRepository.findAllByRoleOrderByIdAsc(AppAdminRole.EMPLOYEE);
+        List<JoinTeam> joinTeams = joinTeamRepository.findAllWithTeamAndAppAdmin();
 
-        Map<Long, Long> teamIdByAppAdminId = joinTeamRepository.findAllWithTeamAndAppAdmin().stream()
-                .collect(Collectors.toMap(
-                        joinTeam -> joinTeam.getAppAdmin().getId(),
-                        joinTeam -> joinTeam.getTeam().getId()
-                ));
-
-        Map<Long, List<AppAdmin>> employeesByTeamId = employees.stream()
-                .filter(employee -> teamIdByAppAdminId.containsKey(employee.getId()))
+        Map<Long, Set<Long>> appAdminIdsByTeamId = joinTeams.stream()
                 .collect(Collectors.groupingBy(
-                        employee -> teamIdByAppAdminId.get(employee.getId()),
-                        Collectors.toList()
+                        joinTeam -> joinTeam.getTeam().getId(),
+                        Collectors.mapping(joinTeam -> joinTeam.getAppAdmin().getId(), Collectors.toSet())
                 ));
+
+        Set<Long> assignedAppAdminIds = joinTeams.stream()
+                .map(joinTeam -> joinTeam.getAppAdmin().getId())
+                .collect(Collectors.toSet());
 
         List<TeamNode> teams = teamRepository.findAllByOrderByIdAsc().stream()
-                .map(team -> TeamNode.of(team, employeesByTeamId.getOrDefault(team.getId(), List.of())))
+                .map(team -> TeamNode.of(team, filterByIds(employees, appAdminIdsByTeamId.getOrDefault(team.getId(), Set.of()))))
                 .toList();
 
         List<AppAdmin> unassigned = employees.stream()
-                .filter(employee -> !teamIdByAppAdminId.containsKey(employee.getId()))
+                .filter(employee -> !assignedAppAdminIds.contains(employee.getId()))
                 .toList();
 
         return TeamTreeResponse.of(employees.size(), teams, TeamNode.unassigned(unassigned));
+    }
+
+    private List<AppAdmin> filterByIds(List<AppAdmin> employees, Set<Long> ids) {
+        return employees.stream()
+                .filter(employee -> ids.contains(employee.getId()))
+                .toList();
     }
 }

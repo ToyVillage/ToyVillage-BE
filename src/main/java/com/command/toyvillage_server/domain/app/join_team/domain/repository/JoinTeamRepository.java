@@ -2,6 +2,7 @@ package com.command.toyvillage_server.domain.app.join_team.domain.repository;
 
 import com.command.toyvillage_server.domain.app.join_team.domain.JoinTeam;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -9,9 +10,15 @@ import java.util.List;
 import java.util.Optional;
 
 public interface JoinTeamRepository extends JpaRepository<JoinTeam, Long> {
-    Optional<JoinTeam> findByAppAdmin_Id(Long appAdminId);
-
     Optional<JoinTeam> findByAppAdmin_IdAndTeam_Id(Long appAdminId, Long teamId);
+
+    @Modifying
+    @Query(value = """
+            insert into tbl_join_team (app_admin_id, team_id)
+            values (:appAdminId, :teamId)
+            on duplicate key update join_team_id = join_team_id
+            """, nativeQuery = true)
+    void insertIfAbsent(@Param("appAdminId") Long appAdminId, @Param("teamId") Long teamId);
 
     List<JoinTeam> findAllByTeam_Id(Long teamId);
 

@@ -7,6 +7,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -23,12 +24,9 @@ public class Team {
     @Column(nullable = false, name = "team_name")
     private String name;
 
-    private Team(String name) {
+    @Builder
+    public Team(String name) {
         this.name = name;
-    }
-
-    public static Team create(String name) {
-        return new Team(name);
     }
 
     public void update(String name) {
