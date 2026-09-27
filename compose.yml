@@ -9,12 +9,18 @@ services:
       DB_URL: "jdbc:mysql://mysql:3306/${MYSQL_DATABASE}"
       REDIS_HOST: redis
       REDIS_PORT: 6379
-
+      DD_AGENT_HOST: datadog-agent
+      DD_SERVICE: toyvillage-server
+      DD_ENV: ${DD_ENV:-prod}
+    labels:
+      com.datadoghq.ad.logs: '[{"source":"java","service":"toyvillage-server"}]'
     depends_on:
       mysql:
         condition: service_healthy
       redis:
         condition: service_healthy
+      datadog-agent:
+        condition: service_started
     restart: unless-stopped
 
   mysql:
@@ -40,6 +46,23 @@ services:
       interval: 10s
       timeout: 3s
       retries: 10
+
+  datadog-agent:
+    image: gcr.io/datadoghq/agent:7
+    environment:
+      DD_API_KEY: ${DD_API_KEY}
+      DD_SITE: us5.datadoghq.com
+      DD_ENV: ${DD_ENV:-prod}
+      DD_APM_ENABLED: "true"
+      DD_APM_NON_LOCAL_TRAFFIC: "true"
+      DD_LOGS_ENABLED: "true"
+      DD_LOGS_CONFIG_CONTAINER_COLLECT_ALL: "false"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /proc/:/host/proc/:ro
+      - /sys/fs/cgroup/:/host/sys/fs/cgroup:ro
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+    restart: unless-stopped
 
 volumes:
   mysql_data:
