@@ -8,15 +8,7 @@ import com.command.toyvillage_server.domain.app.feed_log.presentation.dto.respon
 import com.command.toyvillage_server.domain.app.feed_log.presentation.dto.response.FeedLogMyQueryResponse;
 import com.command.toyvillage_server.domain.app.feed_log.presentation.dto.response.FeedLogDetailsQueryResponse;
 import com.command.toyvillage_server.domain.app.feed_log.presentation.dto.response.FeedLogQueryResponse;
-import com.command.toyvillage_server.domain.app.feed_log.service.FeedLogCreateService;
-import com.command.toyvillage_server.domain.app.feed_log.service.FeedLogAdminDetailsQueryService;
-import com.command.toyvillage_server.domain.app.feed_log.service.FeedLogAdminSalaryHistoryListQueryService;
-import com.command.toyvillage_server.domain.app.feed_log.service.FeedLogAdminQueryListService;
-import com.command.toyvillage_server.domain.app.feed_log.service.FeedLogMyQueryService;
-import com.command.toyvillage_server.domain.app.feed_log.service.FeedLogDetailsQueryService;
-import com.command.toyvillage_server.domain.app.feed_log.service.FeedLogQueryService;
-import com.command.toyvillage_server.domain.app.feed_log.service.FeedLogUpdateService;
-import com.command.toyvillage_server.domain.app.feed_log.service.FeedLogAdminUpdateService;
+import com.command.toyvillage_server.domain.app.feed_log.service.*;
 import com.command.toyvillage_server.global.common.response.MessageResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -42,6 +34,7 @@ public class FeedLogController {
     private final FeedLogAdminQueryListService feedLogAdminQueryListService;
     private final FeedLogAdminDetailsQueryService feedLogAdminDetailsQueryService;
     private final FeedLogAdminSalaryHistoryListQueryService feedLogAdminSalaryHistoryListQueryService;
+    private final FeedLogAdminDeleteService feedLogAdminDeleteService;
 
     //admin
     @PutMapping("/admin/{feedLogId}")
@@ -81,6 +74,11 @@ public class FeedLogController {
             @PathVariable("animalManageId") Long animalManageId
     ) {
         return feedLogQueryService.execute(animalManageId);
+    }
+
+    @DeleteMapping("/admin/{feedLogId}")
+    public void deleteFeedLog(@PathVariable("feedLogId") Long feedLogId) {
+        feedLogAdminDeleteService.execute(feedLogId);
     }
 
     //직원
