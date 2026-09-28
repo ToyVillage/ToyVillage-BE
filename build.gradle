@@ -67,5 +67,43 @@ dependencies {
 }
 
 tasks.named('test') {
+    dependsOn 'validateMigrationVersions'
     useJUnitPlatform()
+}
+
+tasks.register('validateMigrationVersions') {
+    group = 'verification'
+    description = 'Rejects duplicate Flyway migration versions without connecting to a database.'
+
+    def migrations = fileTree('src/main/resources/db/migration') {
+        include '**/V*.sql'
+    }
+    inputs.files(migrations)
+
+    doLast {
+        def versions = migrations.files.groupBy { migration ->
+            def match = migration.name =~ /^V([0-9]+(?:[._][0-9]+)*)__.+\.sql$/
+            if (!match.matches()) {
+                throw new GradleException("Invalid Flyway migration filename: ${migration.name}")
+            }
+
+            def parts = match.group(1).split(/[._]/).collect { new BigInteger(it) }
+            while (parts.size() > 1 && parts.last() == BigInteger.ZERO) {
+                parts.remove(parts.size() - 1)
+            }
+            parts.join('.')
+        }
+        def duplicates = versions.findAll { version, files -> files.size() > 1 }
+        if (!duplicates.isEmpty()) {
+            def details = duplicates.collect { version, files ->
+                "V${version}: ${files.collect { it.name }.sort().join(', ')}"
+            }.sort().join('\n')
+            throw new GradleException("Duplicate Flyway migration versions:\n${details}")
+        }
+        logger.lifecycle("Validated ${versions.size()} unique Flyway migration versions.")
+    }
+}
+
+tasks.named('bootJar') {
+    dependsOn 'validateMigrationVersions'
 }
