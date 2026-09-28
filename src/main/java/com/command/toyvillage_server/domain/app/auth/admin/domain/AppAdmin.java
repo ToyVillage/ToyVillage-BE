@@ -51,7 +51,7 @@ public class AppAdmin {
     @Column(nullable = false, name = "delete_status")
     private boolean deleteStatus;
 
-    @Column(name = "create_at")
+    @Column(name = "create_at", nullable = false)
     private LocalDate createAt;
 
     public static AppAdmin createEmployee(String username, String name, String encodedPassword, String position) {
