@@ -79,6 +79,12 @@ public class AppAdmin {
 
     public void changePassword(String encodedPassword) {
         this.password = encodedPassword;
+        this.passwordChanged = true;
+    }
+
+    public void resetPassword(String encodedPassword) {
+        this.password = encodedPassword;
+        this.passwordChanged = false;
     }
 
     public void changeDeleteStatus() {
