@@ -24,7 +24,7 @@ public class EmployeePasswordResetService {
         AppAdmin appAdmin = appAdminRepository.findByIdAndRoleAndDeleteStatusFalse(appAdminId, AppAdminRole.EMPLOYEE)
             .orElseThrow(() -> AppAdminNotFoundException.EXCEPTION);
 
-        appAdmin.changePassword(passwordEncoder.encode(appAdmin.getUsername()));
+        appAdmin.resetPassword(passwordEncoder.encode(appAdmin.getUsername()));
         appAdminRepository.saveAndFlush(appAdmin);
 
         refreshTokenRepository.deleteById(jwtTokenProvider.getAppRefreshTokenKey(appAdmin.getUsername()));

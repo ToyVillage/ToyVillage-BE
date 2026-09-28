@@ -10,7 +10,8 @@ public record EmployeeResponse(
         Long id,
         String username,
         String name,
-        LocalDate createAt
+        LocalDate createAt,
+        boolean passwordChanged
 ) {
     public static EmployeeResponse from(AppAdmin employee) {
         return EmployeeResponse.builder()
@@ -18,6 +19,7 @@ public record EmployeeResponse(
                 .username(employee.getUsername())
                 .name(employee.getName())
                 .createAt(employee.getCreateAt())
+                .passwordChanged(employee.isPasswordChanged())
                 .build();
     }
 }

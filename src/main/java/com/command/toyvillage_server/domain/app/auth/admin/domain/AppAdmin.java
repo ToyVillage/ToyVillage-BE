@@ -38,6 +38,9 @@ public class AppAdmin {
     @Column(nullable = false)
     private String password;
 
+    @Column(name = "password_changed", nullable = false)
+    private boolean passwordChanged;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private AppAdminRole role;
