@@ -103,6 +103,7 @@ public enum ErrorCode {
 
     // feed log
     FEED_LOG_NOT_FOUND(404, "존재하지 않는 급여일지입니다."),
+    FEED_LOG_FORBIDDEN(403, "관리자만 급여일지를 수정할 수 있습니다."),
 
     // team
     TEAM_NOT_FOUND(404, "존재하지 않는 팀입니다."),

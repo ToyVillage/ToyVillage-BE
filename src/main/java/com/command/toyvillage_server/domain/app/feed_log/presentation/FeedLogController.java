@@ -16,6 +16,7 @@ import com.command.toyvillage_server.domain.app.feed_log.service.FeedLogMyQueryS
 import com.command.toyvillage_server.domain.app.feed_log.service.FeedLogDetailsQueryService;
 import com.command.toyvillage_server.domain.app.feed_log.service.FeedLogQueryService;
 import com.command.toyvillage_server.domain.app.feed_log.service.FeedLogUpdateService;
+import com.command.toyvillage_server.domain.app.feed_log.service.FeedLogAdminUpdateService;
 import com.command.toyvillage_server.global.common.response.MessageResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +35,7 @@ import java.time.LocalDate;
 public class FeedLogController {
     private final FeedLogCreateService feedLogCreateService;
     private final FeedLogUpdateService feedLogUpdateService;
+    private final FeedLogAdminUpdateService feedLogAdminUpdateService;
     private final FeedLogMyQueryService feedLogMyQueryService;
     private final FeedLogDetailsQueryService feedLogDetailsQueryService;
     private final FeedLogQueryService feedLogQueryService;
@@ -42,6 +44,15 @@ public class FeedLogController {
     private final FeedLogAdminSalaryHistoryListQueryService feedLogAdminSalaryHistoryListQueryService;
 
     //admin
+    @PutMapping("/admin/{feedLogId}")
+    public ResponseEntity<MessageResponse> updateAdminFeedLog(
+            @PathVariable("feedLogId") Long feedLogId,
+            @RequestBody @Valid FeedLogRequest request
+    ) {
+        feedLogAdminUpdateService.execute(feedLogId, request);
+        return ResponseEntity.ok(MessageResponse.of("급여일지가 수정되었습니다."));
+    }
+
     @GetMapping("/admin")
     public FeedLogAdminQueryListResponse getFeedLogList(
             @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
