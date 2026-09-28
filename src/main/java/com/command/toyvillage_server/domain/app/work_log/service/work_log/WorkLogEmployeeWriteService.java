@@ -39,7 +39,7 @@ public class WorkLogEmployeeWriteService {
             throw AppAdminNotFoundException.EXCEPTION;
         }
 
-        AppAdmin appAdmin = appAdminRepository.findById(appAdminDetails.getId())
+        AppAdmin appAdmin = appAdminRepository.findByIdAndDeleteStatusFalse(appAdminDetails.getId())
             .orElseThrow(() -> AppAdminNotFoundException.EXCEPTION);
 
         WorkLogTemplate template = workLogTemplateRepository.findByIdAndDeleteYnFalse(workLogTemplateId)

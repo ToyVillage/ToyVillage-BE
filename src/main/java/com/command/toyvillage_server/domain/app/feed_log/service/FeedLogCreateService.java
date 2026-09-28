@@ -24,7 +24,7 @@ public class FeedLogCreateService {
 
     @Transactional
     public void execute(Long animalManageId, FeedLogRequest feedLogRequest) {
-        AppAdmin writer = appAdminRepository.findById(userFacade.getCurrentUserId())
+        AppAdmin writer = appAdminRepository.findByIdAndDeleteStatusFalse(userFacade.getCurrentUserId())
                 .orElseThrow(() -> AppAdminNotFoundException.EXCEPTION);
 
         AnimalManage animalManage = animalManageRepository.findById(animalManageId)

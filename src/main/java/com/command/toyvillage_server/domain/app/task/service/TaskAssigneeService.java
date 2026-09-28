@@ -20,7 +20,7 @@ public class TaskAssigneeService {
         }
 
         List<Long> distinctIds = assigneeIds.stream().distinct().toList();
-        List<AppAdmin> assignees = appAdminRepository.findAllById(distinctIds);
+        List<AppAdmin> assignees = appAdminRepository.findAllByIdInAndDeleteStatusFalse(distinctIds);
 
         if (assignees.size() != distinctIds.size()) {
             throw AppAdminNotFoundException.EXCEPTION;

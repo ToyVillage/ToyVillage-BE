@@ -21,7 +21,7 @@ public class ReservationAdminPermissionQueryListService {
         reservationRepository.findById(reservationId)
             .orElseThrow(() -> ReservationNotFoundException.EXCEPTION);
 
-        return reservationPermissionRepository.findAllByReservation_Id(reservationId)
+        return reservationPermissionRepository.findAllByReservation_IdAndAppAdmin_DeleteStatusFalse(reservationId)
             .stream()
             .map(permission -> ReservationPermissionResponse.of(
                     permission.getAppAdmin().getId(),

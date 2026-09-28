@@ -15,7 +15,7 @@ public class AppAdminDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) {
-        AppAdmin appAdmin = appAdminRepository.findByUsername(username)
+        AppAdmin appAdmin = appAdminRepository.findByUsernameAndDeleteStatusFalse(username)
                 .orElseThrow(() -> new UsernameNotFoundException("App admin not found"));
 
         return new AppAdminDetails(appAdmin);

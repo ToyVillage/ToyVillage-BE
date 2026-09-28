@@ -37,7 +37,7 @@ public class CreateAnimalObservationService {
         AnimalManage animalManage = animalManageRepository.findById(animalManageId)
             .orElseThrow(() -> AnimalManageNotFoundException.EXCEPTION);
 
-        AppAdmin author = appAdminRepository.findById(userFacade.getCurrentUserId())
+        AppAdmin author = appAdminRepository.findByIdAndDeleteStatusFalse(userFacade.getCurrentUserId())
             .orElseThrow(() -> AppAdminNotFoundException.EXCEPTION);
 
         List<File> files = List.of();

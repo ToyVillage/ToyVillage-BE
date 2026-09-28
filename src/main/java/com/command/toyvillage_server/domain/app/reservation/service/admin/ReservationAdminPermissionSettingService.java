@@ -24,7 +24,7 @@ public class ReservationAdminPermissionSettingService {
         Reservation reservation = reservationRepository.findById(reservationId)
             .orElseThrow(() -> ReservationNotFoundException.EXCEPTION);
 
-        AppAdmin appAdmin = appAdminRepository.findById(appAdminId)
+        AppAdmin appAdmin = appAdminRepository.findByIdAndDeleteStatusFalse(appAdminId)
             .orElseThrow(() -> AppAdminNotFoundException.EXCEPTION);
 
         if (permission) {

@@ -33,7 +33,7 @@ public class AppChangePasswordService {
             throw AppAdminNotFoundException.EXCEPTION;
         }
 
-        AppAdmin appAdmin = appAdminRepository.findById(details.getId())
+        AppAdmin appAdmin = appAdminRepository.findByIdAndDeleteStatusFalse(details.getId())
                 .orElseThrow(() -> AppAdminNotFoundException.EXCEPTION);
         
         if (!passwordEncoder.matches(request.currentPassword(), appAdmin.getPassword())) {

@@ -15,7 +15,7 @@ public class QueryEmployeeListService {
 
     @Transactional(readOnly = true)
     public List<EmployeeResponse> execute() {
-        return appAdminRepository.findAllByRoleOrderByIdAsc(AppAdminRole.EMPLOYEE)
+        return appAdminRepository.findAllByRoleAndDeleteStatusFalseOrderByIdAsc(AppAdminRole.EMPLOYEE)
                 .stream()
                 .map(EmployeeResponse::from)
                 .toList();

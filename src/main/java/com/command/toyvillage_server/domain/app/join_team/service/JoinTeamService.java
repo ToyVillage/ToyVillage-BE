@@ -26,7 +26,7 @@ public class JoinTeamService {
         }
 
         for (Long appAdminId : request.appAdminIds().stream().distinct().toList()) {
-            AppAdmin appAdmin = appAdminRepository.findById(appAdminId)
+            AppAdmin appAdmin = appAdminRepository.findByIdAndDeleteStatusFalse(appAdminId)
                     .orElseThrow(() -> AppAdminNotFoundException.EXCEPTION);
 
             if (appAdmin.isAppAdmin()) {

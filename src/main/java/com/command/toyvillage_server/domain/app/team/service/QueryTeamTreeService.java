@@ -27,7 +27,7 @@ public class QueryTeamTreeService {
 
     @Transactional(readOnly = true)
     public TeamTreeResponse execute() {
-        List<AppAdmin> employees = appAdminRepository.findAllByRoleOrderByIdAsc(AppAdminRole.EMPLOYEE);
+        List<AppAdmin> employees = appAdminRepository.findAllByRoleAndDeleteStatusFalseOrderByIdAsc(AppAdminRole.EMPLOYEE);
         List<JoinTeam> joinTeams = joinTeamRepository.findAllWithTeamAndAppAdmin();
 
         Map<Long, Set<Long>> appAdminIdsByTeamId = joinTeams.stream()

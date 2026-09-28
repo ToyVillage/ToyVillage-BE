@@ -25,6 +25,7 @@ public interface JoinTeamRepository extends JpaRepository<JoinTeam, Long> {
     @Query("""
             select j.team.id as teamId, count(j) as memberCount
             from JoinTeam j
+            where j.appAdmin.deleteStatus = false
             group by j.team.id
             """)
     List<TeamMemberCount> countMembersByTeam();
@@ -39,6 +40,7 @@ public interface JoinTeamRepository extends JpaRepository<JoinTeam, Long> {
             select j from JoinTeam j
             join fetch j.appAdmin
             where j.team.id = :teamId
+              and j.appAdmin.deleteStatus = false
             order by j.appAdmin.id asc
             """)
     List<JoinTeam> findMembersByTeamId(@Param("teamId") Long teamId);
@@ -47,6 +49,7 @@ public interface JoinTeamRepository extends JpaRepository<JoinTeam, Long> {
             select j from JoinTeam j
             join fetch j.team
             join fetch j.appAdmin
+            where j.appAdmin.deleteStatus = false
             """)
     List<JoinTeam> findAllWithTeamAndAppAdmin();
 }

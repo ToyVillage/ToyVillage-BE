@@ -35,7 +35,7 @@ public class WorkLogTemplateAdminCreateService {
             throw WorkLogTemplateAlreadyExistsException.EXCEPTION;
         }
 
-        AppAdmin appAdmin = appAdminRepository.findById(userFacade.getCurrentUserId())
+        AppAdmin appAdmin = appAdminRepository.findByIdAndDeleteStatusFalse(userFacade.getCurrentUserId())
             .orElseThrow(() -> AppAdminNotFoundException.EXCEPTION);
 
         WorkLogTemplate template = WorkLogTemplate.builder()
