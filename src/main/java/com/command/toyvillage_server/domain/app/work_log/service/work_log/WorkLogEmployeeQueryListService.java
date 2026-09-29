@@ -1,6 +1,7 @@
 package com.command.toyvillage_server.domain.app.work_log.service.work_log;
 
 import com.command.toyvillage_server.domain.app.auth.admin.exception.AppAdminNotFoundException;
+import com.command.toyvillage_server.domain.app.work_log.domain.WorkLog;
 import com.command.toyvillage_server.domain.app.work_log.domain.repository.WorkLogRepository;
 import com.command.toyvillage_server.domain.app.work_log.presentation.dto.response.WorkLogListResponse;
 import com.command.toyvillage_server.global.security.auth.AppAdminDetails;
@@ -18,14 +19,21 @@ public class WorkLogEmployeeQueryListService {
     private final WorkLogRepository workLogRepository;
 
     @Transactional(readOnly = true)
-    public Page<WorkLogListResponse> execute(Pageable pageable) {
+    public Page<WorkLogListResponse> execute(Long templateId, Pageable pageable) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication == null || !(authentication.getPrincipal() instanceof AppAdminDetails appAdminDetails)) {
             throw AppAdminNotFoundException.EXCEPTION;
         }
 
-        return workLogRepository.findByAppAdminId(appAdminDetails.getId(), pageable)
-            .map(WorkLogListResponse::from);
+        Page<WorkLog> workLogs;
+
+        if (templateId == null) {
+            workLogs = workLogRepository.findByAppAdminId(appAdminDetails.getId(), pageable);
+        } else {
+            workLogs = workLogRepository.findByAppAdminIdAndTemplateId(appAdminDetails.getId(), templateId, pageable);
+        }
+
+        return workLogs.map(WorkLogListResponse::from);
     }
 }
