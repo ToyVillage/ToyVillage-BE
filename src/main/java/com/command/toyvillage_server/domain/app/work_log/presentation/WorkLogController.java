@@ -90,16 +90,18 @@ public class WorkLogController {
     @GetMapping
     public Page<WorkLogListResponse> getWorkLogList(
         @PageableDefault(size = 4) Pageable pageable,
-        @RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date
+        @RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date,
+        @RequestParam(value = "templateId", required = false) Long templateId
     ) {
-        return workLogAdminQueryListService.execute(date, pageable);
+        return workLogAdminQueryListService.execute(date, templateId, pageable);
     }
 
     @GetMapping("/employee")
     public Page<WorkLogListResponse> getEmployeeWorkLogList(
-        @PageableDefault(size = 10) Pageable pageable
+        @PageableDefault(size = 10) Pageable pageable,
+        @RequestParam(value = "templateId", required = false) Long templateId
     ) {
-        return workLogEmployeeQueryListService.execute(pageable);
+        return workLogEmployeeQueryListService.execute(templateId, pageable);
     }
 
     @GetMapping("/{workLogId}")
