@@ -9,7 +9,7 @@ import com.command.toyvillage_server.domain.app.workreport.presentation.dto.resp
 import com.command.toyvillage_server.domain.app.workreport.service.WorkApproveService;
 import com.command.toyvillage_server.domain.app.workreport.service.WorkRejectService;
 import com.command.toyvillage_server.domain.app.workreport.service.WorkReportCreateService;
-import com.command.toyvillage_server.domain.app.workreport.service.WorkReportUpdateService;
+import com.command.toyvillage_server.domain.app.workreport.service.WorkReportResubmitService;
 import com.command.toyvillage_server.domain.app.workreport.service.WorkReportDeleteService;
 import com.command.toyvillage_server.domain.app.workreport.service.WorkReportQueryService;
 import com.command.toyvillage_server.domain.app.workreport.service.WorkReportAllQueryService;
@@ -34,7 +34,7 @@ public class WorkReportController {
     private final WorkReportCreateService workReportCreateService;
     private final WorkApproveService workApproveService;
     private final WorkRejectService workRejectService;
-    private final WorkReportUpdateService workReportUpdateService;
+    private final WorkReportResubmitService workReportResubmitService;
     private final WorkReportDeleteService workReportDeleteService;
     private final WorkReportQueryService workReportQueryService;
     private final WorkReportAllQueryService workReportAllQueryService;
@@ -62,12 +62,12 @@ public class WorkReportController {
     }
 
     @PutMapping("/{id}")
-    public MessageResponse updateWorkReport(
+    public MessageResponse reSubmitWorkReport(
             @PathVariable("id") Long workReportId,
             @Valid @RequestBody WorkReportRequest workReportRequest
     ) {
-        workReportUpdateService.execute(workReportId, workReportRequest);
-        return MessageResponse.of("업무 보고가 수정되었습니다.");
+        workReportResubmitService.execute(workReportId, workReportRequest);
+        return MessageResponse.of("업무 보고가 재제출되었습니다.");
     }
 
     @DeleteMapping("/{id}")

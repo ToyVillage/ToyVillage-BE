@@ -4,6 +4,7 @@ import com.command.toyvillage_server.domain.app.auth.admin.domain.AppAdmin;
 import com.command.toyvillage_server.domain.app.task.domain.Task;
 import com.command.toyvillage_server.domain.app.workreport.exception.WorkAlreadyApprovedException;
 import com.command.toyvillage_server.domain.app.workreport.exception.WorkNotFoundException;
+import com.command.toyvillage_server.domain.app.workreport.exception.WorkNotRejectedException;
 import com.command.toyvillage_server.domain.web.file.domain.File;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -76,14 +77,18 @@ public class WorkReport {
         this.files = files == null ? new ArrayList<>() : new ArrayList<>(files);
     }
 
-    public void update(String content, String note, List<File> files) {
+    public void resubmit(String content, String note, List<File> files) {
+        if (status != Status.REJECTED) {
+            throw WorkNotRejectedException.EXCEPTION;
+        }
+
         this.content = content;
         this.note = note;
         if (files != null) {
             this.files.clear();
             this.files.addAll(files);
         }
-        this.status = Status.PENDING;
+        this.status = Status.RESUBMIT;
         this.rejectionReason = null;
     }
 

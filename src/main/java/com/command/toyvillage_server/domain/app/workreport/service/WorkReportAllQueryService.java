@@ -25,7 +25,8 @@ public class WorkReportAllQueryService {
                 workReports,
                 workReportRepository.countByStatus(Status.PENDING),
                 workReportRepository.countByStatus(Status.APPROVED),
-                workReportRepository.countByStatus(Status.REJECTED)
+                workReportRepository.countByStatus(Status.REJECTED),
+                workReportRepository.countByStatus(Status.RESUBMIT)
         );
     }
 }

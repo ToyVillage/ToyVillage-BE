@@ -90,6 +90,7 @@ public record TaskDetailResponse(
             long approved,
             long rejected,
             long pending,
+            long resubmit,
             long missing
     ) {
         private static ProgressResponse from(List<ReportResponse> reports) {
@@ -98,6 +99,7 @@ public record TaskDetailResponse(
                     .approved(countOf(reports, Status.APPROVED))
                     .rejected(countOf(reports, Status.REJECTED))
                     .pending(countOf(reports, Status.PENDING))
+                    .resubmit(countOf(reports, Status.RESUBMIT))
                     .missing(countOf(reports, Status.MISSING))
                     .build();
         }
