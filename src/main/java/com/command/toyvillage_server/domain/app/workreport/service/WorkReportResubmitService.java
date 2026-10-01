@@ -15,7 +15,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class WorkReportUpdateService {
+public class WorkReportResubmitService {
     private final WorkReportRepository workReportRepository;
     private final FileFacade fileFacade;
     private final UserFacade userFacade;
@@ -31,6 +31,6 @@ public class WorkReportUpdateService {
                 ? null
                 : fileFacade.findAllByKeys(workReportRequest.fileKey());
 
-        workReport.update(workReportRequest.content(), workReportRequest.note(), files);
+        workReport.resubmit(workReportRequest.content(), workReportRequest.note(), files);
     }
 }
