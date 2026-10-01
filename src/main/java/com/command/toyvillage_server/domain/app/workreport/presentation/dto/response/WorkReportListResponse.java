@@ -16,13 +16,15 @@ public record WorkReportListResponse(
         int totalPageSize,
         long pendingCount,
         long approvedCount,
-        long rejectedCount
+        long rejectedCount,
+        long resubmitCount
 ) {
     public static WorkReportListResponse of(
             Page<WorkReport> workReports,
             long pendingCount,
             long approvedCount,
-            long rejectedCount
+            long rejectedCount,
+            long resubmitCount
     ) {
         return WorkReportListResponse.builder()
                 .reports(workReports.map(ReportResponse::from).toList())
@@ -30,6 +32,7 @@ public record WorkReportListResponse(
                 .pendingCount(pendingCount)
                 .approvedCount(approvedCount)
                 .rejectedCount(rejectedCount)
+                .resubmitCount(resubmitCount)
                 .build();
     }
 
