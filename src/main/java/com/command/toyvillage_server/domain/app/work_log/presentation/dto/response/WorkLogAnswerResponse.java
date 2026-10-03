@@ -12,6 +12,7 @@ public record WorkLogAnswerResponse(
     Long questionId,
     String question,
     QuestionType questionType,
+    boolean required,
     String answerText,
     List<WorkLogAnswerOptionResponse> options,
     FileResponse file
@@ -27,6 +28,7 @@ public record WorkLogAnswerResponse(
             .questionId(answer.getQuestion().getId())
             .question(answer.getQuestion().getQuestion())
             .questionType(answer.getQuestion().getQuestionType())
+            .required(answer.getQuestion().isRequired())
             .answerText(answer.getAnswerText())
             .options(answer.getSelectedOptions().stream()
                 .map(WorkLogAnswerOptionResponse::from)
