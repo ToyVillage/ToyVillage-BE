@@ -16,9 +16,15 @@ public record WorkLogQuestionRequest(
     @NotNull(message = "질문 타입을 선택해주세요.")
     QuestionType questionType,
 
+    Boolean required,
+
     @Valid
     List<WorkLogQuestionOptionRequest> options
 ) {
+    public WorkLogQuestionRequest {
+        required = !Boolean.FALSE.equals(required);
+    }
+
     public List<WorkLogQuestionOptionRequest> options() {
         if (options == null) {
             return List.of();
