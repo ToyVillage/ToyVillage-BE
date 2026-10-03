@@ -11,6 +11,7 @@ public record WorkLogQuestionResponse(
     Long questionId,
     String question,
     QuestionType questionType,
+    boolean required,
     List<WorkLogQuestionOptionResponse> options
 ) {
     public static WorkLogQuestionResponse from(WorkLogQuestion question) {
@@ -18,6 +19,7 @@ public record WorkLogQuestionResponse(
             .questionId(question.getId())
             .question(question.getQuestion())
             .questionType(question.getQuestionType())
+            .required(question.isRequired())
             .options(question.getOptions().stream()
                 .map(WorkLogQuestionOptionResponse::from)
                 .toList())
