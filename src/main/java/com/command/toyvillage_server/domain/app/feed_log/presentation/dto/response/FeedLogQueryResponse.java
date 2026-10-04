@@ -22,6 +22,7 @@ public record FeedLogQueryResponse(
             Long animalId,
             String feedType,
             Float feedAmount,
+            Float remainingAmount,
             LocalDateTime feedDateTime,
             String significant
     ) {
@@ -31,6 +32,7 @@ public record FeedLogQueryResponse(
                     .animalId(feedLog.getAnimalManage().getId())
                     .feedType(feedLog.getFeedType())
                     .feedAmount(feedLog.getFeedAmount())
+                    .remainingAmount(feedLog.getRemainingAmount())
                     .feedDateTime(feedLog.getFeedDateTime())
                     .significant(feedLog.getSignificant())
                     .build();

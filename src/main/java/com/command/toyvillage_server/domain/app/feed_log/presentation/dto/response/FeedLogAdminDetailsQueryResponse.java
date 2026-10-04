@@ -15,6 +15,7 @@ public record FeedLogAdminDetailsQueryResponse(
         FileResponse animalImageUrl,
         String feedType,
         Float feedAmount,
+        Float remainingAmount,
         LocalDateTime feedDateTime,
         String significant
 ) {
@@ -27,6 +28,7 @@ public record FeedLogAdminDetailsQueryResponse(
                 .animalImageUrl(FileResponse.from(feedLog.getAnimalManage().getAnimalImage()))
                 .feedType(feedLog.getFeedType())
                 .feedAmount(feedLog.getFeedAmount())
+                .remainingAmount(feedLog.getRemainingAmount())
                 .feedDateTime(feedLog.getFeedDateTime())
                 .significant(feedLog.getSignificant())
                 .build();

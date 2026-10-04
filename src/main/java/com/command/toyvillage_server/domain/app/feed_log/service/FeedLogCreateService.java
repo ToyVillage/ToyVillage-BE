@@ -36,6 +36,7 @@ public class FeedLogCreateService {
                 .feedDateTime(feedLogRequest.feedDateTime())
                 .feedType(feedLogRequest.feedType())
                 .feed_amount(feedLogRequest.feedAmount())
+                .remainingAmount(feedLogRequest.remainingAmount())
                 .significant(feedLogRequest.significant())
                 .build();
 

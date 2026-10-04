@@ -29,6 +29,7 @@ public class FeedLogAdminUpdateService {
                 feedLogRequest.feedDateTime(),
                 feedLogRequest.feedType(),
                 feedLogRequest.feedAmount(),
+                feedLogRequest.remainingAmount(),
                 feedLogRequest.significant()
         );
     }
