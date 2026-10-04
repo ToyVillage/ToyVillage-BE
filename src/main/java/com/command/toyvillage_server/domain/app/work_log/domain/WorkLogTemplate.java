@@ -87,6 +87,7 @@ public class WorkLogTemplate {
             .collect(Collectors.toCollection(HashSet::new));
 
         questions.stream()
+            .filter(WorkLogQuestion::isRequired)
             .forEach(question -> sections.forEach(section -> {
                 if (!answered.contains(key(section.getId(), question.getId()))) {
                     throw WorkLogAnswerRequiredException.EXCEPTION;
