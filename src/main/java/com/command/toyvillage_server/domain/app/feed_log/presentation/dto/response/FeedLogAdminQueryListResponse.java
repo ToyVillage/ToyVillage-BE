@@ -27,6 +27,7 @@ public record FeedLogAdminQueryListResponse(
             String animalName,
             String feedType,
             Float feedAmount,
+            Float remainingAmount,
             LocalDateTime feedDateTime
     ) {
         public static FeedLogResponse from(FeedLog feedLog) {
@@ -37,6 +38,7 @@ public record FeedLogAdminQueryListResponse(
                     .animalName(feedLog.getAnimalManage().getAnimalName())
                     .feedType(feedLog.getFeedType())
                     .feedAmount(feedLog.getFeedAmount())
+                    .remainingAmount(feedLog.getRemainingAmount())
                     .feedDateTime(feedLog.getFeedDateTime())
                     .build();
         }
