@@ -14,6 +14,9 @@ public record FeedLogRequest(
         @NotNull(message = "급여량을 입력해주세요.")
         @PositiveOrZero(message = "급여량은 0 이상이어야 합니다.")
         Float feedAmount,
+        @NotNull(message = "잔여량을 입력해주세요.")
+        @PositiveOrZero(message = "잔여량은 0 이상이어야 합니다.")
+        Float remainingAmount,
         @NotNull(message = "특이사항을 입력해주세요.")
         String significant
 ) {
