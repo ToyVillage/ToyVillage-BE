@@ -1,6 +1,7 @@
 package com.command.toyvillage_server.domain.app.feed_log.presentation.dto.response;
 
 import com.command.toyvillage_server.domain.app.feed_log.domain.FeedLog;
+import com.command.toyvillage_server.domain.app.feed_log.domain.Unit;
 import com.command.toyvillage_server.domain.web.file.presentation.dto.response.FileResponse;
 import lombok.Builder;
 
@@ -16,6 +17,7 @@ public record FeedLogAdminDetailsQueryResponse(
         String feedType,
         Float feedAmount,
         Float remainingAmount,
+        Unit feedUnit,
         LocalDateTime feedDateTime,
         String significant
 ) {
@@ -29,6 +31,7 @@ public record FeedLogAdminDetailsQueryResponse(
                 .feedType(feedLog.getFeedType())
                 .feedAmount(feedLog.getFeedAmount())
                 .remainingAmount(feedLog.getRemainingAmount())
+                .feedUnit(feedLog.getFeedUnit())
                 .feedDateTime(feedLog.getFeedDateTime())
                 .significant(feedLog.getSignificant())
                 .build();

@@ -25,6 +25,7 @@ public class FeedLogUpdateService {
                 feedLogRequest.feedType(),
                 feedLogRequest.feedAmount(),
                 feedLogRequest.remainingAmount(),
+                feedLogRequest.feedUnit(),
                 feedLogRequest.significant()
         );
     }

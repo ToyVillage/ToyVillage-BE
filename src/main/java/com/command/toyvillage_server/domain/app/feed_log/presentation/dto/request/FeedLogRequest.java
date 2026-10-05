@@ -1,5 +1,6 @@
 package com.command.toyvillage_server.domain.app.feed_log.presentation.dto.request;
 
+import com.command.toyvillage_server.domain.app.feed_log.domain.Unit;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
@@ -17,6 +18,8 @@ public record FeedLogRequest(
         @NotNull(message = "잔여량을 입력해주세요.")
         @PositiveOrZero(message = "잔여량은 0 이상이어야 합니다.")
         Float remainingAmount,
+        @NotNull(message = "급여 단위를 입력해주세요.")
+        Unit feedUnit,
         @NotNull(message = "특이사항을 입력해주세요.")
         String significant
 ) {

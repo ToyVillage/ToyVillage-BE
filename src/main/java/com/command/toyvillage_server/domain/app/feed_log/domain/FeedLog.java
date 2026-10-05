@@ -36,6 +36,10 @@ public class FeedLog {
     @Column(nullable = false, name = "remaining_amount")
     private Float remainingAmount;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, name = "feed_unit")
+    private Unit feedUnit;
+
     @Column(nullable = false , name = "significant")
     private String significant;
 
@@ -46,22 +50,24 @@ public class FeedLog {
 
     @Builder
     public FeedLog(AppAdmin appAdmin,AnimalManage animalManage, LocalDateTime feedDateTime,
-                   String feedType, Float feed_amount, Float remainingAmount, String significant) {
+                   String feedType, Float feed_amount, Float remainingAmount, Unit feedUnit, String significant) {
         this.appAdmin = appAdmin;
         this.animalManage = animalManage;
         this.feedDateTime = feedDateTime;
         this.feedType = feedType;
         this.feedAmount = feed_amount;
         this.remainingAmount = remainingAmount;
+        this.feedUnit = feedUnit;
         this.significant = significant;
     }
 
     public void update(LocalDateTime feedDateTime,
-                       String feedType, Float feed_amount, Float remainingAmount, String significant) {
+                       String feedType, Float feed_amount, Float remainingAmount, Unit feedUnit, String significant) {
         this.feedDateTime = feedDateTime;
         this.feedType = feedType;
         this.feedAmount = feed_amount;
         this.remainingAmount = remainingAmount;
+        this.feedUnit = feedUnit;
         this.significant = significant;
     }
 }

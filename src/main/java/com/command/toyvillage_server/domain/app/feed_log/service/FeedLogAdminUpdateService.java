@@ -30,6 +30,7 @@ public class FeedLogAdminUpdateService {
                 feedLogRequest.feedType(),
                 feedLogRequest.feedAmount(),
                 feedLogRequest.remainingAmount(),
+                feedLogRequest.feedUnit(),
                 feedLogRequest.significant()
         );
     }

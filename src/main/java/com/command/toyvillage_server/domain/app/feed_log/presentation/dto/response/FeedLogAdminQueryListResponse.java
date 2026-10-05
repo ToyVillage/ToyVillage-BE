@@ -1,6 +1,7 @@
 package com.command.toyvillage_server.domain.app.feed_log.presentation.dto.response;
 
 import com.command.toyvillage_server.domain.app.feed_log.domain.FeedLog;
+import com.command.toyvillage_server.domain.app.feed_log.domain.Unit;
 import lombok.Builder;
 import org.springframework.data.domain.Page;
 
@@ -28,6 +29,7 @@ public record FeedLogAdminQueryListResponse(
             String feedType,
             Float feedAmount,
             Float remainingAmount,
+            Unit feedUnit,
             LocalDateTime feedDateTime
     ) {
         public static FeedLogResponse from(FeedLog feedLog) {
@@ -39,6 +41,7 @@ public record FeedLogAdminQueryListResponse(
                     .feedType(feedLog.getFeedType())
                     .feedAmount(feedLog.getFeedAmount())
                     .remainingAmount(feedLog.getRemainingAmount())
+                    .feedUnit(feedLog.getFeedUnit())
                     .feedDateTime(feedLog.getFeedDateTime())
                     .build();
         }
