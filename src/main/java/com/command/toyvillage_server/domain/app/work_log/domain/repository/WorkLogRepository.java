@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public interface WorkLogRepository extends JpaRepository<WorkLog, Long> {
     long countByWriteAtGreaterThanEqualAndWriteAtLessThan(
@@ -19,5 +20,9 @@ public interface WorkLogRepository extends JpaRepository<WorkLog, Long> {
 
     Page<WorkLog> findByAppAdminIdAndTemplateId(Long appAdminId, Long templateId, Pageable pageable);
 
+    Page<WorkLog> findByAppAdminIdAndTemplateIdIn(Long appAdminId, List<Long> templateIds, Pageable pageable);
+
     Page<WorkLog> findByWriteAtAndTemplateId(LocalDate writeAt, Long templateId, Pageable pageable);
+
+    Page<WorkLog> findByWriteAtAndTemplateIdIn(LocalDate writeAt, List<Long> templateIds, Pageable pageable);
 }
