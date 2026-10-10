@@ -18,8 +18,6 @@ public interface WorkLogRepository extends JpaRepository<WorkLog, Long> {
 
     Page<WorkLog> findByWriteAt(LocalDate writeAt, Pageable pageable);
 
-    Page<WorkLog> findByAppAdminIdAndTemplateId(Long appAdminId, Long templateId, Pageable pageable);
-
     Page<WorkLog> findByAppAdminIdAndTemplateIdIn(Long appAdminId, List<Long> templateIds, Pageable pageable);
 
     Page<WorkLog> findByWriteAtAndTemplateIdIn(LocalDate writeAt, List<Long> templateIds, Pageable pageable);
