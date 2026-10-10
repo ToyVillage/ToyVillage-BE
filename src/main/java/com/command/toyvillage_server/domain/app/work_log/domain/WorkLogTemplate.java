@@ -10,6 +10,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -32,8 +33,12 @@ public class WorkLogTemplate {
     @Column(name = "work_log_template_id")
     private Long id;
 
-    @Column(name = "template_title", nullable = false, unique = true, length = 50)
+    @Column(name = "template_title", nullable = false, length = 50)
     private String templateTitle;
+
+    @Setter
+    @Column(name = "original_template_id", updatable = false)
+    private Long originalTemplateId;
 
     @CreatedDate
     @Column(name = "created_at", nullable = false, updatable = false)
@@ -97,6 +102,10 @@ public class WorkLogTemplate {
 
     public void changeDeleteYn() {
         this.deleteYn = true;
+    }
+
+    public Long getHistoryId() {
+        return originalTemplateId == null ? id : originalTemplateId;
     }
 
     private WorkLogSection findSection(Long sectionId) {
