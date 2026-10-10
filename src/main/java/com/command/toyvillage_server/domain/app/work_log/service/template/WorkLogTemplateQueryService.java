@@ -15,7 +15,7 @@ public class WorkLogTemplateQueryService {
 
     @Transactional(readOnly = true)
     public WorkLogTemplateResponse execute(Long workLogTemplateId) {
-        WorkLogTemplate template = workLogTemplateRepository.findByIdAndDeleteYnFalse(workLogTemplateId)
+        WorkLogTemplate template = workLogTemplateRepository.findById(workLogTemplateId)
             .orElseThrow(() -> WorkLogTemplateNotFoundException.EXCEPTION);
 
         return WorkLogTemplateResponse.from(template);
