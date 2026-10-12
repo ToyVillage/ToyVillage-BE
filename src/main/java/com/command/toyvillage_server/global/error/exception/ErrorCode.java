@@ -46,6 +46,7 @@ public enum ErrorCode {
 
     // general
     BAD_REQUEST(400, "잘못된 요청입니다."),
+    NO_RESOURCE_FOUND(404, "존재하지 않는 API입니다."),
     INTERNAL_SERVER_ERROR(500, "내부 서버 오류가 발생했습니다."),
 
     //aws s3
