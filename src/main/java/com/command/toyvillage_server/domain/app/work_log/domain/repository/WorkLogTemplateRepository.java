@@ -6,10 +6,15 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 public interface WorkLogTemplateRepository extends JpaRepository<WorkLogTemplate, Long> {
     boolean existsByTemplateTitle(String templateTitle);
+
+    boolean existsByTemplateTitleAndIdNotIn(String templateTitle, List<Long> templateIds);
+
+    List<WorkLogTemplate> findAllByIdOrOriginalTemplateId(Long id, Long originalTemplateId);
 
     Optional<WorkLogTemplate> findByIdAndDeleteYnFalse(Long workLogTemplateId);
 

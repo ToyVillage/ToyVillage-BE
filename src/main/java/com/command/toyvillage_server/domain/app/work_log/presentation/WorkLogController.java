@@ -5,6 +5,7 @@ import com.command.toyvillage_server.domain.app.work_log.presentation.dto.reques
 import com.command.toyvillage_server.domain.app.work_log.presentation.dto.response.*;
 import com.command.toyvillage_server.domain.app.work_log.service.template.WorkLogTemplateAdminCreateService;
 import com.command.toyvillage_server.domain.app.work_log.service.template.WorkLogTemplateAdminDeleteService;
+import com.command.toyvillage_server.domain.app.work_log.service.template.WorkLogTemplateAdminUpdateService;
 import com.command.toyvillage_server.domain.app.work_log.service.template.WorkLogTemplateQueryListService;
 import com.command.toyvillage_server.domain.app.work_log.service.template.WorkLogTemplateQueryService;
 import com.command.toyvillage_server.domain.app.work_log.service.work_log.WorkLogAdminQueryListService;
@@ -33,6 +34,7 @@ import java.time.LocalDate;
 public class WorkLogController {
     private final WorkLogTemplateAdminCreateService workLogTemplateAdminCreateService;
     private final WorkLogTemplateAdminDeleteService workLogTemplateAdminDeleteService;
+    private final WorkLogTemplateAdminUpdateService workLogTemplateAdminUpdateService;
     private final WorkLogTemplateQueryListService workLogTemplateQueryListService;
     private final WorkLogTemplateQueryService workLogTemplateQueryService;
     private final WorkLogEmployeeWriteService workLogEmployeeWriteService;
@@ -48,6 +50,14 @@ public class WorkLogController {
         @RequestBody @Valid WorkLogTemplateRequest request
     ) {
         return workLogTemplateAdminCreateService.execute(request);
+    }
+
+    @PatchMapping("/template/{workLogTemplateId}")
+    public WorkLogTemplateCreateResponse updateWorkLogTemplate(
+        @PathVariable Long workLogTemplateId,
+        @RequestBody @Valid WorkLogTemplateRequest request
+    ) {
+        return workLogTemplateAdminUpdateService.execute(workLogTemplateId, request);
     }
 
     @GetMapping("/template")

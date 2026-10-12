@@ -35,6 +35,15 @@ public class WorkLogTemplateAdminCreateService {
             throw WorkLogTemplateAlreadyExistsException.EXCEPTION;
         }
 
+        WorkLogTemplate template = createTemplate(request);
+        workLogTemplateRepository.save(template);
+
+        return WorkLogTemplateCreateResponse.builder()
+            .templateId(template.getId())
+            .build();
+    }
+
+    WorkLogTemplate createTemplate(WorkLogTemplateRequest request) {
         AppAdmin appAdmin = appAdminRepository.findByIdAndDeleteStatusFalse(userFacade.getCurrentUserId())
             .orElseThrow(() -> AppAdminNotFoundException.EXCEPTION);
 
@@ -46,11 +55,7 @@ public class WorkLogTemplateAdminCreateService {
         addSections(template, request.sections());
         addQuestions(template, request.questions());
 
-        workLogTemplateRepository.save(template);
-
-        return WorkLogTemplateCreateResponse.builder()
-            .templateId(template.getId())
-            .build();
+        return template;
     }
 
     private void addSections(WorkLogTemplate template, List<String> sectionNames) {
