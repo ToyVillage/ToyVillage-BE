@@ -14,6 +14,7 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 @Slf4j
 @RestControllerAdvice
@@ -79,6 +80,16 @@ public class GlobalExceptionHandler {
         ErrorResponse response = ErrorResponse.of(errorCode, errorCode.getErrorMessage());
 
         return new ResponseEntity<>(response, HttpStatus.METHOD_NOT_ALLOWED);
+    }
+
+    // 없는 api 호출
+    @ExceptionHandler(NoResourceFoundException.class)
+    public ResponseEntity<ErrorResponse> handleNoResourceFoundException(NoResourceFoundException e) {
+        log.error("없는 API 호출: ", e);
+        ErrorCode errorCode = ErrorCode.NO_RESOURCE_FOUND;
+        ErrorResponse response = ErrorResponse.of(errorCode, errorCode.getErrorMessage());
+
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 
     //그 외 에러들
