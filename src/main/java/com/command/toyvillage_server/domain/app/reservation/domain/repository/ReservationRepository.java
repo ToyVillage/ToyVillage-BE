@@ -33,7 +33,7 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
     @Query("""
         update Reservation r
         set r.status = :status
-        where r.visitSiteDate >= :today
+        where (r.visitSiteDate is null or r.visitSiteDate >= :today)
           and r.visitDate >= :today
           and (r.status is null or r.status <> :status)
         """)

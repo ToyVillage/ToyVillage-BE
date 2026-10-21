@@ -14,6 +14,8 @@ public record ReservationAdminQueryListObjectResponse(
     LocalDate counselDate,
     LocalDate reservationDate,
     LocalTime reservationTime,
+    LocalDate visitDate,
+    LocalTime visitTime,
     String location,
     int count,
     ReservationStatus status
@@ -27,6 +29,8 @@ public record ReservationAdminQueryListObjectResponse(
             .counselDate(reservation.getCounselDate())
             .reservationDate(reservation.getReservationDate())
             .reservationTime(reservation.getReservationTime())
+            .visitDate(reservation.getVisitDate())
+            .visitTime(reservation.getVisitTime())
             .location(reservation.getLocation())
             .count(reservation.getReservationCount())
             .status(reservation.getStatus())

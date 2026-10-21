@@ -57,11 +57,12 @@ public class ReservationAdminCreateService {
             throw ReservationInvalidTimeException.EXCEPTION;
         }
 
-        if (!request.visitSiteExitTime().isAfter(request.visitSiteTime())) {
+        if (request.visitSiteTime() != null && request.visitSiteExitTime() != null
+            && !request.visitSiteExitTime().isAfter(request.visitSiteTime())) {
             throw ReservationInvalidTimeException.EXCEPTION;
         }
 
-        if (request.visitSiteDate().isAfter(request.visitDate())) {
+        if (request.visitSiteDate() != null && request.visitSiteDate().isAfter(request.visitDate())) {
             throw ReservationInvalidDateException.EXCEPTION;
         }
     }
