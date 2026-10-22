@@ -54,23 +54,23 @@ public record ReservationRequest(
     @JsonFormat(pattern = "HH:mm")
     LocalTime exitTime,
 
-    @NotNull(message = "사전답사 인원을 입력해주세요.")
     @PositiveOrZero(message = "사전답사 인원은 0명 이상이어야 합니다.")
     Integer visitSiteCount,
 
-    @NotNull(message = "사전답사일을 선택해주세요.")
     LocalDate visitSiteDate,
 
-    @NotNull(message = "사전답사 시간을 선택해주세요.")
     @JsonFormat(pattern = "HH:mm")
     LocalTime visitSiteTime,
 
-    @NotNull(message = "사전답사 퇴장 시간을 선택해주세요.")
     @JsonFormat(pattern = "HH:mm")
     LocalTime visitSiteExitTime,
 
     List<Long> appAdminIds
 ) {
+    public Integer visitSiteCount() {
+        return visitSiteCount == null ? 0 : visitSiteCount;
+    }
+
     public List<Long> appAdminIds() {
         return appAdminIds == null ? List.of() : appAdminIds;
     }

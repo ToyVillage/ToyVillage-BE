@@ -22,7 +22,7 @@ public enum ReservationStatus {
             return VISIT_COMPLETED;
         }
 
-        if (visitSiteDate.isBefore(today)) {
+        if (visitSiteDate != null && visitSiteDate.isBefore(today)) {
             return SITE_VISIT_COMPLETED;
         }
 
