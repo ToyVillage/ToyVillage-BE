@@ -83,3 +83,7 @@ jwt:
   app-refresh-expiration: ${APP_REFRESH_EXPIRATION:604800000}
   header: Authorization
   prefix: Bearer
+
+firebase:
+  service-account:
+    path: "/firebase/service-account.json"
