@@ -12,8 +12,8 @@ public class NoticeRequestDto {
     @NotBlank(message = "공지사항 제목을 입력해주세요.")
     private String title;
 
-    private List<@NotNull(message = "팀 ID를 입력해주세요.")
-        @Positive(message = "팀 ID는 양수여야 합니다.") Long> teamIds;
+    @NotNull(message = "팀 ID를 입력해주세요.")
+    private List<@Positive(message = "팀 ID는 양수여야 합니다.") Long> teamIds;
 
     @NotBlank(message = "공지사항 내용을 입력해주세요.")
     private String content;
