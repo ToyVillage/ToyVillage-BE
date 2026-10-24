@@ -2,6 +2,8 @@ server:
   forward-headers-strategy: framework
 
 spring:
+  config:
+    import: optional:file:.env[.properties]
   datasource:
     url: ${DB_URL}
     username: ${DB_USERNAME}
@@ -86,4 +88,6 @@ jwt:
 
 firebase:
   service-account:
-    path: "/firebase/service-account.json"
+    project-id: ${FIREBASE_PROJECT_ID}
+    client-email: ${FIREBASE_CLIENT_EMAIL}
+    private-key: ${FIREBASE_PRIVATE_KEY}
