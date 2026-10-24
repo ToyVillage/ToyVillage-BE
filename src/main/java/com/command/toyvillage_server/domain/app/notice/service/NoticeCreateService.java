@@ -4,6 +4,7 @@ import com.command.toyvillage_server.domain.app.notice.domain.Notice;
 import com.command.toyvillage_server.domain.app.notice.domain.NoticeTeam;
 import com.command.toyvillage_server.domain.app.notice.domain.repository.NoticeRepository;
 import com.command.toyvillage_server.domain.app.notice.domain.repository.NoticeTeamRepository;
+import com.command.toyvillage_server.domain.app.notice.presentation.dto.events.NoticeCreated;
 import com.command.toyvillage_server.domain.app.notice.presentation.dto.request.NoticeRequestDto;
 import com.command.toyvillage_server.domain.app.team.domain.Team;
 import com.command.toyvillage_server.domain.app.team.domain.repository.TeamRepository;
@@ -12,6 +13,7 @@ import com.command.toyvillage_server.domain.web.file.domain.File;
 import com.command.toyvillage_server.domain.web.file.domain.repository.FileRepository;
 import com.command.toyvillage_server.domain.web.file.exception.FileNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +27,7 @@ public class NoticeCreateService {
     private final NoticeTeamRepository noticeTeamRepository;
     private final FileRepository fileRepository;
     private final TeamRepository teamRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Transactional
     public void execute(NoticeRequestDto request) {
@@ -51,5 +54,6 @@ public class NoticeCreateService {
         noticeTeamRepository.saveAll(teams.stream()
             .map(team -> NoticeTeam.create(notice, team))
             .toList());
+        eventPublisher.publishEvent(NoticeCreated.of(notice.getId(), notice.getTitle(), teamIds));
     }
 }
