@@ -67,6 +67,8 @@ public class SecurityConfig {
                     .requestMatchers(HttpMethod.POST, "/app/auth/logout")
                             .hasAnyRole("APP_ADMIN", "EMPLOYEE")
                     .requestMatchers("/app/admin", "/app/admin/**").hasRole("APP_ADMIN")
+                    .requestMatchers(HttpMethod.POST, "/app/fcm/token").hasAnyRole("APP_ADMIN", "EMPLOYEE")
+                    .requestMatchers(HttpMethod.DELETE, "/app/fcm/token").hasAnyRole("APP_ADMIN", "EMPLOYEE")
 
                     // task
                     .requestMatchers(HttpMethod.GET, "/tasks/*")
