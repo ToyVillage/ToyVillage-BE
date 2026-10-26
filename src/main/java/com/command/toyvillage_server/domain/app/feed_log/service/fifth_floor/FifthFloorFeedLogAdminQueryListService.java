@@ -25,7 +25,7 @@ public class FifthFloorFeedLogAdminQueryListService {
     ) {
         Page<FifthFloorFeedLog> feedLogs = animalTaxonomic == null
                 ? fifthFloorFeedLogRepository.findAllByFeedDate(date, pageable)
-                : fifthFloorFeedLogRepository.findAllByFeedDateAndAnimalTaxonomic(
+                : fifthFloorFeedLogRepository.findAllByFeedDateAndAnimalManage_AnimalKind_AnimalTaxonomic(
                         date,
                         animalTaxonomic,
                         pageable

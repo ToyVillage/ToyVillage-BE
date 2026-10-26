@@ -16,9 +16,9 @@ public record DashBoardQueryFeedLogResponse(
     public static DashBoardQueryFeedLogResponse from(FeedLog feedLog) {
         return DashBoardQueryFeedLogResponse.builder()
                 .feedLogId(feedLog.getId())
-                .animalKind(feedLog.getAnimalKindName())
-                .animalName(feedLog.getAnimalName())
-                .animalDeleted(feedLog.isAnimalDeleted())
+                .animalKind(feedLog.getAnimalManage().getAnimalKind().getKindName())
+                .animalName(feedLog.getAnimalManage().getAnimalName())
+                .animalDeleted(feedLog.getAnimalManage().isDeleteYn())
                 .feedDateTime(feedLog.getFeedDateTime())
                 .build();
     }

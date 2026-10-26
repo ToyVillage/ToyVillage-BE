@@ -1,7 +1,6 @@
 package com.command.toyvillage_server.domain.app.feed_log.domain;
 
 import com.command.toyvillage_server.domain.app.animal_manage.domain.AnimalManage;
-import com.command.toyvillage_server.domain.app.animal_manage.domain.enums.AnimalTaxonomic;
 import com.command.toyvillage_server.domain.app.auth.admin.domain.AppAdmin;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -24,23 +23,9 @@ public class FeedLog {
     @Column(nullable = false,name = "feed_date_time")
     private LocalDateTime feedDateTime;
 
-    // 동물이 삭제되면 null이 되고, 아래 스냅샷으로 기록을 유지한다.
-    @JoinColumn(name = "animal_manage_id")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "animal_manage_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private AnimalManage animalManage;
-
-    @Column(nullable = false, name = "animal_name")
-    private String animalName;
-
-    @Column(nullable = false, name = "animal_kind_name")
-    private String animalKindName;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false, name = "animal_taxonomic")
-    private AnimalTaxonomic animalTaxonomic;
-
-    @Column(nullable = false, name = "animal_deleted")
-    private boolean animalDeleted;
 
     @Column(nullable = false, name = "feed_type")
     private String feedType;
@@ -68,9 +53,6 @@ public class FeedLog {
                    String feedType, Float feed_amount, Float remainingAmount, Unit feedUnit, String significant) {
         this.appAdmin = appAdmin;
         this.animalManage = animalManage;
-        this.animalName = animalManage.getAnimalName();
-        this.animalKindName = animalManage.getAnimalKind().getKindName();
-        this.animalTaxonomic = animalManage.getAnimalKind().getAnimalTaxonomic();
         this.feedDateTime = feedDateTime;
         this.feedType = feedType;
         this.feedAmount = feed_amount;

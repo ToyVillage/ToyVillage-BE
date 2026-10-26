@@ -1,6 +1,5 @@
 package com.command.toyvillage_server.domain.app.feed_log.presentation.dto.response;
 
-import com.command.toyvillage_server.domain.app.animal_manage.domain.AnimalManage;
 import com.command.toyvillage_server.domain.app.feed_log.domain.FeedLog;
 import com.command.toyvillage_server.domain.app.feed_log.domain.Unit;
 import com.command.toyvillage_server.domain.web.file.presentation.dto.response.FileResponse;
@@ -24,15 +23,13 @@ public record FeedLogAdminDetailsQueryResponse(
         String significant
 ) {
     public static FeedLogAdminDetailsQueryResponse from(FeedLog feedLog) {
-        AnimalManage animalManage = feedLog.getAnimalManage();
-
         return FeedLogAdminDetailsQueryResponse.builder()
-                .animalId(animalManage == null ? null : animalManage.getId())
+                .animalId(feedLog.getAnimalManage().getId())
                 .staffName(feedLog.getAppAdmin().getName())
-                .animalKind(feedLog.getAnimalKindName())
-                .animalName(feedLog.getAnimalName())
-                .animalDeleted(feedLog.isAnimalDeleted())
-                .animalImageUrl(animalManage == null ? null : FileResponse.from(animalManage.getAnimalImage()))
+                .animalKind(feedLog.getAnimalManage().getAnimalKind().getKindName())
+                .animalName(feedLog.getAnimalManage().getAnimalName())
+                .animalDeleted(feedLog.getAnimalManage().isDeleteYn())
+                .animalImageUrl(FileResponse.from(feedLog.getAnimalManage().getAnimalImage()))
                 .feedType(feedLog.getFeedType())
                 .feedAmount(feedLog.getFeedAmount())
                 .remainingAmount(feedLog.getRemainingAmount())

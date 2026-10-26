@@ -25,9 +25,9 @@ public record FeedLogMyQueryResponse(
         public static FeedLogResponse from(FeedLog feedLog) {
             return FeedLogResponse.builder()
                     .feedId(feedLog.getId())
-                    .animalKind(feedLog.getAnimalKindName())
-                    .animalName(feedLog.getAnimalName())
-                    .animalDeleted(feedLog.isAnimalDeleted())
+                    .animalKind(feedLog.getAnimalManage().getAnimalKind().getKindName())
+                    .animalName(feedLog.getAnimalManage().getAnimalName())
+                    .animalDeleted(feedLog.getAnimalManage().isDeleteYn())
                     .build();
         }
     }

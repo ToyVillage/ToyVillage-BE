@@ -1,6 +1,5 @@
 package com.command.toyvillage_server.domain.app.feed_log.presentation.dto.response;
 
-import com.command.toyvillage_server.domain.app.animal_manage.domain.AnimalManage;
 import com.command.toyvillage_server.domain.app.feed_log.domain.FifthFloorFeedLog;
 import com.command.toyvillage_server.domain.app.feed_log.domain.Unit;
 import com.command.toyvillage_server.domain.web.file.presentation.dto.response.FileResponse;
@@ -22,15 +21,13 @@ public record FifthFloorFeedLogAdminDetailsQueryResponse(
         LocalDate feedDate
 ) {
     public static FifthFloorFeedLogAdminDetailsQueryResponse from(FifthFloorFeedLog feedLog) {
-        AnimalManage animalManage = feedLog.getAnimalManage();
-
         return FifthFloorFeedLogAdminDetailsQueryResponse.builder()
-                .animalId(animalManage == null ? null : animalManage.getId())
+                .animalId(feedLog.getAnimalManage().getId())
                 .staffName(feedLog.getAppAdmin().getName())
-                .animalKind(feedLog.getAnimalKindName())
-                .animalName(feedLog.getAnimalName())
-                .animalDeleted(feedLog.isAnimalDeleted())
-                .animalImageUrl(animalManage == null ? null : FileResponse.from(animalManage.getAnimalImage()))
+                .animalKind(feedLog.getAnimalManage().getAnimalKind().getKindName())
+                .animalName(feedLog.getAnimalManage().getAnimalName())
+                .animalDeleted(feedLog.getAnimalManage().isDeleteYn())
+                .animalImageUrl(FileResponse.from(feedLog.getAnimalManage().getAnimalImage()))
                 .feedType(feedLog.getFeedType())
                 .feedAmount(feedLog.getFeedAmount())
                 .feedUnit(feedLog.getFeedUnit())
