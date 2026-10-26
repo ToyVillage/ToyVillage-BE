@@ -34,7 +34,7 @@ public class NoticeNotificationService {
         try {
             MulticastMessage message = MulticastMessage.builder()
                 .addAllTokens(tokens)
-                .setNotification(Notification.builder()
+                .setNotification(Notification.builder() // 500개씩 쪼개서 보내야하지만 직원의 수를 고려하여 해당 처리르 하지 않음
                     .setTitle("새 공지사항")
                     .setBody(event.title())
                     .build())
