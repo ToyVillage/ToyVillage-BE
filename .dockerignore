@@ -3,6 +3,7 @@
 .gradle
 .idea
 build
+!build/libs/toyvillage.jar
 .env
 src/main/resources/.env
 *.iml
