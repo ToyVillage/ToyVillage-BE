@@ -35,6 +35,9 @@ public class AnimalKind {
     @Column(name = "detail_kind")
     private String detailKind;
 
+    @Column(name = "floor")
+    private Integer floor;
+
     @CreatedDate
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
@@ -53,6 +56,7 @@ public class AnimalKind {
         String scientificName,
         AnimalTaxonomic animalTaxonomic,
         String detailKind,
+        Integer floor,
         File kindImage
     ) {
         this.kindName = kindName;
@@ -60,6 +64,7 @@ public class AnimalKind {
         this.scientificName = scientificName;
         this.animalTaxonomic = animalTaxonomic;
         this.detailKind = detailKind;
+        this.floor = floor;
         this.kindImage = kindImage;
     }
 
@@ -69,6 +74,7 @@ public class AnimalKind {
         String scientificName,
         AnimalTaxonomic animalTaxonomic,
         String detailKind,
+        Integer floor,
         File kindImage
     ) {
         this.kindName = kindName;
@@ -76,6 +82,7 @@ public class AnimalKind {
         this.scientificName = scientificName;
         this.animalTaxonomic = animalTaxonomic;
         this.detailKind = detailKind;
+        this.floor = floor;
         this.kindImage = kindImage;
     }
 
