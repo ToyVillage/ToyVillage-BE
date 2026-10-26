@@ -66,6 +66,7 @@ public enum ErrorCode {
 
     //notice
     NOTICE_NOT_FOUND(404, "존재하지 않는 공지사항입니다."),
+    NOTICE_FCM_NOT_SEND(500, "공지사항 알림 발송에 실패했습니다."),
 
     // reservation
     RESERVATION_NOT_FOUND(404, "존재하지 않는 단체예약 목록입니다."),
