@@ -10,13 +10,15 @@ public record DashBoardQueryFeedLogResponse(
         Long feedLogId,
         String animalKind,
         String animalName,
+        boolean animalDeleted,
         LocalDateTime feedDateTime
 ) {
     public static DashBoardQueryFeedLogResponse from(FeedLog feedLog) {
         return DashBoardQueryFeedLogResponse.builder()
                 .feedLogId(feedLog.getId())
-                .animalKind(feedLog.getAnimalManage().getAnimalKind().getKindName())
-                .animalName(feedLog.getAnimalManage().getAnimalName())
+                .animalKind(feedLog.getAnimalKindName())
+                .animalName(feedLog.getAnimalName())
+                .animalDeleted(feedLog.isAnimalDeleted())
                 .feedDateTime(feedLog.getFeedDateTime())
                 .build();
     }

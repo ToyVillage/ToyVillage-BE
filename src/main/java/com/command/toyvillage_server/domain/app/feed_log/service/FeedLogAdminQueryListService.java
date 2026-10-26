@@ -33,7 +33,7 @@ public class FeedLogAdminQueryListService {
                         endDateTime,
                         pageable
                 )
-                : feedLogRepository.findAllByFeedDateTimeGreaterThanEqualAndFeedDateTimeLessThanAndAnimalManage_AnimalKind_AnimalTaxonomic(
+                : feedLogRepository.findAllByFeedDateTimeGreaterThanEqualAndFeedDateTimeLessThanAndAnimalTaxonomic(
                         startDateTime,
                         endDateTime,
                         animalTaxonomic,

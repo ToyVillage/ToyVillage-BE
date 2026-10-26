@@ -6,6 +6,7 @@ import com.command.toyvillage_server.domain.app.animal_manage.domain.repository.
 import com.command.toyvillage_server.domain.app.animal_manage.domain.repository.AnimalObservationRepository;
 import com.command.toyvillage_server.domain.app.animal_manage.exception.AnimalManageNotFoundException;
 import com.command.toyvillage_server.domain.app.feed_log.domain.repository.FeedLogRepository;
+import com.command.toyvillage_server.domain.app.feed_log.domain.repository.FifthFloorFeedLogRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +18,7 @@ public class DeleteAnimalManageService {
     private final AnimalObservationFileRepository animalObservationFileRepository;
     private final AnimalObservationRepository animalObservationRepository;
     private final FeedLogRepository feedLogRepository;
+    private final FifthFloorFeedLogRepository fifthFloorFeedLogRepository;
 
     @Transactional
     public void execute(Long animalManageId) {
@@ -25,7 +27,9 @@ public class DeleteAnimalManageService {
 
         animalObservationFileRepository.deleteAllByAnimalObservation_AnimalManage_Id(animalManageId);
         animalObservationRepository.deleteAllByAnimalManageId(animalManageId);
-        feedLogRepository.deleteAllByAnimalManage_Id(animalManageId);
+        // 급여 기록은 스냅샷으로 남기고 동물 연결만 끊는다.
+        feedLogRepository.detachAnimalManage(animalManageId);
+        fifthFloorFeedLogRepository.detachAnimalManage(animalManageId);
         animalManageRepository.delete(animalManage);
     }
 }
