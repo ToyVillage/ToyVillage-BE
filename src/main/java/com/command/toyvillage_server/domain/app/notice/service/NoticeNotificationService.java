@@ -7,6 +7,7 @@ import com.command.toyvillage_server.domain.app.notification.domain.FcmToken;
 import com.command.toyvillage_server.domain.app.notification.domain.repository.FcmTokenRepository;
 import com.google.firebase.messaging.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
@@ -20,6 +21,7 @@ public class NoticeNotificationService {
     private final FcmTokenRepository fcmTokenRepository;
     private final FirebaseMessaging firebaseMessaging;
 
+    @Async
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void execute(NoticeCreated event) {
         List<String> tokens = event.teamIds() == null || event.teamIds().isEmpty()
