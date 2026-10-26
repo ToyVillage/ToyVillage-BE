@@ -26,7 +26,7 @@ public class QueryAnimalObservationListService {
 
     @Transactional(readOnly = true)
     public Page<AnimalObservationListResponse> execute(Long animalManageId, Pageable pageable) {
-        if (!animalManageRepository.existsById(animalManageId)) {
+        if (!animalManageRepository.existsByIdAndDeleteYnFalse(animalManageId)) {
             throw AnimalManageNotFoundException.EXCEPTION;
         }
 

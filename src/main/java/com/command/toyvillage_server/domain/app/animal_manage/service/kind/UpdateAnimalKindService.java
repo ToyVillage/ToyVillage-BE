@@ -9,8 +9,6 @@ import com.command.toyvillage_server.domain.app.animal_manage.domain.repository.
 import com.command.toyvillage_server.domain.app.animal_manage.exception.AnimalKindNotFoundException;
 import com.command.toyvillage_server.domain.app.animal_manage.exception.AnimalLegalStatusNotFoundException;
 import com.command.toyvillage_server.domain.app.animal_manage.presentation.dto.request.AnimalKindRequest;
-import com.command.toyvillage_server.domain.app.feed_log.domain.repository.FeedLogRepository;
-import com.command.toyvillage_server.domain.app.feed_log.domain.repository.FifthFloorFeedLogRepository;
 import com.command.toyvillage_server.domain.web.file.domain.repository.FileRepository;
 import com.command.toyvillage_server.domain.web.file.exception.FileNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -27,12 +25,10 @@ public class UpdateAnimalKindService {
     private final AnimalLegalStatusRepository animalLegalStatusRepository;
     private final AnimalLegalDesignationRepository animalLegalDesignationRepository;
     private final FileRepository fileRepository;
-    private final FeedLogRepository feedLogRepository;
-    private final FifthFloorFeedLogRepository fifthFloorFeedLogRepository;
 
     @Transactional
     public void execute(Long animalKindId, AnimalKindRequest request) {
-        AnimalKind animalKind = animalKindRepository.findById(animalKindId)
+        AnimalKind animalKind = animalKindRepository.findByIdAndDeleteYnFalse(animalKindId)
             .orElseThrow(() -> AnimalKindNotFoundException.EXCEPTION);
 
         List<AnimalLegalStatus> animalLegalStatuses = findAnimalLegalStatuses(request.animalLegalDesignation());
@@ -45,14 +41,6 @@ public class UpdateAnimalKindService {
             request.animalDetailKind(),
             fileRepository.findByFileKey(request.fileKey())
                 .orElseThrow(() -> FileNotFoundException.EXCEPTION)
-        );
-
-        // 급여 기록의 종 스냅샷도 수정된 정보로 맞춘다.
-        feedLogRepository.updateAnimalKindSnapshot(
-            animalKindId, animalKind.getKindName(), animalKind.getAnimalTaxonomic()
-        );
-        fifthFloorFeedLogRepository.updateAnimalKindSnapshot(
-            animalKindId, animalKind.getKindName(), animalKind.getAnimalTaxonomic()
         );
 
         animalLegalDesignationRepository.deleteAllByAnimalKindId(animalKindId);

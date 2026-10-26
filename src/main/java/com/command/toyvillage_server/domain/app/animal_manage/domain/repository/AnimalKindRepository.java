@@ -8,14 +8,21 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.Optional;
+
 public interface AnimalKindRepository extends JpaRepository<AnimalKind, Long> {
+    Optional<AnimalKind> findByIdAndDeleteYnFalse(Long animalKindId);
+
+    boolean existsByIdAndDeleteYnFalse(Long animalKindId);
+
     Page<AnimalKind> findAllByAnimalTaxonomic(AnimalTaxonomic animalTaxonomic, Pageable pageable);
 
     @Query(
         value = """
             SELECT animalKind
             FROM AnimalKind animalKind
-            WHERE (:animalTaxonomic IS NULL OR animalKind.animalTaxonomic = :animalTaxonomic)
+            WHERE animalKind.deleteYn = false
+              AND (:animalTaxonomic IS NULL OR animalKind.animalTaxonomic = :animalTaxonomic)
               AND (
                 :keyword IS NULL
                 OR :keyword = ''
@@ -24,6 +31,7 @@ public interface AnimalKindRepository extends JpaRepository<AnimalKind, Long> {
                     SELECT animalManage.id
                     FROM AnimalManage animalManage
                     WHERE animalManage.animalKind = animalKind
+                      AND animalManage.deleteYn = false
                       AND LOWER(animalManage.animalName) LIKE LOWER(CONCAT('%', :keyword, '%'))
                 )
               )
@@ -31,7 +39,8 @@ public interface AnimalKindRepository extends JpaRepository<AnimalKind, Long> {
         countQuery = """
             SELECT COUNT(animalKind)
             FROM AnimalKind animalKind
-            WHERE (:animalTaxonomic IS NULL OR animalKind.animalTaxonomic = :animalTaxonomic)
+            WHERE animalKind.deleteYn = false
+              AND (:animalTaxonomic IS NULL OR animalKind.animalTaxonomic = :animalTaxonomic)
               AND (
                 :keyword IS NULL
                 OR :keyword = ''
@@ -40,6 +49,7 @@ public interface AnimalKindRepository extends JpaRepository<AnimalKind, Long> {
                     SELECT animalManage.id
                     FROM AnimalManage animalManage
                     WHERE animalManage.animalKind = animalKind
+                      AND animalManage.deleteYn = false
                       AND LOWER(animalManage.animalName) LIKE LOWER(CONCAT('%', :keyword, '%'))
                 )
               )

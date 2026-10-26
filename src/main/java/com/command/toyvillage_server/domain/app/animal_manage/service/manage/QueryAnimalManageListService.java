@@ -22,17 +22,17 @@ public class QueryAnimalManageListService {
         String keyword,
         Pageable pageable
     ) {
-        if (!animalKindRepository.existsById(animalKindId)) {
+        if (!animalKindRepository.existsByIdAndDeleteYnFalse(animalKindId)) {
             throw AnimalKindNotFoundException.EXCEPTION;
         }
 
         if (keyword == null || keyword.isBlank()) {
-            return animalManageRepository.findAllByAnimalKindId(animalKindId, pageable)
+            return animalManageRepository.findAllByAnimalKindIdAndDeleteYnFalse(animalKindId, pageable)
                 .map(AnimalManageQueryListObjectResponse::from);
         }
 
         return animalManageRepository
-            .findAllByAnimalKindIdAndAnimalNameContainingIgnoreCase(animalKindId, keyword.trim(), pageable)
+            .findAllByAnimalKindIdAndAnimalNameContainingIgnoreCaseAndDeleteYnFalse(animalKindId, keyword.trim(), pageable)
             .map(AnimalManageQueryListObjectResponse::from);
     }
 }

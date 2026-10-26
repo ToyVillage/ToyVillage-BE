@@ -27,7 +27,7 @@ public class FifthFloorFeedLogCreateService {
         AppAdmin writer = appAdminRepository.findByIdAndDeleteStatusFalse(userFacade.getCurrentUserId())
                 .orElseThrow(() -> AppAdminNotFoundException.EXCEPTION);
 
-        AnimalManage animalManage = animalManageRepository.findById(animalManageId)
+        AnimalManage animalManage = animalManageRepository.findByIdAndDeleteYnFalse(animalManageId)
                 .orElseThrow(() -> AnimalManageNotFoundException.EXCEPTION);
 
         FifthFloorFeedLog feedLog = FifthFloorFeedLog.builder()

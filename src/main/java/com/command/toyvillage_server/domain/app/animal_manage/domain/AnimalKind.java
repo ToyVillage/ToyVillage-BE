@@ -43,6 +43,9 @@ public class AnimalKind {
     @JoinColumn(name = "file_id", nullable = false)
     private File kindImage;
 
+    @Column(name = "delete_yn", nullable = false)
+    private boolean deleteYn;
+
     @Builder
     private AnimalKind(
         String kindName,
@@ -76,4 +79,7 @@ public class AnimalKind {
         this.kindImage = kindImage;
     }
 
+    public void changeDeleteYn() {
+        this.deleteYn = true;
+    }
 }
