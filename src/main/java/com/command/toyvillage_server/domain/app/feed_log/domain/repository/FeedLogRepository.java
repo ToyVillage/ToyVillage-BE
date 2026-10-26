@@ -41,6 +41,4 @@ public interface FeedLogRepository extends JpaRepository<FeedLog, Long> {
     List<FeedLog> findAllByAppAdmin_IdOrderByIdDesc(Long writerId);
 
     List<FeedLog> findAllByAnimalManage_IdAndAppAdmin_IdOrderByIdDesc(Long animalManageId, Long writerId);
-
-    void deleteAllByAnimalManage_Id(Long animalManageId);
 }

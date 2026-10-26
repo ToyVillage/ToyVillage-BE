@@ -24,6 +24,4 @@ public interface AnimalObservationRepository extends JpaRepository<AnimalObserva
 
     Optional<AnimalObservation> findByIdAndAnimalManageId(Long id, Long animalManageId);
 
-    void deleteAllByAnimalManageId(Long animalManageId);
-
 }

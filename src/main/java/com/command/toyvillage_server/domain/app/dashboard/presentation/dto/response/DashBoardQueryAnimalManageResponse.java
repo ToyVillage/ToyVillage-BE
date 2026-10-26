@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 public record DashBoardQueryAnimalManageResponse(
         Long animalObservationId,
         Long animalId,
+        boolean animalDeleted,
         String title,
         LocalDateTime createdAt
 ) {
@@ -17,6 +18,7 @@ public record DashBoardQueryAnimalManageResponse(
         return DashBoardQueryAnimalManageResponse.builder()
                 .animalObservationId(animalObservation.getId())
                 .animalId(animalManage.getId())
+                .animalDeleted(animalManage.isDeleteYn())
                 .title(animalObservation.getTitle())
                 .createdAt(animalObservation.getCreatedAt())
                 .build();

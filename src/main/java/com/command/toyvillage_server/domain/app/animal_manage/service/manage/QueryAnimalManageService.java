@@ -20,7 +20,7 @@ public class QueryAnimalManageService {
 
     @Transactional(readOnly = true)
     public AnimalManageQueryResponse execute(Long animalManageId) {
-        AnimalManage animalManage = animalManageRepository.findById(animalManageId)
+        AnimalManage animalManage = animalManageRepository.findByIdAndDeleteYnFalse(animalManageId)
             .orElseThrow(() -> AnimalManageNotFoundException.EXCEPTION);
 
         List<String> legalStatuses = animalLegalDesignationRepository

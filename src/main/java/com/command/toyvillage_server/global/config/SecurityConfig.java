@@ -147,7 +147,8 @@ public class SecurityConfig {
                     .requestMatchers("/animal-manage", "/animal-manage/**").hasRole("APP_ADMIN")
 
                     // feed log
-                    .requestMatchers("/feed-log/admin", "/feed-log/admin/**")
+                    .requestMatchers("/feed-log/admin", "/feed-log/admin/**",
+                            "/feed-log/fifth-floor/admin", "/feed-log/fifth-floor/admin/**")
                             .hasRole("APP_ADMIN")
                     .requestMatchers("/feed-log", "/feed-log/**")
                             .hasAnyRole("APP_ADMIN", "EMPLOYEE")

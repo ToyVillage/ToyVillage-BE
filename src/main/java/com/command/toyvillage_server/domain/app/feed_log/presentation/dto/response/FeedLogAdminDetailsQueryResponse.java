@@ -13,6 +13,7 @@ public record FeedLogAdminDetailsQueryResponse(
         String staffName,
         String animalKind,
         String animalName,
+        boolean animalDeleted,
         FileResponse animalImageUrl,
         String feedType,
         Float feedAmount,
@@ -27,6 +28,7 @@ public record FeedLogAdminDetailsQueryResponse(
                 .staffName(feedLog.getAppAdmin().getName())
                 .animalKind(feedLog.getAnimalManage().getAnimalKind().getKindName())
                 .animalName(feedLog.getAnimalManage().getAnimalName())
+                .animalDeleted(feedLog.getAnimalManage().isDeleteYn())
                 .animalImageUrl(FileResponse.from(feedLog.getAnimalManage().getAnimalImage()))
                 .feedType(feedLog.getFeedType())
                 .feedAmount(feedLog.getFeedAmount())

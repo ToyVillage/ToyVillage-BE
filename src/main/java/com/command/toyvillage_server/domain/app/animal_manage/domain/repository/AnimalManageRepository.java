@@ -8,21 +8,26 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface AnimalManageRepository extends JpaRepository<AnimalManage, Long> {
-    List<AnimalManage> findAllByAnimalKindId(Long animalKindId);
+    Optional<AnimalManage> findByIdAndDeleteYnFalse(Long animalManageId);
 
-    Page<AnimalManage> findAllByAnimalKindId(Long animalKindId, Pageable pageable);
+    boolean existsByIdAndDeleteYnFalse(Long animalManageId);
 
-    Page<AnimalManage> findAllByAnimalKindIdAndAnimalNameContainingIgnoreCase(
+    List<AnimalManage> findAllByAnimalKindIdAndDeleteYnFalse(Long animalKindId);
+
+    Page<AnimalManage> findAllByAnimalKindIdAndDeleteYnFalse(Long animalKindId, Pageable pageable);
+
+    Page<AnimalManage> findAllByAnimalKindIdAndAnimalNameContainingIgnoreCaseAndDeleteYnFalse(
         Long animalKindId,
         String animalName,
         Pageable pageable
     );
 
-    long countByAnimalKindId(Long animalKindId);
+    long countByAnimalKindIdAndDeleteYnFalse(Long animalKindId);
 
     @Query("SELECT a.animalKind.id, COUNT(a.id) FROM AnimalManage a " +
-        "WHERE a.animalKind.id IN :animalKindIds GROUP BY a.animalKind.id")
+        "WHERE a.animalKind.id IN :animalKindIds AND a.deleteYn = false GROUP BY a.animalKind.id")
     List<Object[]> countByAnimalKindIds(@Param("animalKindIds") List<Long> animalKindIds);
 }

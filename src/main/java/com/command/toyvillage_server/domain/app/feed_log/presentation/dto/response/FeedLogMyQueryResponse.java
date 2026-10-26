@@ -19,13 +19,15 @@ public record FeedLogMyQueryResponse(
     private record FeedLogResponse(
             Long feedId,
             String animalKind,
-            String animalName
+            String animalName,
+            boolean animalDeleted
     ) {
         public static FeedLogResponse from(FeedLog feedLog) {
             return FeedLogResponse.builder()
                     .feedId(feedLog.getId())
                     .animalKind(feedLog.getAnimalManage().getAnimalKind().getKindName())
                     .animalName(feedLog.getAnimalManage().getAnimalName())
+                    .animalDeleted(feedLog.getAnimalManage().isDeleteYn())
                     .build();
         }
     }

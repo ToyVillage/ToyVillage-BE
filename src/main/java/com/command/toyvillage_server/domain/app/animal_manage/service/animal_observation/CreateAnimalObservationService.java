@@ -34,7 +34,7 @@ public class CreateAnimalObservationService {
 
     @Transactional
     public Long execute(Long animalManageId, AnimalObservationRequest request) {
-        AnimalManage animalManage = animalManageRepository.findById(animalManageId)
+        AnimalManage animalManage = animalManageRepository.findByIdAndDeleteYnFalse(animalManageId)
             .orElseThrow(() -> AnimalManageNotFoundException.EXCEPTION);
 
         AppAdmin author = appAdminRepository.findByIdAndDeleteStatusFalse(userFacade.getCurrentUserId())

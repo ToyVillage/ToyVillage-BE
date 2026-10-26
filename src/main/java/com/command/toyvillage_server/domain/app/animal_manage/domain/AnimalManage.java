@@ -38,6 +38,9 @@ public class AnimalManage {
     @JoinColumn(name = "file_id", nullable = false)
     private File animalImage;
 
+    @Column(name = "delete_yn", nullable = false)
+    private boolean deleteYn;
+
     public void update(
         AnimalKind animalKind,
         String animalName,
@@ -52,5 +55,9 @@ public class AnimalManage {
         this.birthYear = birthYear;
         this.otherInfo = otherInfo;
         this.animalImage = animalImage;
+    }
+
+    public void changeDeleteYn() {
+        this.deleteYn = true;
     }
 }
