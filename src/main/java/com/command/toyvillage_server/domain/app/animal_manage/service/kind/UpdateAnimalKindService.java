@@ -39,6 +39,7 @@ public class UpdateAnimalKindService {
             request.animalScientificName(),
             request.animalTaxonomic(),
             request.animalDetailKind(),
+            request.floor(),
             fileRepository.findByFileKey(request.fileKey())
                 .orElseThrow(() -> FileNotFoundException.EXCEPTION)
         );

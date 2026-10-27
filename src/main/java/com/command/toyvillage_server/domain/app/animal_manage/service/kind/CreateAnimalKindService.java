@@ -35,6 +35,7 @@ public class CreateAnimalKindService {
             .scientificName(request.animalScientificName())
             .animalTaxonomic(request.animalTaxonomic())
             .detailKind(request.animalDetailKind())
+            .floor(request.floor())
             .kindImage(fileRepository.findByFileKey(request.fileKey())
                 .orElseThrow(() -> FileNotFoundException.EXCEPTION))
             .build();
