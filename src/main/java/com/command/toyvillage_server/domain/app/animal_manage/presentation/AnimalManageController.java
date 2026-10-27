@@ -126,6 +126,7 @@ public class AnimalManageController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<MessageResponse> createAnimalManage(
         @RequestBody @Valid AnimalManageRequest request
     ) {
