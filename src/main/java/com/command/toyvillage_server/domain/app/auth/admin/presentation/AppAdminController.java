@@ -25,6 +25,7 @@ public class AppAdminController {
     private final EmployeePasswordResetService employeePasswordResetService;
 
     @PostMapping("/employees")
+    @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<MessageResponse> createEmployee(
             @RequestBody @Valid EmployeeCreateRequest request
     ) {
