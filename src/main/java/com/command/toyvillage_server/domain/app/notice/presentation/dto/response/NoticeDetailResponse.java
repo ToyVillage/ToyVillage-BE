@@ -5,7 +5,7 @@ import com.command.toyvillage_server.domain.app.notice.domain.NoticeTeam;
 import com.command.toyvillage_server.domain.web.file.presentation.dto.response.FileResponse;
 import lombok.Builder;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Builder
@@ -14,7 +14,7 @@ public record NoticeDetailResponse(
     String title,
     List<NoticeTeamResponse> teams,
     String content,
-    LocalDate createdAt,
+    LocalDateTime createdAt,
     List<FileResponse> files
 ) {
     public static NoticeDetailResponse from(Notice notice, List<NoticeTeam> noticeTeams) {
