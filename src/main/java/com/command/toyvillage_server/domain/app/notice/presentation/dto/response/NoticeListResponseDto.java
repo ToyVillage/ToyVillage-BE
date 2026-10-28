@@ -5,7 +5,7 @@ import com.command.toyvillage_server.domain.app.notice.domain.NoticeTeam;
 import lombok.Builder;
 import org.springframework.data.domain.Page;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -28,7 +28,7 @@ public record NoticeListResponseDto(
         Long id,
         String title,
         List<NoticeTeamResponse> teams,
-        LocalDate createdAt
+        LocalDateTime createdAt
     ) {
         public static NoticeResponse from(Notice notice, List<NoticeTeam> noticeTeams) {
             return NoticeResponse.builder()

@@ -28,7 +28,7 @@ public class UpdateAnimalKindService {
 
     @Transactional
     public void execute(Long animalKindId, AnimalKindRequest request) {
-        AnimalKind animalKind = animalKindRepository.findById(animalKindId)
+        AnimalKind animalKind = animalKindRepository.findByIdAndDeleteYnFalse(animalKindId)
             .orElseThrow(() -> AnimalKindNotFoundException.EXCEPTION);
 
         List<AnimalLegalStatus> animalLegalStatuses = findAnimalLegalStatuses(request.animalLegalDesignation());
@@ -39,6 +39,7 @@ public class UpdateAnimalKindService {
             request.animalScientificName(),
             request.animalTaxonomic(),
             request.animalDetailKind(),
+            request.floor(),
             fileRepository.findByFileKey(request.fileKey())
                 .orElseThrow(() -> FileNotFoundException.EXCEPTION)
         );

@@ -15,6 +15,7 @@ public record AnimalKindQueryResponse(
     String scientificName,
     AnimalTaxonomic animalTaxonomic,
     String detailKind,
+    Integer floor,
     List<AnimalLegalStatusResponse> legalStatuses,
     long animalCount,
     FileResponse kindImage
@@ -31,6 +32,7 @@ public record AnimalKindQueryResponse(
             .scientificName(animalKind.getScientificName())
             .animalTaxonomic(animalKind.getAnimalTaxonomic())
             .detailKind(animalKind.getDetailKind())
+            .floor(animalKind.getFloor())
             .legalStatuses(legalStatuses)
             .animalCount(animalCount)
             .kindImage(FileResponse.from(animalKind.getKindImage()))

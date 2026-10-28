@@ -21,7 +21,7 @@ public class CreateAnimalManageService {
     @Transactional
     public void execute(AnimalManageRequest request) {
         AnimalManage animalManage = AnimalManage.builder()
-            .animalKind(animalKindRepository.findById(request.animalKindId())
+            .animalKind(animalKindRepository.findByIdAndDeleteYnFalse(request.animalKindId())
                 .orElseThrow(() -> AnimalKindNotFoundException.EXCEPTION))
             .animalName(request.animalName())
             .animalGender(request.animalGender())

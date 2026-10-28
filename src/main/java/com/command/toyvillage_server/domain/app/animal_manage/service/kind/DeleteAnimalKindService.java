@@ -20,12 +20,12 @@ public class DeleteAnimalKindService {
 
     @Transactional
     public void execute(Long animalKindId) {
-        AnimalKind animalKind = animalKindRepository.findById(animalKindId)
+        AnimalKind animalKind = animalKindRepository.findByIdAndDeleteYnFalse(animalKindId)
             .orElseThrow(() -> AnimalKindNotFoundException.EXCEPTION);
 
-        animalManageRepository.findAllByAnimalKindId(animalKindId)
+        animalManageRepository.findAllByAnimalKindIdAndDeleteYnFalse(animalKindId)
             .forEach(animalManage -> deleteAnimalManageService.execute(animalManage.getId()));
         animalLegalDesignationRepository.deleteAllByAnimalKindId(animalKindId);
-        animalKindRepository.delete(animalKind);
+        animalKind.changeDeleteYn();
     }
 }

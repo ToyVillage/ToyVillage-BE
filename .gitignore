@@ -38,3 +38,6 @@ out/
 
 ### env ###
 .env
+
+### oh-my-claudecode ###
+.omc/

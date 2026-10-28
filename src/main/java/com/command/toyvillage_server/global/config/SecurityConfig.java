@@ -67,6 +67,8 @@ public class SecurityConfig {
                     .requestMatchers(HttpMethod.POST, "/app/auth/logout")
                             .hasAnyRole("APP_ADMIN", "EMPLOYEE")
                     .requestMatchers("/app/admin", "/app/admin/**").hasRole("APP_ADMIN")
+                    .requestMatchers(HttpMethod.POST, "/app/fcm/token").hasAnyRole("APP_ADMIN", "EMPLOYEE")
+                    .requestMatchers(HttpMethod.DELETE, "/app/fcm/token").hasAnyRole("APP_ADMIN", "EMPLOYEE")
 
                     // task
                     .requestMatchers(HttpMethod.GET, "/tasks/*")
@@ -109,6 +111,9 @@ public class SecurityConfig {
                     .requestMatchers(HttpMethod.GET, "/dashboard", "/dashboard/**")
                             .hasRole("APP_ADMIN")
 
+                    // all activities
+                    .requestMatchers("/all-activities", "/all-activities/**").hasRole("APP_ADMIN")
+
                     // team settings
                     .requestMatchers("/team", "/team/**").hasRole("APP_ADMIN")
                     .requestMatchers("/join-team", "/join-team/**").hasRole("APP_ADMIN")
@@ -145,7 +150,8 @@ public class SecurityConfig {
                     .requestMatchers("/animal-manage", "/animal-manage/**").hasRole("APP_ADMIN")
 
                     // feed log
-                    .requestMatchers("/feed-log/admin", "/feed-log/admin/**")
+                    .requestMatchers("/feed-log/admin", "/feed-log/admin/**",
+                            "/feed-log/fifth-floor/admin", "/feed-log/fifth-floor/admin/**")
                             .hasRole("APP_ADMIN")
                     .requestMatchers("/feed-log", "/feed-log/**")
                             .hasAnyRole("APP_ADMIN", "EMPLOYEE")

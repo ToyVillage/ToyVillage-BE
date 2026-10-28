@@ -83,3 +83,9 @@ jwt:
   app-refresh-expiration: ${APP_REFRESH_EXPIRATION:604800000}
   header: Authorization
   prefix: Bearer
+
+firebase:
+  service-account:
+    project-id: ${FIREBASE_PROJECT_ID}
+    client-email: ${FIREBASE_CLIENT_EMAIL}
+    private-key: ${FIREBASE_PRIVATE_KEY}

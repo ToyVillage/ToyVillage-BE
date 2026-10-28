@@ -23,7 +23,7 @@ public class QueryAnimalKindService {
 
     @Transactional(readOnly = true)
     public AnimalKindQueryResponse execute(Long animalKindId) {
-        AnimalKind animalKind = animalKindRepository.findById(animalKindId)
+        AnimalKind animalKind = animalKindRepository.findByIdAndDeleteYnFalse(animalKindId)
             .orElseThrow(() -> AnimalKindNotFoundException.EXCEPTION);
 
         List<AnimalLegalStatusResponse> legalStatuses = animalLegalDesignationRepository.findAllByAnimalKind(animalKind).stream()
@@ -34,7 +34,7 @@ public class QueryAnimalKindService {
         return AnimalKindQueryResponse.of(
             animalKind,
             legalStatuses,
-            animalManageRepository.countByAnimalKindId(animalKindId)
+            animalManageRepository.countByAnimalKindIdAndDeleteYnFalse(animalKindId)
         );
     }
 }

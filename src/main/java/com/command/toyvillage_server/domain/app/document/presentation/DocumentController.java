@@ -10,6 +10,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -26,6 +27,7 @@ public class DocumentController {
     private final DeleteDocumentService deleteDocumentService;
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<MessageResponse> create(@Valid @RequestBody DocumentRequest request) {
         Long id = createDocumentService.execute(request);
 

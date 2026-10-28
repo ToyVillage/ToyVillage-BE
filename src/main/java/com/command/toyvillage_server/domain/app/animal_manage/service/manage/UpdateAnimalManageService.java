@@ -21,11 +21,11 @@ public class UpdateAnimalManageService {
 
     @Transactional
     public void execute(Long animalManageId, AnimalManageRequest request) {
-        AnimalManage animalManage = animalManageRepository.findById(animalManageId)
+        AnimalManage animalManage = animalManageRepository.findByIdAndDeleteYnFalse(animalManageId)
             .orElseThrow(() -> AnimalManageNotFoundException.EXCEPTION);
 
         animalManage.update(
-            animalKindRepository.findById(request.animalKindId())
+            animalKindRepository.findByIdAndDeleteYnFalse(request.animalKindId())
                 .orElseThrow(() -> AnimalKindNotFoundException.EXCEPTION),
             request.animalName(),
             request.animalGender(),
