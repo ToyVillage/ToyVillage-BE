@@ -67,6 +67,7 @@ public class AnimalManageController {
     private final DeleteAnimalObservationService deleteAnimalObservationService;
 
     @PostMapping("/kind")
+    @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<MessageResponse> createAnimalKind(
         @RequestBody @Valid AnimalKindRequest request
     ) {
@@ -160,6 +161,7 @@ public class AnimalManageController {
     }
 
     @PostMapping("/legal-status")
+    @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<MessageResponse> createAnimalLegalStatus(
         @RequestBody @Valid AnimalLegalStatusRequest request
     ) {
