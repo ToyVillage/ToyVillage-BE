@@ -1,42 +1,44 @@
 package com.command.toyvillage_server.domain.app.excel.service;
 
+import com.command.toyvillage_server.domain.app.excel.service.dto.ExcelSheet;
+import com.command.toyvillage_server.global.error.exception.ErrorCode;
+import com.command.toyvillage_server.global.error.exception.ToyVillageException;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Service;
 import com.command.toyvillage_server.domain.app.auth.admin.domain.AppAdmin;
-import com.command.toyvillage_server.domain.app.excel.presentation.ExcelType;
 import com.command.toyvillage_server.domain.app.task.domain.Task;
 import com.command.toyvillage_server.domain.app.task.domain.TaskStatus;
 import com.command.toyvillage_server.domain.app.task.domain.repository.TaskRepository;
 import com.command.toyvillage_server.domain.app.workreport.domain.Status;
 import com.command.toyvillage_server.domain.app.workreport.domain.WorkReport;
 import com.command.toyvillage_server.domain.app.workreport.domain.repository.WorkReportRepository;
-import lombok.RequiredArgsConstructor;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static com.command.toyvillage_server.domain.app.excel.service.ExcelSheetSupport.*;
-
 @Service
 @RequiredArgsConstructor
-public class ExportTaskExcelService implements ExcelSheetService {
+public class ExportTaskExcelService {
+
+    private static final int PAGE_SIZE = 200;
+    private static final int MAX_ROWS = 10_000;
 
     private final TaskRepository taskRepository;
     private final WorkReportRepository workReportRepository;
 
-    @Override
-    public ExcelType type() {
-        return ExcelType.TASK;
-    }
-
-    @Override
-    public void execute(XSSFSheet sheet, LocalDate startDate, LocalDate endDate) {
-        header(sheet, "생성일", "제목", "내용", "우선순위", "마감일", "진행상태", "담당자", "보고상태");
+    public ExcelSheet execute(LocalDate startDate, LocalDate endDate) {
         LocalDate today = LocalDate.now();
-        forEachPage(page -> taskRepository.findByCreatedAtBetween(
-            startTime(startDate), endTime(endDate), page(page, "createdAt")), tasks -> {
+        List<List<Object>> rows = new ArrayList<>();
+        for (int page = 0; ; page++) {
+            List<Task> tasks = taskRepository.findByCreatedAtBetween(
+                startDate.atStartOfDay(), endDate.atTime(23, 59, 59, 999_999_000),
+                PageRequest.of(page, PAGE_SIZE, Sort.by("createdAt", "id")));
             Map<Long, List<WorkReport>> reportsByTask = workReportRepository
                 .findAllByTask_IdIn(tasks.stream().map(Task::getId).toList()).stream()
                 .collect(Collectors.groupingBy(w -> w.getTask().getId()));
@@ -50,13 +52,20 @@ public class ExportTaskExcelService implements ExcelSheetService {
                     String reportStatus = reports.stream()
                         .filter(w -> w.getAppAdmin().getId().equals(assignee.getId()))
                         .findFirst()
-                        .map(w -> reportStatus(w.getStatus().name()))
+                        .map(w -> reportStatus(w.getStatus()))
                         .orElse("미제출");
-                    row(sheet, t.getCreatedAt().toLocalDate(), t.getTitle(), t.getContent(),
-                        priority(t.getPriority().name()), t.getFinishDate(), taskStatus, assignee.getName(), reportStatus);
+                    rows.add(Arrays.asList(t.getCreatedAt().toLocalDate(), t.getTitle(), t.getContent(),
+                        priority(t.getPriority().name()), t.getFinishDate(), taskStatus, assignee.getName(), reportStatus));
                 }
             }
-        });
+            if (rows.size() > MAX_ROWS) {
+                throw new ToyVillageException(ErrorCode.EXCEL_EXPORT_TOO_LARGE);
+            }
+            if (tasks.size() < PAGE_SIZE) {
+                return new ExcelSheet(
+                    List.of("생성일", "제목", "내용", "우선순위", "마감일", "진행상태", "담당자", "보고상태"), rows);
+            }
+        }
     }
 
     private String taskStatus(TaskStatus value) {
@@ -73,6 +82,16 @@ public class ExportTaskExcelService implements ExcelSheetService {
             case "MEDIUM" -> "보통";
             case "LOW" -> "낮음";
             default -> value;
+        };
+    }
+
+    private String reportStatus(Status value) {
+        return switch (value) {
+            case PENDING -> "대기";
+            case APPROVED -> "승인";
+            case REJECTED -> "반려";
+            case MISSING -> "미제출";
+            case RESUBMIT -> "재제출";
         };
     }
 }

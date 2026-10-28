@@ -1,41 +1,49 @@
 package com.command.toyvillage_server.domain.app.excel.service;
 
-import com.command.toyvillage_server.domain.app.excel.presentation.ExcelType;
+import com.command.toyvillage_server.domain.app.excel.service.dto.ExcelSheet;
+import com.command.toyvillage_server.global.error.exception.ErrorCode;
+import com.command.toyvillage_server.global.error.exception.ToyVillageException;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Service;
 import com.command.toyvillage_server.domain.app.work_log.domain.WorkLog;
 import com.command.toyvillage_server.domain.app.work_log.domain.WorkLogAnswer;
 import com.command.toyvillage_server.domain.app.work_log.domain.repository.WorkLogRepository;
-import lombok.RequiredArgsConstructor;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
-
-import static com.command.toyvillage_server.domain.app.excel.service.ExcelSheetSupport.*;
 
 @Service
 @RequiredArgsConstructor
-public class ExportWorkLogExcelService implements ExcelSheetService {
+public class ExportWorkLogExcelService {
+
+    private static final int PAGE_SIZE = 200;
+    private static final int MAX_ROWS = 10_000;
 
     private final WorkLogRepository workLogRepository;
 
-    @Override
-    public ExcelType type() {
-        return ExcelType.WORK_LOG;
-    }
-
-    @Override
-    public void execute(XSSFSheet sheet, LocalDate startDate, LocalDate endDate) {
-        header(sheet, "작성일", "템플릿", "작성자", "섹션", "질문", "답변");
-        forEachPage(page -> workLogRepository.findByWriteAtBetween(
-            start(startDate), end(endDate), page(page, "writeAt")), workLogs -> {
+    public ExcelSheet execute(LocalDate startDate, LocalDate endDate) {
+        List<List<Object>> rows = new ArrayList<>();
+        for (int page = 0; ; page++) {
+            List<WorkLog> workLogs = workLogRepository.findByWriteAtBetween(
+                startDate, endDate, PageRequest.of(page, PAGE_SIZE, Sort.by("writeAt", "id")));
             for (WorkLog w : workLogs) {
                 for (WorkLogAnswer answer : w.getAnswers()) {
-                    row(sheet, w.getWriteAt(), w.getTemplate().getTemplateTitle(), w.getAppAdmin().getName(),
-                        answer.getSection().getSectionName(), answer.getQuestion().getQuestion(), answerText(answer));
+                    rows.add(Arrays.asList(w.getWriteAt(), w.getTemplate().getTemplateTitle(), w.getAppAdmin().getName(),
+                        answer.getSection().getSectionName(), answer.getQuestion().getQuestion(), answerText(answer)));
                 }
             }
-        });
+            if (rows.size() > MAX_ROWS) {
+                throw new ToyVillageException(ErrorCode.EXCEL_EXPORT_TOO_LARGE);
+            }
+            if (workLogs.size() < PAGE_SIZE) {
+                return new ExcelSheet(List.of("작성일", "템플릿", "작성자", "섹션", "질문", "답변"), rows);
+            }
+        }
     }
 
     private String answerText(WorkLogAnswer answer) {

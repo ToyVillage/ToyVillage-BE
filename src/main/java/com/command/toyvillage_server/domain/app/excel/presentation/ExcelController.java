@@ -16,21 +16,27 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
+import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/excel")
 public class ExcelController {
 
+    private static final Set<ExcelType> UNDATED_TYPES = Set.of(ExcelType.TEAM_MEMBER, ExcelType.ANIMAL);
+
     private final ExcelExportService excelExportService;
 
     @GetMapping
     public ResponseEntity<byte[]> export(
-        @RequestParam ExcelType type,
+        @RequestParam List<ExcelType> types,
+        @RequestParam(defaultValue = "SHEET") ExcelExportMode mode,
         @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
         @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate
     ) {
-        if (type == ExcelType.TEAM_MEMBER || type == ExcelType.ANIMAL) {
+        List<ExcelType> distinctTypes = types.stream().distinct().toList();
+        if (UNDATED_TYPES.containsAll(distinctTypes)) {
             startDate = null;
             endDate = null;
         }
@@ -38,17 +44,17 @@ public class ExcelController {
             throw new ToyVillageException(ErrorCode.EXCEL_EXPORT_INVALID_DATE_RANGE);
         }
 
-        byte[] body = excelExportService.execute(type, startDate, endDate);
+        byte[] body = excelExportService.execute(distinctTypes, mode, startDate, endDate);
 
-        String fileName = type.getTitle()
+        String fileName = (distinctTypes.size() == 1 ? distinctTypes.get(0).getTitle() : "통합")
             + (startDate != null ? "_" + startDate : "")
             + (endDate != null ? "_" + endDate : "")
-            + ".xlsx";
+            + "." + mode.getExtension();
 
         return ResponseEntity.ok()
             .header(HttpHeaders.CONTENT_DISPOSITION,
                 ContentDisposition.attachment().filename(fileName, StandardCharsets.UTF_8).build().toString())
-            .contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
+            .contentType(MediaType.parseMediaType(mode.getContentType()))
             .body(body);
     }
 }
