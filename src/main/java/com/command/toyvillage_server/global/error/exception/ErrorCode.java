@@ -46,6 +46,8 @@ public enum ErrorCode {
 
     // general
     BAD_REQUEST(400, "잘못된 요청입니다."),
+    EXCEL_EXPORT_TOO_LARGE(413, "엑셀 내보내기 최대 건수를 초과했습니다."),
+    EXCEL_EXPORT_INVALID_DATE_RANGE(400, "시작일은 종료일보다 늦을 수 없습니다."),
     NO_RESOURCE_FOUND(404, "존재하지 않는 API입니다."),
     INTERNAL_SERVER_ERROR(500, "내부 서버 오류가 발생했습니다."),
 
