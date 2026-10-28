@@ -15,6 +15,7 @@ public interface AnimalManageRepository extends JpaRepository<AnimalManage, Long
             select a from AnimalManage a
             join fetch a.animalKind kind
             left join fetch a.animalImage
+            where a.deleteYn = false and kind.deleteYn = false
             order by kind.animalTaxonomic, kind.kindName, a.animalName, a.id
             """)
     List<AnimalManage> findExportPage(Pageable pageable);
