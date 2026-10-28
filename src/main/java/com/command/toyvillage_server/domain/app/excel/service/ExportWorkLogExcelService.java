@@ -32,6 +32,10 @@ public class ExportWorkLogExcelService {
             List<WorkLog> workLogs = workLogRepository.findByWriteAtBetween(
                 startDate, endDate, PageRequest.of(page, PAGE_SIZE, Sort.by("writeAt", "id")));
             for (WorkLog w : workLogs) {
+                if (w.getAnswers().isEmpty()) {
+                    rows.add(Arrays.asList(w.getWriteAt(), w.getTemplate().getTemplateTitle(), w.getAppAdmin().getName(),
+                        null, null, null));
+                }
                 for (WorkLogAnswer answer : w.getAnswers()) {
                     rows.add(Arrays.asList(w.getWriteAt(), w.getTemplate().getTemplateTitle(), w.getAppAdmin().getName(),
                         answer.getSection().getSectionName(), answer.getQuestion().getQuestion(), answerText(answer)));
