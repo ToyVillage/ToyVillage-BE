@@ -24,6 +24,8 @@ public class ExportAnimalExcelService {
 
     private static final int PAGE_SIZE = 200;
     private static final int MAX_ROWS = 1_000;
+    private static final List<String> HEADERS = List.of("사진", "개체명", "종", "영문명", "학명", "분류", "세부종", "성별",
+        "출생년도", "법적지위", "기타정보");
 
     private final AnimalManageRepository animalManageRepository;
     private final AnimalLegalDesignationRepository animalLegalDesignationRepository;
@@ -45,21 +47,12 @@ public class ExportAnimalExcelService {
                 byte[] image = a.getAnimalImage() == null ? null : awsS3Provider.download(a.getAnimalImage().getFileKey());
                 rows.add(Arrays.asList(image == null ? "이미지 없음" : image, a.getAnimalName(), kind.getKindName(),
                     kind.getEngName(), kind.getScientificName(), kind.getAnimalTaxonomic().getType(), kind.getDetailKind(),
-                    gender(a.getAnimalGender().name()), a.getBirthYear(), legalByKind.getOrDefault(kind.getId(), ""),
+                    a.getAnimalGender().getType(), a.getBirthYear(), legalByKind.getOrDefault(kind.getId(), ""),
                     a.getOtherInfo()));
             }
             if (animals.size() < PAGE_SIZE) {
-                return new ExcelSheet(List.of("사진", "개체명", "종", "영문명", "학명", "분류", "세부종", "성별",
-                    "출생년도", "법적지위", "기타정보"), rows);
+                return new ExcelSheet(HEADERS, rows);
             }
         }
-    }
-
-    private String gender(String name) {
-        return switch (name) {
-            case "MAN" -> "수컷";
-            case "WOMAN" -> "암컷";
-            default -> "미상";
-        };
     }
 }

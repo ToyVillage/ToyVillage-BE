@@ -24,6 +24,7 @@ public class ExportNoticeExcelService {
 
     private static final int PAGE_SIZE = 200;
     private static final int MAX_ROWS = 10_000;
+    private static final List<String> HEADERS = List.of("작성일시", "제목", "내용", "대상 팀");
 
     private final NoticeRepository noticeRepository;
     private final NoticeTeamRepository noticeTeamRepository;
@@ -41,14 +42,14 @@ public class ExportNoticeExcelService {
                         Collectors.joining(", "))));
             for (Notice n : notices) {
                 String teams = teamNames.getOrDefault(n.getId(), "");
-                rows.add(Arrays.asList(n.getCreatedAt().toLocalDate(), n.getTitle(), n.getContent(),
+                rows.add(Arrays.asList(n.getCreatedAt(), n.getTitle(), n.getContent(),
                     teams.isEmpty() ? "전체" : teams));
             }
             if (rows.size() > MAX_ROWS) {
                 throw new ToyVillageException(ErrorCode.EXCEL_EXPORT_TOO_LARGE);
             }
             if (notices.size() < PAGE_SIZE) {
-                return new ExcelSheet(List.of("작성일", "제목", "내용", "대상 팀"), rows);
+                return new ExcelSheet(HEADERS, rows);
             }
         }
     }

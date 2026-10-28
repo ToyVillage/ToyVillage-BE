@@ -22,6 +22,7 @@ public class ExportWorkReportExcelService {
 
     private static final int PAGE_SIZE = 200;
     private static final int MAX_ROWS = 10_000;
+    private static final List<String> HEADERS = List.of("작성일시", "업무 제목", "작성자", "내용", "비고", "상태", "반려사유");
 
     private final WorkReportRepository workReportRepository;
 
@@ -32,14 +33,14 @@ public class ExportWorkReportExcelService {
                 startDate.atStartOfDay(), endDate.atTime(23, 59, 59, 999_999_000),
                 PageRequest.of(page, PAGE_SIZE, Sort.by("createdAt", "id")));
             for (WorkReport w : reports) {
-                rows.add(Arrays.asList(w.getCreatedAt().toLocalDate(), w.getTask().getTitle(), w.getAppAdmin().getName(),
+                rows.add(Arrays.asList(w.getCreatedAt(), w.getTask().getTitle(), w.getAppAdmin().getName(),
                     w.getContent(), w.getNote(), reportStatus(w.getStatus()), w.getRejectionReason()));
             }
             if (rows.size() > MAX_ROWS) {
                 throw new ToyVillageException(ErrorCode.EXCEL_EXPORT_TOO_LARGE);
             }
             if (reports.size() < PAGE_SIZE) {
-                return new ExcelSheet(List.of("작성일", "업무 제목", "작성자", "내용", "비고", "상태", "반려사유"), rows);
+                return new ExcelSheet(HEADERS, rows);
             }
         }
     }

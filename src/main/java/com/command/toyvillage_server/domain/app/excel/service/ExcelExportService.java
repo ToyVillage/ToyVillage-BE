@@ -23,6 +23,8 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
@@ -87,15 +89,18 @@ public class ExcelExportService {
     private byte[] workbook(List<ExcelType> types, LocalDate start, LocalDate end) throws IOException {
         try (XSSFWorkbook workbook = new XSSFWorkbook()) {
             CellStyle headerStyle = headerStyle(workbook);
-            CellStyle dateStyle = workbook.createCellStyle();
-            dateStyle.setDataFormat(workbook.createDataFormat().getFormat("yyyy-mm-dd"));
+            CellStyles styles = cellStyles(workbook);
 
             for (ExcelType type : types) {
                 ExcelSheet data = export(type, start, end);
                 XSSFSheet sheet = workbook.createSheet(type.getTitle());
                 writeHeader(sheet, data.headers(), headerStyle);
                 for (int i = 0; i < data.rows().size(); i++) {
-                    writeRow(sheet, i + 1, data.rows().get(i), dateStyle);
+                    List<Object> values = data.rows().get(i);
+                    if (values.size() != data.headers().size()) {
+                        throw new IllegalStateException(type + " 행의 값 개수가 헤더 개수와 다릅니다.");
+                    }
+                    writeRow(sheet, i + 1, values, styles);
                 }
                 for (int i = 0; i < data.headers().size(); i++) {
                     if (sheet.getColumnWidth(i) == sheet.getDefaultColumnWidth() * 256) {
@@ -130,18 +135,41 @@ public class ExcelExportService {
         }
     }
 
-    private void writeRow(XSSFSheet sheet, int index, List<Object> values, CellStyle dateStyle) {
+    private record CellStyles(CellStyle date, CellStyle dateTime, CellStyle time) {}
+
+    private CellStyles cellStyles(XSSFWorkbook workbook) {
+        return new CellStyles(
+            formatStyle(workbook, "yyyy-mm-dd"),
+            formatStyle(workbook, "yyyy-mm-dd hh:mm"),
+            formatStyle(workbook, "hh:mm")
+        );
+    }
+
+    private CellStyle formatStyle(XSSFWorkbook workbook, String format) {
+        CellStyle style = workbook.createCellStyle();
+        style.setDataFormat(workbook.createDataFormat().getFormat(format));
+        return style;
+    }
+
+    private void writeRow(XSSFSheet sheet, int index, List<Object> values, CellStyles styles) {
         Row row = sheet.createRow(index);
         for (int i = 0; i < values.size(); i++) {
             Cell cell = row.createCell(i);
             Object v = values.get(i);
+            // byte[] 값은 이미지 원본으로 보고 썸네일로 변환해 셀 위치에 삽입한다.
             if (v instanceof byte[] image) {
                 writeImage(sheet, row, i, image);
             } else if (v instanceof Number n) {
                 cell.setCellValue(n.doubleValue());
+            } else if (v instanceof LocalDateTime dt) {
+                cell.setCellValue(dt);
+                cell.setCellStyle(styles.dateTime());
             } else if (v instanceof LocalDate d) {
                 cell.setCellValue(d);
-                cell.setCellStyle(dateStyle);
+                cell.setCellStyle(styles.date());
+            } else if (v instanceof LocalTime t) {
+                cell.setCellValue(t.toSecondOfDay() / 86_400.0);
+                cell.setCellStyle(styles.time());
             } else if (v != null) {
                 cell.setCellValue(Objects.toString(v));
             }

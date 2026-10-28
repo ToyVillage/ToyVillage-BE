@@ -9,6 +9,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import com.command.toyvillage_server.domain.app.auth.admin.domain.AppAdmin;
 import com.command.toyvillage_server.domain.app.task.domain.Task;
+import com.command.toyvillage_server.domain.app.task.domain.TaskPriority;
 import com.command.toyvillage_server.domain.app.task.domain.TaskStatus;
 import com.command.toyvillage_server.domain.app.task.domain.repository.TaskRepository;
 import com.command.toyvillage_server.domain.app.workreport.domain.Status;
@@ -28,6 +29,8 @@ public class ExportTaskExcelService {
 
     private static final int PAGE_SIZE = 200;
     private static final int MAX_ROWS = 10_000;
+    private static final List<String> HEADERS =
+        List.of("생성일시", "제목", "내용", "우선순위", "마감일", "진행상태", "담당자", "보고상태");
 
     private final TaskRepository taskRepository;
     private final WorkReportRepository workReportRepository;
@@ -54,16 +57,15 @@ public class ExportTaskExcelService {
                         .findFirst()
                         .map(w -> reportStatus(w.getStatus()))
                         .orElse("미제출");
-                    rows.add(Arrays.asList(t.getCreatedAt().toLocalDate(), t.getTitle(), t.getContent(),
-                        priority(t.getPriority().name()), t.getFinishDate(), taskStatus, assignee.getName(), reportStatus));
+                    rows.add(Arrays.asList(t.getCreatedAt(), t.getTitle(), t.getContent(),
+                        priority(t.getPriority()), t.getFinishDate(), taskStatus, assignee.getName(), reportStatus));
                 }
             }
             if (rows.size() > MAX_ROWS) {
                 throw new ToyVillageException(ErrorCode.EXCEL_EXPORT_TOO_LARGE);
             }
             if (tasks.size() < PAGE_SIZE) {
-                return new ExcelSheet(
-                    List.of("생성일", "제목", "내용", "우선순위", "마감일", "진행상태", "담당자", "보고상태"), rows);
+                return new ExcelSheet(HEADERS, rows);
             }
         }
     }
@@ -76,12 +78,11 @@ public class ExportTaskExcelService {
         };
     }
 
-    private String priority(String value) {
+    private String priority(TaskPriority value) {
         return switch (value) {
-            case "HIGH" -> "높음";
-            case "MEDIUM" -> "보통";
-            case "LOW" -> "낮음";
-            default -> value;
+            case HIGH -> "높음";
+            case MEDIUM -> "보통";
+            case LOW -> "낮음";
         };
     }
 

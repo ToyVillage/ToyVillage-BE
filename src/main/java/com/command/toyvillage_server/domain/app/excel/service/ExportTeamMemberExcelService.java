@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import com.command.toyvillage_server.domain.app.auth.admin.domain.AppAdmin;
+import com.command.toyvillage_server.domain.app.auth.admin.domain.AppAdminRole;
 import com.command.toyvillage_server.domain.app.join_team.domain.JoinTeam;
 import com.command.toyvillage_server.domain.app.join_team.domain.repository.JoinTeamRepository;
 
@@ -20,6 +21,7 @@ public class ExportTeamMemberExcelService {
 
     private static final int PAGE_SIZE = 200;
     private static final int MAX_ROWS = 10_000;
+    private static final List<String> HEADERS = List.of("팀", "이름", "직책", "권한", "등록일");
 
     private final JoinTeamRepository joinTeamRepository;
 
@@ -29,22 +31,21 @@ public class ExportTeamMemberExcelService {
             List<JoinTeam> joinTeams = joinTeamRepository.findExportPage(PageRequest.of(page, PAGE_SIZE));
             for (JoinTeam j : joinTeams) {
                 AppAdmin a = j.getAppAdmin();
-                rows.add(Arrays.asList(j.getTeam().getName(), a.getName(), a.getPosition(), role(a.getRole().name()), a.getCreateAt()));
+                rows.add(Arrays.asList(j.getTeam().getName(), a.getName(), a.getPosition(), role(a.getRole()), a.getCreateAt()));
             }
             if (rows.size() > MAX_ROWS) {
                 throw new ToyVillageException(ErrorCode.EXCEL_EXPORT_TOO_LARGE);
             }
             if (joinTeams.size() < PAGE_SIZE) {
-                return new ExcelSheet(List.of("팀", "이름", "직책", "권한", "등록일"), rows);
+                return new ExcelSheet(HEADERS, rows);
             }
         }
     }
 
-    private String role(String value) {
+    private String role(AppAdminRole value) {
         return switch (value) {
-            case "APP_ADMIN" -> "관리자";
-            case "EMPLOYEE" -> "직원";
-            default -> value;
+            case APP_ADMIN -> "관리자";
+            case EMPLOYEE -> "직원";
         };
     }
 }

@@ -23,6 +23,7 @@ public class ExportWorkLogExcelService {
 
     private static final int PAGE_SIZE = 200;
     private static final int MAX_ROWS = 10_000;
+    private static final List<String> HEADERS = List.of("작성일", "템플릿", "작성자", "섹션", "질문", "답변");
 
     private final WorkLogRepository workLogRepository;
 
@@ -45,7 +46,7 @@ public class ExportWorkLogExcelService {
                 throw new ToyVillageException(ErrorCode.EXCEL_EXPORT_TOO_LARGE);
             }
             if (workLogs.size() < PAGE_SIZE) {
-                return new ExcelSheet(List.of("작성일", "템플릿", "작성자", "섹션", "질문", "답변"), rows);
+                return new ExcelSheet(HEADERS, rows);
             }
         }
     }

@@ -17,14 +17,11 @@ import org.springframework.web.bind.annotation.RestController;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Set;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/excel")
 public class ExcelController {
-
-    private static final Set<ExcelType> UNDATED_TYPES = Set.of(ExcelType.TEAM_MEMBER, ExcelType.ANIMAL);
 
     private final ExcelExportService excelExportService;
 
@@ -36,7 +33,7 @@ public class ExcelController {
         @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate
     ) {
         List<ExcelType> distinctTypes = types.stream().distinct().toList();
-        if (UNDATED_TYPES.containsAll(distinctTypes)) {
+        if (distinctTypes.stream().noneMatch(ExcelType::isDated)) {
             startDate = null;
             endDate = null;
         }
