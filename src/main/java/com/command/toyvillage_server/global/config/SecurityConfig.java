@@ -174,6 +174,9 @@ public class SecurityConfig {
                     .requestMatchers("/work-report", "/work-report/**")
                             .hasRole("EMPLOYEE")
 
+                    // excel
+                    .requestMatchers("/excel", "/excel/**").hasRole("APP_ADMIN")
+
                     .anyRequest().authenticated()
                 )
                 .with(new SecurityFilterConfig(jwtTokenProvider, objectMapper), Customizer.withDefaults())
