@@ -4,7 +4,7 @@ import com.command.toyvillage_server.domain.web.file.domain.File;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +25,7 @@ public class Notice {
     private String content;
 
     @Column(nullable = false)
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
 
     @OneToMany
     @JoinTable(
@@ -47,7 +47,7 @@ public class Notice {
     private Notice(String title, String content, List<File> files) {
         this.title = title;
         this.content = content;
-        this.createdAt = LocalDate.now();
+        this.createdAt = LocalDateTime.now();
         this.files = new ArrayList<>(files);
     }
 
