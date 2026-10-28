@@ -161,6 +161,7 @@ public class AnimalManageController {
     }
 
     @PostMapping("/legal-status")
+    @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<MessageResponse> createAnimalLegalStatus(
         @RequestBody @Valid AnimalLegalStatusRequest request
     ) {
