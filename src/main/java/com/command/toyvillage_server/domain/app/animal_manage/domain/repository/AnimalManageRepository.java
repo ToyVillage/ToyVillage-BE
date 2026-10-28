@@ -10,6 +10,14 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface AnimalManageRepository extends JpaRepository<AnimalManage, Long> {
+    @Query("""
+            select a from AnimalManage a
+            join fetch a.animalKind kind
+            left join fetch a.animalImage
+            order by kind.animalTaxonomic, kind.kindName, a.animalName, a.id
+            """)
+    List<AnimalManage> findExportPage(Pageable pageable);
+
     List<AnimalManage> findAllByAnimalKindId(Long animalKindId);
 
     Page<AnimalManage> findAllByAnimalKindId(Long animalKindId, Pageable pageable);

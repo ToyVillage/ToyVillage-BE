@@ -12,8 +12,11 @@ import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
 import java.util.Optional;
+import java.util.List;
 
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
+    List<Reservation> findByReservationDateBetween(LocalDate start, LocalDate end, Pageable pageable);
+
     Optional<Reservation> findById(Long id);
 
     int countByStatus(ReservationStatus status);
