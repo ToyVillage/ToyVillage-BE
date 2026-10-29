@@ -1,6 +1,8 @@
 package com.command.toyvillage_server.domain.app.task.service;
 
 import com.command.toyvillage_server.domain.app.auth.admin.domain.AppAdmin;
+import com.command.toyvillage_server.domain.app.auth.admin.domain.repository.AppAdminRepository;
+import com.command.toyvillage_server.domain.app.auth.admin.facade.UserFacade;
 import com.command.toyvillage_server.domain.app.task.domain.Task;
 import com.command.toyvillage_server.domain.app.task.domain.repository.TaskRepository;
 import com.command.toyvillage_server.domain.app.task.presentation.dto.request.TaskRequest;
@@ -17,6 +19,8 @@ public class CreateTaskService {
     private final TaskRepository taskRepository;
     private final TaskAssigneeService taskAssigneeService;
     private final FileFacade fileFacade;
+    private final AppAdminRepository appAdminRepository;
+    private final UserFacade userFacade;
 
     @Transactional
     public Long execute(TaskRequest request) {
@@ -27,6 +31,7 @@ public class CreateTaskService {
                 .title(request.title())
                 .content(request.content())
                 .assignees(assignees)
+                .creator(appAdminRepository.getReferenceById(userFacade.getCurrentUserId()))
                 .finishDate(request.finishDate())
                 .priority(request.priority())
                 .files(files)

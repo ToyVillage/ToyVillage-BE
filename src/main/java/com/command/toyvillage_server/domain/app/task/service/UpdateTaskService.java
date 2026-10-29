@@ -1,6 +1,7 @@
 package com.command.toyvillage_server.domain.app.task.service;
 
 import com.command.toyvillage_server.domain.app.auth.admin.domain.AppAdmin;
+import com.command.toyvillage_server.domain.app.auth.admin.facade.UserFacade;
 import com.command.toyvillage_server.domain.app.task.domain.Task;
 import com.command.toyvillage_server.domain.app.task.domain.repository.TaskRepository;
 import com.command.toyvillage_server.domain.app.task.exception.TaskNotFoundException;
@@ -23,11 +24,16 @@ public class UpdateTaskService {
     private final WorkReportRepository workReportRepository;
     private final TaskAssigneeService taskAssigneeService;
     private final FileFacade fileFacade;
+    private final UserFacade userFacade;
 
     @Transactional
     public void execute(Long id, TaskRequest request) {
         Task task = taskRepository.findById(id)
                 .orElseThrow(() -> TaskNotFoundException.EXCEPTION);
+
+        if (!userFacade.isCurrentUserAppAdmin() && !task.isCreatedBy(userFacade.getCurrentUserId())) {
+            throw TaskNotFoundException.EXCEPTION;
+        }
 
         List<AppAdmin> assignees = taskAssigneeService.execute(request.assigneeIds());
         List<File> files = request.files() == null ? null : fileFacade.findAllByKeys(request.files());

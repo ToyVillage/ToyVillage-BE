@@ -1,5 +1,6 @@
 package com.command.toyvillage_server.domain.app.task.service;
 
+import com.command.toyvillage_server.domain.app.auth.admin.facade.UserFacade;
 import com.command.toyvillage_server.domain.app.task.domain.Task;
 import com.command.toyvillage_server.domain.app.task.domain.TaskStatus;
 import com.command.toyvillage_server.domain.app.task.domain.repository.TaskRepository;
@@ -22,6 +23,7 @@ import java.util.stream.Collectors;
 public class QueryTaskListService {
     private final TaskRepository taskRepository;
     private final WorkReportRepository workReportRepository;
+    private final UserFacade userFacade;
 
     @Transactional(readOnly = true)
     public TaskListResponse execute(TaskStatus status, Pageable pageable) {
@@ -38,14 +40,16 @@ public class QueryTaskListService {
     }
 
     private Page<Task> findTasks(TaskStatus status, LocalDate today, Pageable pageable) {
+        Long creatorId = userFacade.isCurrentUserAppAdmin() ? null : userFacade.getCurrentUserId();
+
         if (status == null) {
-            return taskRepository.findAll(pageable);
+            return taskRepository.findAllCreatedBy(creatorId, pageable);
         }
 
         return switch (status) {
-            case COMPLETED -> taskRepository.findAllCompleted(pageable);
-            case IN_PROGRESS -> taskRepository.findAllInProgress(today, pageable);
-            case EXPIRED -> taskRepository.findAllExpired(today, pageable);
+            case COMPLETED -> taskRepository.findAllCompleted(creatorId, pageable);
+            case IN_PROGRESS -> taskRepository.findAllInProgress(creatorId, today, pageable);
+            case EXPIRED -> taskRepository.findAllExpired(creatorId, today, pageable);
         };
     }
 }
