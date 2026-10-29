@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequiredArgsConstructor
@@ -32,7 +33,10 @@ public class ExcelController {
         @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
         @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate
     ) {
-        List<ExcelType> distinctTypes = types.stream().distinct().toList();
+        List<ExcelType> distinctTypes = types.stream().filter(Objects::nonNull).distinct().toList();
+        if (distinctTypes.isEmpty()) {
+            throw new ToyVillageException(ErrorCode.EXCEL_EXPORT_TYPE_REQUIRED);
+        }
         if (distinctTypes.stream().noneMatch(ExcelType::isDated)) {
             startDate = null;
             endDate = null;

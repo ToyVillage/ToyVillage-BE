@@ -244,9 +244,10 @@ public class ExcelExportService {
                 paths.add(file.getFileName() + " (다운로드 실패)");
                 continue;
             }
-            String path = folder + "/" + file.getFileName();
+            String fileName = file.getFileName().replaceAll("[\\\\/]", "_");
+            String path = folder + "/" + fileName;
             for (int n = 1; attachments.containsKey(path); n++) {
-                path = folder + "/" + n + "_" + file.getFileName();
+                path = folder + "/" + n + "_" + fileName;
             }
             attachments.put(path, data);
             paths.add(path);
