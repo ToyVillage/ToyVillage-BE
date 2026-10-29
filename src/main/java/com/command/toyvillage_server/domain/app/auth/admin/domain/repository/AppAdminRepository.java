@@ -4,6 +4,7 @@ import com.command.toyvillage_server.domain.app.auth.admin.domain.AppAdmin;
 import com.command.toyvillage_server.domain.app.auth.admin.domain.AppAdminRole;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,7 +13,7 @@ public interface AppAdminRepository extends JpaRepository<AppAdmin, Long> {
 
     Optional<AppAdmin> findByIdAndDeleteStatusFalse(Long id);
 
-    Optional<AppAdmin> findByIdAndRoleAndDeleteStatusFalse(Long id, AppAdminRole role);
+    Optional<AppAdmin> findByIdAndRoleInAndDeleteStatusFalse(Long id, Collection<AppAdminRole> roles);
 
     List<AppAdmin> findAllByIdInAndDeleteStatusFalse(List<Long> ids);
 
@@ -20,7 +21,7 @@ public interface AppAdminRepository extends JpaRepository<AppAdmin, Long> {
 
     boolean existsByUsername(String username);
 
-    List<AppAdmin> findByRoleAndDeleteStatusFalseOrderByNameAsc(AppAdminRole role);
+    List<AppAdmin> findByRoleInAndDeleteStatusFalseOrderByNameAsc(Collection<AppAdminRole> roles);
 
-    List<AppAdmin> findAllByRoleAndDeleteStatusFalseOrderByIdAsc(AppAdminRole role);
+    List<AppAdmin> findAllByRoleInAndDeleteStatusFalseOrderByIdAsc(Collection<AppAdminRole> roles);
 }

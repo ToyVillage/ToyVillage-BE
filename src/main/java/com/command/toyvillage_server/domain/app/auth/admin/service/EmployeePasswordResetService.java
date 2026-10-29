@@ -21,7 +21,7 @@ public class EmployeePasswordResetService {
 
     @Transactional
     public void execute(Long appAdminId) {
-        AppAdmin appAdmin = appAdminRepository.findByIdAndRoleAndDeleteStatusFalse(appAdminId, AppAdminRole.EMPLOYEE)
+        AppAdmin appAdmin = appAdminRepository.findByIdAndRoleInAndDeleteStatusFalse(appAdminId, AppAdminRole.EMPLOYEE_ROLES)
             .orElseThrow(() -> AppAdminNotFoundException.EXCEPTION);
 
         appAdmin.resetPassword(passwordEncoder.encode(appAdmin.getUsername()));

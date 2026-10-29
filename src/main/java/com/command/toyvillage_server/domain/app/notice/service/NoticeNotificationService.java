@@ -25,9 +25,9 @@ public class NoticeNotificationService {
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void execute(NoticeCreated event) {
         List<String> tokens = event.teamIds() == null || event.teamIds().isEmpty()
-            ? fcmTokenRepository.findAllByAppAdmin_DeleteStatusFalseAndAppAdmin_Role(AppAdminRole.EMPLOYEE)
+            ? fcmTokenRepository.findAllByAppAdmin_DeleteStatusFalseAndAppAdmin_RoleIn(AppAdminRole.EMPLOYEE_ROLES)
                 .stream().map(FcmToken::getToken).toList()
-            : fcmTokenRepository.findTeamTokens(event.teamIds(), AppAdminRole.EMPLOYEE);
+            : fcmTokenRepository.findTeamTokens(event.teamIds(), AppAdminRole.EMPLOYEE_ROLES);
 
         sendBatch(event, tokens);
     }
