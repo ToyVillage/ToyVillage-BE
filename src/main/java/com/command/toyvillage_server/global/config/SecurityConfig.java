@@ -191,7 +191,7 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
 
         configuration.setAllowedOrigins(List.of(
-                prodUrl, stagUrl, localUrl, "https://toyvillage.vercel.app/", "https://toyvillage.kr/", "http://localhost:5173/"
+                prodUrl, stagUrl, localUrl, "https://toyvillage.vercel.app/", "https://toyvillage.kr/", "http://localhost:5173/", "http://localhost:5174/"
         ));
 
         configuration.setAllowedMethods(Arrays.asList("OPTIONS", "GET", "POST", "PUT", "PATCH", "DELETE"));
