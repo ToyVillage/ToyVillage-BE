@@ -21,6 +21,9 @@ public interface WorkReportRepository extends JpaRepository<WorkReport, Long> {
     Page<WorkReport> findAllByStatus(Status status, Pageable pageable);
 
     long countByStatus(Status status);
+    Page<WorkReport> findAllByTask_Creator_Id(Long creatorId, Pageable pageable);
+    Page<WorkReport> findAllByStatusAndTask_Creator_Id(Status status, Long creatorId, Pageable pageable);
+    long countByStatusAndTask_Creator_Id(Status status, Long creatorId);
     List<WorkReport> findAllByTask_Id(Long taskId);
     List<WorkReport> findAllByTask_IdIn(Collection<Long> taskIds);
     boolean existsByTask_IdAndAppAdmin_Id(Long taskId, Long appAdminId);
