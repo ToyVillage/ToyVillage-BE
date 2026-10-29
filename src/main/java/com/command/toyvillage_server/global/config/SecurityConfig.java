@@ -63,18 +63,20 @@ public class SecurityConfig {
                     // app auth
                     .requestMatchers("/app/auth/login", "/app/auth/reissue").permitAll()
                     .requestMatchers(HttpMethod.PATCH, "/app/auth/password")
-                            .hasAnyRole("APP_ADMIN", "EMPLOYEE")
+                            .hasAnyRole("APP_ADMIN", "MIDDLE_ADMIN", "EMPLOYEE")
                     .requestMatchers(HttpMethod.POST, "/app/auth/logout")
-                            .hasAnyRole("APP_ADMIN", "EMPLOYEE")
+                            .hasAnyRole("APP_ADMIN", "MIDDLE_ADMIN", "EMPLOYEE")
+                    .requestMatchers(HttpMethod.GET, "/app/admin/employees")
+                            .hasAnyRole("APP_ADMIN", "MIDDLE_ADMIN")
                     .requestMatchers("/app/admin", "/app/admin/**").hasRole("APP_ADMIN")
-                    .requestMatchers(HttpMethod.POST, "/app/fcm/token").hasAnyRole("APP_ADMIN", "EMPLOYEE")
-                    .requestMatchers(HttpMethod.DELETE, "/app/fcm/token").hasAnyRole("APP_ADMIN", "EMPLOYEE")
+                    .requestMatchers(HttpMethod.POST, "/app/fcm/token").hasAnyRole("APP_ADMIN", "MIDDLE_ADMIN", "EMPLOYEE")
+                    .requestMatchers(HttpMethod.DELETE, "/app/fcm/token").hasAnyRole("APP_ADMIN", "MIDDLE_ADMIN", "EMPLOYEE")
 
                     // task
                     .requestMatchers(HttpMethod.GET, "/tasks/*")
-                            .hasAnyRole("APP_ADMIN", "EMPLOYEE")
+                            .hasAnyRole("APP_ADMIN", "MIDDLE_ADMIN", "EMPLOYEE")
                     .requestMatchers("/tasks", "/tasks/**")
-                            .hasRole("APP_ADMIN")
+                            .hasAnyRole("APP_ADMIN", "MIDDLE_ADMIN")
 
                     // faq
                     .requestMatchers(HttpMethod.GET, "/faq", "/faq/**").permitAll()
@@ -120,7 +122,7 @@ public class SecurityConfig {
 
                     // reservation
                     .requestMatchers(HttpMethod.GET, "/reservation/employee", "/reservation/employee/**")
-                            .hasRole("EMPLOYEE")
+                            .hasAnyRole("MIDDLE_ADMIN", "EMPLOYEE")
                     .requestMatchers("/reservation", "/reservation/**")
                             .hasRole("APP_ADMIN")
 
@@ -134,19 +136,19 @@ public class SecurityConfig {
 
                     // notice
                     .requestMatchers(HttpMethod.GET, "/notice", "/notice/**")
-                            .hasAnyRole("APP_ADMIN", "EMPLOYEE")
+                            .hasAnyRole("APP_ADMIN", "MIDDLE_ADMIN", "EMPLOYEE")
                     .requestMatchers("/notice", "/notice/**").hasRole("APP_ADMIN")
 
                     // documents
                     .requestMatchers(HttpMethod.GET, "/documents", "/documents/**")
-                            .hasAnyRole("APP_ADMIN", "EMPLOYEE")
+                            .hasAnyRole("APP_ADMIN", "MIDDLE_ADMIN", "EMPLOYEE")
                     .requestMatchers("/documents", "/documents/**").hasRole("APP_ADMIN")
 
                     // animal manage
                     .requestMatchers(HttpMethod.GET, "/animal-manage", "/animal-manage/**")
-                            .hasAnyRole("APP_ADMIN", "EMPLOYEE")
+                            .hasAnyRole("APP_ADMIN", "MIDDLE_ADMIN", "EMPLOYEE")
                     .requestMatchers(HttpMethod.POST, "/animal-manage/*/observations")
-                            .hasAnyRole("APP_ADMIN", "EMPLOYEE")
+                            .hasAnyRole("APP_ADMIN", "MIDDLE_ADMIN", "EMPLOYEE")
                     .requestMatchers("/animal-manage", "/animal-manage/**").hasRole("APP_ADMIN")
 
                     // feed log
@@ -154,31 +156,31 @@ public class SecurityConfig {
                             "/feed-log/fifth-floor/admin", "/feed-log/fifth-floor/admin/**")
                             .hasRole("APP_ADMIN")
                     .requestMatchers("/feed-log", "/feed-log/**")
-                            .hasAnyRole("APP_ADMIN", "EMPLOYEE")
+                            .hasAnyRole("APP_ADMIN", "MIDDLE_ADMIN", "EMPLOYEE")
 
                     // work log
                     .requestMatchers(HttpMethod.POST, "/work-log/template").hasRole("APP_ADMIN")
                     .requestMatchers(HttpMethod.PATCH, "/work-log/template/**").hasRole("APP_ADMIN")
                     .requestMatchers(HttpMethod.DELETE, "/work-log/template/**").hasRole("APP_ADMIN")
                     .requestMatchers(HttpMethod.GET, "/work-log/template", "/work-log/template/**")
-                            .hasAnyRole("APP_ADMIN", "EMPLOYEE")
+                            .hasAnyRole("APP_ADMIN", "MIDDLE_ADMIN", "EMPLOYEE")
                     .requestMatchers(HttpMethod.GET, "/work-log").hasRole("APP_ADMIN")
-                    .requestMatchers(HttpMethod.GET, "/work-log/employee").hasRole("EMPLOYEE")
+                    .requestMatchers(HttpMethod.GET, "/work-log/employee").hasAnyRole("MIDDLE_ADMIN", "EMPLOYEE")
                     .requestMatchers(HttpMethod.GET, "/work-log/**")
-                            .hasAnyRole("APP_ADMIN", "EMPLOYEE")
+                            .hasAnyRole("APP_ADMIN", "MIDDLE_ADMIN", "EMPLOYEE")
                     .requestMatchers(HttpMethod.DELETE, "/work-log/**")
-                            .hasAnyRole("APP_ADMIN", "EMPLOYEE")
-                    .requestMatchers("/work-log", "/work-log/**").hasRole("EMPLOYEE")
+                            .hasAnyRole("APP_ADMIN", "MIDDLE_ADMIN", "EMPLOYEE")
+                    .requestMatchers("/work-log", "/work-log/**").hasAnyRole("MIDDLE_ADMIN", "EMPLOYEE")
 
                     // work report
                     .requestMatchers(HttpMethod.PATCH,
                             "/work-report/approve/**", "/work-report/reject/**")
-                            .hasRole("APP_ADMIN")
+                            .hasAnyRole("APP_ADMIN", "MIDDLE_ADMIN")
                     .requestMatchers(HttpMethod.GET,
                             "/work-report", "/work-report/detail/**")
-                            .hasRole("APP_ADMIN")
+                            .hasAnyRole("APP_ADMIN", "MIDDLE_ADMIN")
                     .requestMatchers("/work-report", "/work-report/**")
-                            .hasRole("EMPLOYEE")
+                            .hasAnyRole("MIDDLE_ADMIN", "EMPLOYEE")
 
                     .anyRequest().authenticated()
                 )
