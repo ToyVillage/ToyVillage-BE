@@ -47,6 +47,7 @@ public enum ErrorCode {
     // general
     BAD_REQUEST(400, "잘못된 요청입니다."),
     EXCEL_EXPORT_TOO_LARGE(413, "엑셀 내보내기 최대 건수를 초과했습니다."),
+    EXCEL_EXPORT_ATTACHMENT_TOO_LARGE(413, "엑셀 내보내기 첨부파일 총용량을 초과했습니다."),
     EXCEL_EXPORT_INVALID_DATE_RANGE(400, "시작일은 종료일보다 늦을 수 없습니다."),
     EXCEL_EXPORT_TYPE_REQUIRED(400, "내보낼 항목을 하나 이상 선택해야 합니다."),
     NO_RESOURCE_FOUND(404, "존재하지 않는 API입니다."),

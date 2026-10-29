@@ -6,6 +6,8 @@ import com.command.toyvillage_server.domain.app.excel.service.dto.ExcelFiles;
 import com.command.toyvillage_server.domain.app.excel.service.dto.ExcelSheet;
 import com.command.toyvillage_server.domain.web.file.domain.File;
 import com.command.toyvillage_server.global.aws.s3.AwsS3Provider;
+import com.command.toyvillage_server.global.error.exception.ErrorCode;
+import com.command.toyvillage_server.global.error.exception.ToyVillageException;
 import lombok.RequiredArgsConstructor;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.util.Units;
@@ -37,6 +39,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -48,6 +51,7 @@ public class ExcelExportService {
     private static final LocalDate MAX_DATE = LocalDate.of(9999, 12, 31);
     private static final int THUMBNAIL_SIZE = 120;
     private static final long MAX_IMAGE_PIXELS = 20_000_000;
+    private static final long MAX_ATTACHMENT_BYTES = 200L * 1024 * 1024;
     private static final int ICON_WIDTH = 96;
     private static final int ICON_HEIGHT = 72;
 
@@ -68,10 +72,11 @@ public class ExcelExportService {
     public byte[] execute(List<ExcelType> types, ExcelExportMode mode, LocalDate startDate, LocalDate endDate) {
         LocalDate start = startDate == null ? MIN_DATE : startDate;
         LocalDate end = endDate == null ? MAX_DATE : endDate;
+        AtomicLong downloaded = new AtomicLong();
         try {
             return switch (mode) {
-                case SHEET -> workbook(types, start, end, null);
-                case ZIP -> zip(types, start, end);
+                case SHEET -> workbook(types, start, end, null, downloaded);
+                case ZIP -> zip(types, start, end, downloaded);
             };
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -94,13 +99,13 @@ public class ExcelExportService {
         };
     }
 
-    private byte[] zip(List<ExcelType> types, LocalDate start, LocalDate end) throws IOException {
+    private byte[] zip(List<ExcelType> types, LocalDate start, LocalDate end, AtomicLong downloaded) throws IOException {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         try (ZipOutputStream zip = new ZipOutputStream(out)) {
             for (ExcelType type : types) {
                 Map<String, byte[]> attachments = new LinkedHashMap<>();
                 zip.putNextEntry(new ZipEntry(type.getTitle() + ".xlsx"));
-                zip.write(workbook(List.of(type), start, end, attachments));
+                zip.write(workbook(List.of(type), start, end, attachments, downloaded));
                 zip.closeEntry();
                 for (Map.Entry<String, byte[]> attachment : attachments.entrySet()) {
                     zip.putNextEntry(new ZipEntry(attachment.getKey()));
@@ -114,7 +119,7 @@ public class ExcelExportService {
 
     // attachments가 null이면 첨부파일을 엑셀 안에 OLE 객체로 넣고, 아니면 ZIP에 함께 담을 파일을 경로별로 모은다.
     private byte[] workbook(List<ExcelType> types, LocalDate start, LocalDate end,
-                            Map<String, byte[]> attachments) throws IOException {
+                            Map<String, byte[]> attachments, AtomicLong downloaded) throws IOException {
         try (XSSFWorkbook workbook = new XSSFWorkbook()) {
             CellStyle headerStyle = headerStyle(workbook);
             CellStyles styles = cellStyles(workbook);
@@ -128,7 +133,7 @@ public class ExcelExportService {
                     if (values.size() != data.headers().size()) {
                         throw new IllegalStateException(type + " 행의 값 개수가 헤더 개수와 다릅니다.");
                     }
-                    writeRow(sheet, i + 1, values, styles, type.getTitle(), attachments);
+                    writeRow(sheet, i + 1, values, styles, type.getTitle(), attachments, downloaded);
                 }
                 for (int i = 0; i < data.headers().size(); i++) {
                     if (sheet.getColumnWidth(i) == sheet.getDefaultColumnWidth() * 256) {
@@ -180,7 +185,7 @@ public class ExcelExportService {
     }
 
     private void writeRow(XSSFSheet sheet, int index, List<Object> values, CellStyles styles, String title,
-                          Map<String, byte[]> attachments) throws IOException {
+                          Map<String, byte[]> attachments, AtomicLong downloaded) throws IOException {
         Row row = sheet.createRow(index);
         for (int i = 0; i < values.size(); i++) {
             Cell cell = row.createCell(i);
@@ -190,9 +195,9 @@ public class ExcelExportService {
                 writeImage(sheet, row, i, image);
             } else if (v instanceof ExcelFiles files) {
                 if (attachments == null) {
-                    embedFiles(sheet, row, i, files);
+                    embedFiles(sheet, row, i, files, downloaded);
                 } else {
-                    cell.setCellValue(collectFiles(files, "첨부파일/" + title + "/" + (index + 1) + "행", attachments));
+                    cell.setCellValue(collectFiles(files, "첨부파일/" + title + "/" + (index + 1) + "행", attachments, downloaded));
                 }
             } else if (v instanceof Float f) {
                 cell.setCellValue(Double.parseDouble(f.toString()));
@@ -236,10 +241,11 @@ public class ExcelExportService {
         drawing.createPicture(anchor, pictureIdx);
     }
 
-    private String collectFiles(ExcelFiles files, String folder, Map<String, byte[]> attachments) {
+    private String collectFiles(ExcelFiles files, String folder, Map<String, byte[]> attachments,
+                                AtomicLong downloaded) {
         List<String> paths = new ArrayList<>();
         for (File file : files.files()) {
-            byte[] data = awsS3Provider.download(file.getFileKey());
+            byte[] data = downloadAttachment(file, downloaded);
             if (data == null) {
                 paths.add(file.getFileName() + " (다운로드 실패)");
                 continue;
@@ -255,13 +261,22 @@ public class ExcelExportService {
         return String.join(", ", paths);
     }
 
-    private void embedFiles(XSSFSheet sheet, Row row, int column, ExcelFiles files) throws IOException {
+    private byte[] downloadAttachment(File file, AtomicLong downloaded) {
+        byte[] data = awsS3Provider.download(file.getFileKey());
+        if (data != null && downloaded.addAndGet(data.length) > MAX_ATTACHMENT_BYTES) {
+            throw new ToyVillageException(ErrorCode.EXCEL_EXPORT_ATTACHMENT_TOO_LARGE);
+        }
+        return data;
+    }
+
+    private void embedFiles(XSSFSheet sheet, Row row, int column, ExcelFiles files, AtomicLong downloaded)
+        throws IOException {
         XSSFWorkbook workbook = sheet.getWorkbook();
         XSSFDrawing drawing = sheet.createDrawingPatriarch();
         List<String> failed = new ArrayList<>();
         int x = 4;
         for (File file : files.files()) {
-            byte[] data = awsS3Provider.download(file.getFileKey());
+            byte[] data = downloadAttachment(file, downloaded);
             if (data == null) {
                 failed.add(file.getFileName());
                 continue;
