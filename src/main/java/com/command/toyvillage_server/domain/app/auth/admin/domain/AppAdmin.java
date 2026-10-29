@@ -1,5 +1,6 @@
 package com.command.toyvillage_server.domain.app.auth.admin.domain;
 
+import com.command.toyvillage_server.domain.app.auth.admin.exception.AppAdminRoleInvalidException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -54,8 +55,18 @@ public class AppAdmin {
     @Column(name = "create_at", nullable = false)
     private LocalDate createAt;
 
-    public static AppAdmin createEmployee(String username, String name, String encodedPassword, String position) {
-        return create(username, name, encodedPassword, AppAdminRole.EMPLOYEE, position);
+    public static AppAdmin createEmployee(
+            String username,
+            String name,
+            String encodedPassword,
+            AppAdminRole role,
+            String position
+    ) {
+        if (!AppAdminRole.EMPLOYEE_ROLES.contains(role)) {
+            throw AppAdminRoleInvalidException.EXCEPTION;
+        }
+
+        return create(username, name, encodedPassword, role, position);
     }
 
     private static AppAdmin create(
