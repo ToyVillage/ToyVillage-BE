@@ -5,6 +5,7 @@ import com.command.toyvillage_server.domain.app.workreport.domain.WorkReport;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.EntityGraph;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -12,6 +13,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface WorkReportRepository extends JpaRepository<WorkReport, Long> {
+    @EntityGraph(attributePaths = {"task", "appAdmin"})
+    List<WorkReport> findByCreatedAtBetween(LocalDateTime start, LocalDateTime end, Pageable pageable);
+
     long countByCreatedAtGreaterThanEqualAndCreatedAtLessThan(
             LocalDateTime startDateTime,
             LocalDateTime endDateTime
