@@ -40,6 +40,10 @@ public class Task {
     )
     private List<AppAdmin> assignees = new ArrayList<>();
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "creator_id")
+    private AppAdmin creator;
+
     @Column(nullable = false, name = "finish_date")
     private LocalDate finishDate;
 
@@ -64,6 +68,7 @@ public class Task {
             String title,
             String content,
             List<AppAdmin> assignees,
+            AppAdmin creator,
             LocalDate finishDate,
             TaskPriority priority,
             List<File> files
@@ -73,6 +78,7 @@ public class Task {
         this.title = title;
         this.content = content;
         this.assignees = new ArrayList<>(assignees);
+        this.creator = creator;
         this.finishDate = finishDate;
         this.priority = priority;
         this.files = files == null ? new ArrayList<>() : new ArrayList<>(files);
@@ -103,6 +109,10 @@ public class Task {
     public boolean isAssignee(Long appAdminId) {
         return assignees.stream()
                 .anyMatch(assignee -> assignee.getId().equals(appAdminId));
+    }
+
+    public boolean isCreatedBy(Long appAdminId) {
+        return creator != null && creator.getId().equals(appAdminId);
     }
 
     private static void validateAssignees(List<AppAdmin> assignees) {

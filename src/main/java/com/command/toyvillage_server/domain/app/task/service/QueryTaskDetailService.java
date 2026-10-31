@@ -24,7 +24,10 @@ public class QueryTaskDetailService {
         Task task = taskRepository.findById(id)
                 .orElseThrow(() -> TaskNotFoundException.EXCEPTION);
 
-        if (!userFacade.isCurrentUserAppAdmin() && !task.isAssignee(userFacade.getCurrentUserId())) {
+        Long currentUserId = userFacade.getCurrentUserId();
+        if (!userFacade.isCurrentUserAppAdmin()
+                && !task.isCreatedBy(currentUserId)
+                && !task.isAssignee(currentUserId)) {
             throw TaskNotFoundException.EXCEPTION;
         }
 

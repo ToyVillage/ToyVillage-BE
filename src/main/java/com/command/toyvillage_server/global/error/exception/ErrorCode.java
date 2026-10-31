@@ -77,6 +77,7 @@ public enum ErrorCode {
     // app admin
     APP_ADMIN_NOT_FOUND(404, "존재하지 않는 앱 관리자입니다."),
     APP_ADMIN_EXIST(409, "이미 사용 중인 앱 관리자 아이디입니다."),
+    APP_ADMIN_ROLE_INVALID(400, "직원 계정에 부여할 수 없는 권한입니다."),
 
     //document
     DOCUMENT_NOT_FOUND(404, "존재하지 않는 자료입니다."),

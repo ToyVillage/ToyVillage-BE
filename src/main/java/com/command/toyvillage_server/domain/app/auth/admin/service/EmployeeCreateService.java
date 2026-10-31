@@ -1,6 +1,7 @@
 package com.command.toyvillage_server.domain.app.auth.admin.service;
 
 import com.command.toyvillage_server.domain.app.auth.admin.domain.AppAdmin;
+import com.command.toyvillage_server.domain.app.auth.admin.domain.AppAdminRole;
 import com.command.toyvillage_server.domain.app.auth.admin.domain.repository.AppAdminRepository;
 import com.command.toyvillage_server.domain.app.auth.admin.exception.AppAdminAlreadyExistsException;
 import com.command.toyvillage_server.domain.app.auth.admin.presentation.dto.request.EmployeeCreateRequest;
@@ -25,6 +26,7 @@ public class EmployeeCreateService {
                 request.username(),
                 request.name(),
                 passwordEncoder.encode(request.username()),
+                request.role() == null ? AppAdminRole.EMPLOYEE : request.role(),
                 request.position()
         );
         appAdminRepository.save(employee);

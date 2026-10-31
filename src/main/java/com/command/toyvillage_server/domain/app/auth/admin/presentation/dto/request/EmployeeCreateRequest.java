@@ -1,5 +1,6 @@
 package com.command.toyvillage_server.domain.app.auth.admin.presentation.dto.request;
 
+import com.command.toyvillage_server.domain.app.auth.admin.domain.AppAdminRole;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
@@ -11,6 +12,8 @@ public record EmployeeCreateRequest(
         String name,
 
         @Size(max = 30, message = "직급은 30자를 넘을 수 없습니다.")
-        String position
+        String position,
+
+        AppAdminRole role
 ) {
 }

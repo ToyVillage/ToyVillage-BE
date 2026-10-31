@@ -82,18 +82,26 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
 
     @Query("""
             select t from Task t
-            where size(t.assignees) = (
+            where (:creatorId is null or t.creator.id = :creatorId)
+            """)
+    Page<Task> findAllCreatedBy(@Param("creatorId") Long creatorId, Pageable pageable);
+
+    @Query("""
+            select t from Task t
+            where (:creatorId is null or t.creator.id = :creatorId)
+              and size(t.assignees) = (
                 select count(w) from WorkReport w
                 where w.task = t
                   and w.status = com.command.toyvillage_server.domain.app.workreport.domain.Status.APPROVED
                   and w.appAdmin member of t.assignees
             )
             """)
-    Page<Task> findAllCompleted(Pageable pageable);
+    Page<Task> findAllCompleted(@Param("creatorId") Long creatorId, Pageable pageable);
 
     @Query("""
             select t from Task t
-            where size(t.assignees) <> (
+            where (:creatorId is null or t.creator.id = :creatorId)
+              and size(t.assignees) <> (
                 select count(w) from WorkReport w
                 where w.task = t
                   and w.status = com.command.toyvillage_server.domain.app.workreport.domain.Status.APPROVED
@@ -102,13 +110,15 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
               and t.finishDate >= :today
             """)
     Page<Task> findAllInProgress(
+            @Param("creatorId") Long creatorId,
             @Param("today") LocalDate today,
             Pageable pageable
     );
 
     @Query("""
             select t from Task t
-            where size(t.assignees) <> (
+            where (:creatorId is null or t.creator.id = :creatorId)
+              and size(t.assignees) <> (
                 select count(w) from WorkReport w
                 where w.task = t
                   and w.status = com.command.toyvillage_server.domain.app.workreport.domain.Status.APPROVED
@@ -117,6 +127,7 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
               and t.finishDate < :today
             """)
     Page<Task> findAllExpired(
+            @Param("creatorId") Long creatorId,
             @Param("today") LocalDate today,
             Pageable pageable
     );

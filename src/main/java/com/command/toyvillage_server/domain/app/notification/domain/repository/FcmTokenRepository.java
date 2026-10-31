@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
 import java.util.List;
 
 public interface FcmTokenRepository extends JpaRepository<FcmToken, String> {
@@ -21,16 +22,16 @@ public interface FcmTokenRepository extends JpaRepository<FcmToken, String> {
 
     void deleteByTokenAndAppAdmin_Id(String token, Long appAdminId);
 
-    List<FcmToken> findAllByAppAdmin_DeleteStatusFalseAndAppAdmin_Role(AppAdminRole role);
+    List<FcmToken> findAllByAppAdmin_DeleteStatusFalseAndAppAdmin_RoleIn(Collection<AppAdminRole> roles);
 
     @Query("""
         select distinct f.token from FcmToken f
         join JoinTeam j on j.appAdmin = f.appAdmin
         where j.team.id in :teamIds
           and f.appAdmin.deleteStatus = false
-          and f.appAdmin.role = :role
+          and f.appAdmin.role in :roles
         """)
-    List<String> findTeamTokens(@Param("teamIds") List<Long> teamIds, @Param("role") AppAdminRole role);
+    List<String> findTeamTokens(@Param("teamIds") List<Long> teamIds, @Param("roles") Collection<AppAdminRole> roles);
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     void deleteAllByTokenIn(List<String> tokens);
