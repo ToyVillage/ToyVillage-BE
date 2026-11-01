@@ -26,6 +26,7 @@ public record FeedLogAdminQueryListResponse(
             String staffName,
             String animalKind,
             String animalName,
+            String significant,
             boolean animalDeleted,
             String feedType,
             Float feedAmount,
@@ -39,6 +40,7 @@ public record FeedLogAdminQueryListResponse(
                     .staffName(feedLog.getAppAdmin().getName())
                     .animalKind(feedLog.getAnimalManage().getAnimalKind().getKindName())
                     .animalName(feedLog.getAnimalManage().getAnimalName())
+                    .significant(feedLog.getSignificant())
                     .animalDeleted(feedLog.getAnimalManage().isDeleteYn())
                     .feedType(feedLog.getFeedType())
                     .feedAmount(feedLog.getFeedAmount())
