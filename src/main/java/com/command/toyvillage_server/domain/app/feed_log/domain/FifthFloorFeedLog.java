@@ -8,7 +8,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "tbl_fifth_floor_feed_log")
@@ -21,7 +21,7 @@ public class FifthFloorFeedLog {
     private Long id;
 
     @Column(nullable = false, name = "feed_date")
-    private LocalDate feedDate;
+    private LocalDateTime feedDate;
 
     @JoinColumn(name = "animal_manage_id", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -42,7 +42,7 @@ public class FifthFloorFeedLog {
     private AppAdmin appAdmin;
 
     @Builder
-    public FifthFloorFeedLog(AppAdmin appAdmin, AnimalManage animalManage, LocalDate feedDate,
+    public FifthFloorFeedLog(AppAdmin appAdmin, AnimalManage animalManage, LocalDateTime feedDate,
                              String feedType, Float feedAmount, Unit feedUnit) {
         this.appAdmin = appAdmin;
         this.animalManage = animalManage;
@@ -52,7 +52,7 @@ public class FifthFloorFeedLog {
         this.feedUnit = feedUnit;
     }
 
-    public void update(LocalDate feedDate, String feedType, Float feedAmount, Unit feedUnit) {
+    public void update(LocalDateTime feedDate, String feedType, Float feedAmount, Unit feedUnit) {
         this.feedDate = feedDate;
         this.feedType = feedType;
         this.feedAmount = feedAmount;

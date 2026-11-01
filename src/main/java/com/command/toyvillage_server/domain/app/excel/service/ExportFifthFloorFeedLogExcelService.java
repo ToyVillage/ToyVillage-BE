@@ -23,7 +23,7 @@ public class ExportFifthFloorFeedLogExcelService {
 
     private static final int PAGE_SIZE = 200;
     private static final int MAX_ROWS = 10_000;
-    private static final List<String> HEADERS = List.of("급여일", "개체명", "먹이 종류", "급여량", "단위", "작성자");
+    private static final List<String> HEADERS = List.of("급여일시", "개체명", "먹이 종류", "급여량", "단위", "작성자");
 
     private final FifthFloorFeedLogRepository fifthFloorFeedLogRepository;
 
@@ -31,7 +31,8 @@ public class ExportFifthFloorFeedLogExcelService {
         List<List<Object>> rows = new ArrayList<>();
         for (int page = 0; ; page++) {
             List<FifthFloorFeedLog> feedLogs = fifthFloorFeedLogRepository.findByFeedDateBetween(
-                startDate, endDate, PageRequest.of(page, PAGE_SIZE, Sort.by("feedDate", "id")));
+                startDate.atStartOfDay(), endDate.atTime(23, 59, 59, 999_999_000),
+                PageRequest.of(page, PAGE_SIZE, Sort.by("feedDate", "id")));
             for (FifthFloorFeedLog f : feedLogs) {
                 rows.add(Arrays.asList(f.getFeedDate(), animalName(f.getAnimalManage()), f.getFeedType(),
                     f.getFeedAmount(), unit(f.getFeedUnit()),

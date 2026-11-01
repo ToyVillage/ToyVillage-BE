@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
@@ -23,10 +24,18 @@ public class FifthFloorFeedLogAdminQueryListService {
             AnimalTaxonomic animalTaxonomic,
             Pageable pageable
     ) {
+        LocalDateTime startDateTime = date.atStartOfDay();
+        LocalDateTime endDateTime = date.plusDays(1).atStartOfDay();
+
         Page<FifthFloorFeedLog> feedLogs = animalTaxonomic == null
-                ? fifthFloorFeedLogRepository.findAllByFeedDate(date, pageable)
-                : fifthFloorFeedLogRepository.findAllByFeedDateAndAnimalManage_AnimalKind_AnimalTaxonomic(
-                        date,
+                ? fifthFloorFeedLogRepository.findAllByFeedDateGreaterThanEqualAndFeedDateLessThan(
+                        startDateTime,
+                        endDateTime,
+                        pageable
+                )
+                : fifthFloorFeedLogRepository.findAllByFeedDateGreaterThanEqualAndFeedDateLessThanAndAnimalManage_AnimalKind_AnimalTaxonomic(
+                        startDateTime,
+                        endDateTime,
                         animalTaxonomic,
                         pageable
                 );

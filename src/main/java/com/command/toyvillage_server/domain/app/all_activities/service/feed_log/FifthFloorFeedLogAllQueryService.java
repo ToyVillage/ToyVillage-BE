@@ -16,7 +16,10 @@ public class FifthFloorFeedLogAllQueryService {
 
     @Transactional(readOnly = true)
     public List<FifthFloorFeedLogResponse> execute(LocalDate date) {
-        return fifthFloorFeedLogRepository.findAllByFeedDateOrderByIdAsc(date)
+        return fifthFloorFeedLogRepository.findAllByFeedDateGreaterThanEqualAndFeedDateLessThanOrderByFeedDateAscIdAsc(
+                        date.atStartOfDay(),
+                        date.plusDays(1).atStartOfDay()
+                )
                 .stream()
                 .map(FifthFloorFeedLogResponse::from)
                 .toList();

@@ -5,11 +5,11 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public record FifthFloorFeedLogRequest(
-        @NotNull(message = "급여 날짜를 입력해주세요.")
-        LocalDate feedDate,
+        @NotNull(message = "급여 날짜와 시간을 입력해주세요.")
+        LocalDateTime feedDate,
         @NotBlank(message = "먹이 종류를 입력해주세요.")
         String feedType,
         @NotNull(message = "급여량을 입력해주세요.")
