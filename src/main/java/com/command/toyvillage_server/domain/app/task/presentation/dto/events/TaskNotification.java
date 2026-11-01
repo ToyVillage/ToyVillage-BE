@@ -9,7 +9,8 @@ public record TaskNotification(Long taskId, Long workReportId, String title, Typ
     public enum Type {
         TASK_ASSIGNED,
         TASK_COMPLETED,
-        TASK_APPROVED
+        TASK_APPROVED,
+        TASK_REJECTED
     }
 
     public static TaskNotification assigned(Task task, List<Long> recipientIds) {
@@ -25,5 +26,10 @@ public record TaskNotification(Long taskId, Long workReportId, String title, Typ
     public static TaskNotification approved(WorkReport report) {
         return new TaskNotification(report.getTask().getId(), report.getId(), report.getTask().getTitle(),
                 Type.TASK_APPROVED, List.of(report.getAppAdmin().getId()));
+    }
+
+    public static TaskNotification rejected(WorkReport report) {
+        return new TaskNotification(report.getTask().getId(), report.getId(), report.getTask().getTitle(),
+                Type.TASK_REJECTED, List.of(report.getAppAdmin().getId()));
     }
 }

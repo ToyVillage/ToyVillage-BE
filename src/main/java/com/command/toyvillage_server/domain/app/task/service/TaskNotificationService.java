@@ -42,6 +42,8 @@ public class TaskNotificationService {
                 title = "새 업무지시";
             } else if (event.type() == TaskNotification.Type.TASK_COMPLETED) {
                 title = "업무 완료 보고";
+            } else if (event.type() == TaskNotification.Type.TASK_REJECTED) {
+                title = "업무보고 반려";
             } else {
                 title = "업무 승인 완료";
             }
