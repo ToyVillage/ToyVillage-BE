@@ -16,12 +16,14 @@ import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.*;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.UUID;
 
 @RequiredArgsConstructor
 @Component
 @Slf4j
 public class AwsS3Provider {
+    private static final int MAX_DOWNLOAD_BYTES = 10 * 1024 * 1024;
     private final S3Client s3Client;
     private final FileRepository fileRepository;
 
@@ -75,4 +77,21 @@ public class AwsS3Provider {
         }
     }
     
+
+    public byte[] download(String key) {
+        try (InputStream stream = s3Client.getObject(GetObjectRequest.builder()
+                .bucket(bucket)
+                .key(key)
+                .build())) {
+            byte[] bytes = stream.readNBytes(MAX_DOWNLOAD_BYTES + 1);
+            if (bytes.length > MAX_DOWNLOAD_BYTES) {
+                log.warn("파일 다운로드 크기 초과 / key : {}", key);
+                return null;
+            }
+            return bytes;
+        } catch (IOException | RuntimeException e) {
+            log.warn("파일 다운로드 실패 / key : {}", key, e);
+            return null;
+        }
+    }
 }

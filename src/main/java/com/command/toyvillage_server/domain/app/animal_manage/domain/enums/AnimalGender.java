@@ -1,5 +1,8 @@
 package com.command.toyvillage_server.domain.app.animal_manage.domain.enums;
 
+import lombok.Getter;
+
+@Getter
 public enum AnimalGender {
     MAN("수컷"),
     WOMAN("암컷"),

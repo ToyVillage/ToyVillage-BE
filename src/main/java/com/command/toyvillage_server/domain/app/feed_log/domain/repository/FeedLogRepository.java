@@ -41,6 +41,9 @@ public interface FeedLogRepository extends JpaRepository<FeedLog, Long> {
             LocalDateTime endDateTime
     );
 
+    @EntityGraph(attributePaths = {"appAdmin", "animalManage"})
+    List<FeedLog> findByFeedDateTimeBetween(LocalDateTime start, LocalDateTime end, Pageable pageable);
+
     @EntityGraph(attributePaths = "appAdmin")
     List<FeedLog> findAllByAnimalManage_IdOrderByFeedDateTimeDescIdDesc(Long animalManageId);
 

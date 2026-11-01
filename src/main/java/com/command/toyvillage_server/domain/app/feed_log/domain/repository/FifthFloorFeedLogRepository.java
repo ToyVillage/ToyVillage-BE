@@ -28,6 +28,9 @@ public interface FifthFloorFeedLogRepository extends JpaRepository<FifthFloorFee
     @EntityGraph(attributePaths = {"appAdmin", "animalManage.animalKind"})
     List<FifthFloorFeedLog> findAllByFeedDateOrderByIdAsc(LocalDate feedDate);
 
+    @EntityGraph(attributePaths = {"appAdmin", "animalManage"})
+    List<FifthFloorFeedLog> findByFeedDateBetween(LocalDate start, LocalDate end, Pageable pageable);
+
     @EntityGraph(attributePaths = "appAdmin")
     List<FifthFloorFeedLog> findAllByAnimalManage_IdOrderByFeedDateDescIdDesc(Long animalManageId);
 

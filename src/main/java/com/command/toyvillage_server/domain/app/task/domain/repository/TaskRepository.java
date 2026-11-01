@@ -9,8 +9,11 @@ import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public interface TaskRepository extends JpaRepository<Task, Long> {
+    List<Task> findByCreatedAtBetween(LocalDateTime start, LocalDateTime end, Pageable pageable);
+
 
     @Query("""
             select count(task)

@@ -28,6 +28,9 @@ public interface AnimalObservationRepository extends JpaRepository<AnimalObserva
         Pageable pageable
     );
 
+    @EntityGraph(attributePaths = {"author", "animalManage"})
+    List<AnimalObservation> findByCreatedAtBetween(LocalDateTime start, LocalDateTime end, Pageable pageable);
+
     Page<AnimalObservation> findAllByAnimalManageId(Long animalManageId, Pageable pageable);
 
     Optional<AnimalObservation> findByIdAndAnimalManageId(Long id, Long animalManageId);

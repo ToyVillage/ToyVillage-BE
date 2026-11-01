@@ -3,6 +3,7 @@ package com.command.toyvillage_server.domain.app.join_team.domain.repository;
 import com.command.toyvillage_server.domain.app.join_team.domain.JoinTeam;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -10,6 +11,15 @@ import java.util.List;
 import java.util.Optional;
 
 public interface JoinTeamRepository extends JpaRepository<JoinTeam, Long> {
+    @Query("""
+            select j from JoinTeam j
+            join fetch j.team
+            join fetch j.appAdmin
+            where j.appAdmin.deleteStatus = false
+            order by j.team.name, j.appAdmin.name, j.id
+            """)
+    List<JoinTeam> findExportPage(Pageable pageable);
+
     Optional<JoinTeam> findByAppAdmin_IdAndTeam_Id(Long appAdminId, Long teamId);
 
     @Modifying
