@@ -5,7 +5,7 @@ import com.command.toyvillage_server.domain.app.feed_log.domain.Unit;
 import lombok.Builder;
 import org.springframework.data.domain.Page;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Builder
@@ -30,7 +30,7 @@ public record FifthFloorFeedLogAdminQueryListResponse(
             String feedType,
             Float feedAmount,
             Unit feedUnit,
-            LocalDate feedDate
+            LocalDateTime feedDate
     ) {
         public static FeedLogResponse from(FifthFloorFeedLog feedLog) {
             return FeedLogResponse.builder()

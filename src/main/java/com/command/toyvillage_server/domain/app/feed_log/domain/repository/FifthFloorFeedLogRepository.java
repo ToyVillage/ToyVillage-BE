@@ -7,7 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,20 +16,28 @@ public interface FifthFloorFeedLogRepository extends JpaRepository<FifthFloorFee
     Optional<FifthFloorFeedLog> findByIdAndAppAdmin_Id(Long id, Long writerId);
 
     @EntityGraph(attributePaths = {"appAdmin", "animalManage.animalKind"})
-    Page<FifthFloorFeedLog> findAllByFeedDate(LocalDate feedDate, Pageable pageable);
+    Page<FifthFloorFeedLog> findAllByFeedDateGreaterThanEqualAndFeedDateLessThan(
+            LocalDateTime startDateTime,
+            LocalDateTime endDateTime,
+            Pageable pageable
+    );
 
     @EntityGraph(attributePaths = {"appAdmin", "animalManage.animalKind"})
-    Page<FifthFloorFeedLog> findAllByFeedDateAndAnimalManage_AnimalKind_AnimalTaxonomic(
-            LocalDate feedDate,
+    Page<FifthFloorFeedLog> findAllByFeedDateGreaterThanEqualAndFeedDateLessThanAndAnimalManage_AnimalKind_AnimalTaxonomic(
+            LocalDateTime startDateTime,
+            LocalDateTime endDateTime,
             AnimalTaxonomic animalTaxonomic,
             Pageable pageable
     );
 
     @EntityGraph(attributePaths = {"appAdmin", "animalManage.animalKind"})
-    List<FifthFloorFeedLog> findAllByFeedDateOrderByIdAsc(LocalDate feedDate);
+    List<FifthFloorFeedLog> findAllByFeedDateGreaterThanEqualAndFeedDateLessThanOrderByFeedDateAscIdAsc(
+            LocalDateTime startDateTime,
+            LocalDateTime endDateTime
+    );
 
     @EntityGraph(attributePaths = {"appAdmin", "animalManage"})
-    List<FifthFloorFeedLog> findByFeedDateBetween(LocalDate start, LocalDate end, Pageable pageable);
+    List<FifthFloorFeedLog> findByFeedDateBetween(LocalDateTime start, LocalDateTime end, Pageable pageable);
 
     @EntityGraph(attributePaths = "appAdmin")
     List<FifthFloorFeedLog> findAllByAnimalManage_IdOrderByFeedDateDescIdDesc(Long animalManageId);
