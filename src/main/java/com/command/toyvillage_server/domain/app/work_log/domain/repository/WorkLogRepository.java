@@ -13,6 +13,9 @@ public interface WorkLogRepository extends JpaRepository<WorkLog, Long> {
     @EntityGraph(attributePaths = {"template", "appAdmin"})
     List<WorkLog> findByWriteAtBetween(LocalDate start, LocalDate end, Pageable pageable);
 
+    @EntityGraph(attributePaths = {"template", "appAdmin", "answers"})
+    List<WorkLog> findAllByWriteAtOrderByIdAsc(LocalDate writeAt);
+
     long countByWriteAtGreaterThanEqualAndWriteAtLessThan(
         LocalDate startDate,
         LocalDate endDate
