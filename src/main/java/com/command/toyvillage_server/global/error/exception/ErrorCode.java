@@ -122,6 +122,7 @@ public enum ErrorCode {
     // task
     TASK_NOT_FOUND(404, "존재하지 않는 업무지시입니다."),
     TASK_TARGET_INVALID(400, "업무지시 대상이 올바르지 않습니다."),
+    TASK_FCM_NOT_SEND(500, "업무지시 알림 발송에 실패했습니다."),
 
     // animal management
     ANIMAL_KIND_NOT_FOUND(404, "존재하지 않는 종입니다."),
