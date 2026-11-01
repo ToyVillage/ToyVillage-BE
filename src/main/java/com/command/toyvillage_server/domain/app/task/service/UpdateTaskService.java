@@ -5,12 +5,14 @@ import com.command.toyvillage_server.domain.app.auth.admin.facade.UserFacade;
 import com.command.toyvillage_server.domain.app.task.domain.Task;
 import com.command.toyvillage_server.domain.app.task.domain.repository.TaskRepository;
 import com.command.toyvillage_server.domain.app.task.exception.TaskNotFoundException;
+import com.command.toyvillage_server.domain.app.task.presentation.dto.events.TaskNotification;
 import com.command.toyvillage_server.domain.app.task.presentation.dto.request.TaskRequest;
 import com.command.toyvillage_server.domain.app.workreport.domain.WorkReport;
 import com.command.toyvillage_server.domain.app.workreport.domain.repository.WorkReportRepository;
 import com.command.toyvillage_server.domain.web.file.domain.File;
 import com.command.toyvillage_server.domain.web.file.service.FileFacade;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
@@ -25,6 +27,7 @@ public class UpdateTaskService {
     private final TaskAssigneeService taskAssigneeService;
     private final FileFacade fileFacade;
     private final UserFacade userFacade;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Transactional
     public void execute(Long id, TaskRequest request) {
@@ -38,6 +41,10 @@ public class UpdateTaskService {
         List<AppAdmin> assignees = taskAssigneeService.execute(request.assigneeIds());
         List<File> files = request.files() == null ? null : fileFacade.findAllByKeys(request.files());
 
+        List<Long> addedAssigneeIds = assignees.stream().map(AppAdmin::getId)
+                .filter(assigneeId -> !task.isAssignee(assigneeId))
+                .toList();
+
         task.update(
                 request.title(),
                 request.content(),
@@ -48,6 +55,9 @@ public class UpdateTaskService {
         );
 
         deleteReportsOfRemovedAssignees(id, assignees);
+        if (!addedAssigneeIds.isEmpty()) {
+            eventPublisher.publishEvent(TaskNotification.assigned(task, addedAssigneeIds));
+        }
     }
 
     private void deleteReportsOfRemovedAssignees(Long taskId, List<AppAdmin> assignees) {
