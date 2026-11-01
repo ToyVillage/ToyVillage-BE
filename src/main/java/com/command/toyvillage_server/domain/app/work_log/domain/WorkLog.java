@@ -44,6 +44,9 @@ public class WorkLog {
     @JoinColumn(name = "app_admin_id", nullable = false)
     private AppAdmin appAdmin;
 
+    @Column(name = "title", length = 100)
+    private String title;
+
     @CreatedDate
     @Column(name = "write_at", nullable = false, updatable = false)
     private LocalDate writeAt;
@@ -52,9 +55,14 @@ public class WorkLog {
     private List<WorkLogAnswer> answers = new ArrayList<>();
 
     @Builder
-    private WorkLog(WorkLogTemplate template, AppAdmin appAdmin) {
+    private WorkLog(WorkLogTemplate template, AppAdmin appAdmin, String title) {
         this.template = template;
         this.appAdmin = appAdmin;
+        this.title = title;
+    }
+
+    public void updateTitle(String title) {
+        this.title = title;
     }
 
     public void addAnswer(WorkLogAnswer answer) {

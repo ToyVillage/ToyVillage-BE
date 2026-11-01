@@ -10,13 +10,15 @@ public record WorkLogListResponse(
     Long workLogId,
     String writer,
     LocalDate writeAt,
-    String templateTitle
+    String templateTitle,
+    String title
 ) {
     public static WorkLogListResponse from(WorkLog workLog) {
         return WorkLogListResponse.builder()
             .workLogId(workLog.getId())
             .writer(workLog.getAppAdmin().getName())
             .templateTitle(workLog.getTemplate().getTemplateTitle())
+            .title(workLog.getTitle())
             .writeAt(workLog.getWriteAt())
             .build();
     }

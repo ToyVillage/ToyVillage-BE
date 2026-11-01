@@ -12,6 +12,7 @@ public record WorkLogDetailResponse(
     Long workLogId,
     Long templateId,
     String templateTitle,
+    String title,
     String writerName,
     LocalDate writeAt,
     List<WorkLogSectionAnswerResponse> sections
@@ -24,6 +25,7 @@ public record WorkLogDetailResponse(
             .workLogId(workLog.getId())
             .templateId(workLog.getTemplate().getId())
             .templateTitle(workLog.getTemplate().getTemplateTitle())
+            .title(workLog.getTitle())
             .writerName(workLog.getAppAdmin().getName())
             .writeAt(workLog.getWriteAt())
             .sections(sections)

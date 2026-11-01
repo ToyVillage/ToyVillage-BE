@@ -10,6 +10,7 @@ public record WorkLogAllResponse(
         Long workLogId,
         LocalDate writeAt,
         String templateTitle,
+        String title,
         String authorName,
         long fileCount
 ) {
@@ -18,6 +19,7 @@ public record WorkLogAllResponse(
                 .workLogId(workLog.getId())
                 .writeAt(workLog.getWriteAt())
                 .templateTitle(workLog.getTemplate().getTemplateTitle())
+                .title(workLog.getTitle())
                 .authorName(workLog.getAppAdmin().getName())
                 .fileCount(workLog.getAnswers().stream()
                         .filter(answer -> answer.getFile() != null)

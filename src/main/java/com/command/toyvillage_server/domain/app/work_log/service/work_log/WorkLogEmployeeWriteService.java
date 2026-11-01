@@ -54,6 +54,7 @@ public class WorkLogEmployeeWriteService {
         WorkLog workLog = WorkLog.builder()
             .template(template)
             .appAdmin(appAdmin)
+            .title(request.title())
             .build();
         answers.forEach(workLog::addAnswer);
 
