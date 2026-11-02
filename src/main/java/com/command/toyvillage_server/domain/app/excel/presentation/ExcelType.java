@@ -13,7 +13,7 @@ public enum ExcelType {
     TEAM_MEMBER("팀구성원", false),
     ANIMAL("동물", false),
     WORK_LOG("사육일지", true),
-    FEED_LOG("급여일지", true),
+    FEED_LOG("4층 급여일지", true),
     FIFTH_FLOOR_FEED_LOG("5층 급여일지", true),
     ANIMAL_OBSERVATION("관찰일지", true),
     DOCUMENT("자료실", true);
