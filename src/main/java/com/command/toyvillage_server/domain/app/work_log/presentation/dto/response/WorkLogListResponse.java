@@ -19,7 +19,7 @@ public record WorkLogListResponse(
             .writer(workLog.getAppAdmin().getName())
             .templateTitle(workLog.getTemplate().getTemplateTitle())
             .title(workLog.getTitle())
-            .writeAt(workLog.getWriteAt())
+            .writeAt(workLog.getWriteAt().toLocalDate())
             .build();
     }
 }

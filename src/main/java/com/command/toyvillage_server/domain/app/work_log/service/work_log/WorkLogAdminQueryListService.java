@@ -25,13 +25,15 @@ public class WorkLogAdminQueryListService {
         Page<WorkLog> workLogs;
 
         if (templateId == null) {
-            workLogs = workLogRepository.findByWriteAt(date, pageable);
+            workLogs = workLogRepository.findByWriteAtGreaterThanEqualAndWriteAtLessThan(
+                date.atStartOfDay(), date.plusDays(1).atStartOfDay(), pageable);
         } else {
             List<Long> templateIds = getTemplateIds(templateId);
             if (templateIds.isEmpty()) {
                 return Page.empty(pageable);
             }
-            workLogs = workLogRepository.findByWriteAtAndTemplateIdIn(date, templateIds, pageable);
+            workLogs = workLogRepository.findByWriteAtGreaterThanEqualAndWriteAtLessThanAndTemplateIdIn(
+                date.atStartOfDay(), date.plusDays(1).atStartOfDay(), templateIds, pageable);
         }
 
         return workLogs.map(WorkLogListResponse::from);
