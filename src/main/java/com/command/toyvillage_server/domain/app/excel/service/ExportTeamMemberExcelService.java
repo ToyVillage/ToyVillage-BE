@@ -45,6 +45,7 @@ public class ExportTeamMemberExcelService {
     private String role(AppAdminRole value) {
         return switch (value) {
             case APP_ADMIN -> "관리자";
+            case MIDDLE_ADMIN -> "중간 관리자";
             case EMPLOYEE -> "직원";
         };
     }
