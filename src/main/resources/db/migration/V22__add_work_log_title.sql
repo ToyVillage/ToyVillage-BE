@@ -1,0 +1,1 @@
+ALTER TABLE tbl_work_log ADD COLUMN title VARCHAR(100) NULL;

@@ -50,6 +50,7 @@ public class WorkLogEmployeeUpdateService {
 
         template.validateRequiredAnswered(answers);
 
+        workLog.updateTitle(request.title());
         workLog.replaceAnswers(answers);
     }
 
