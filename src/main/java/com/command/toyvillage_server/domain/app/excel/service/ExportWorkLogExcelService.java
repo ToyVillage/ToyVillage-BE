@@ -31,14 +31,15 @@ public class ExportWorkLogExcelService {
         List<List<Object>> rows = new ArrayList<>();
         for (int page = 0; ; page++) {
             List<WorkLog> workLogs = workLogRepository.findByWriteAtBetween(
-                startDate, endDate, PageRequest.of(page, PAGE_SIZE, Sort.by("writeAt", "id")));
+                startDate.atStartOfDay(), endDate.atTime(23, 59, 59, 999_999_000),
+                PageRequest.of(page, PAGE_SIZE, Sort.by("writeAt", "id")));
             for (WorkLog w : workLogs) {
                 if (w.getAnswers().isEmpty()) {
-                    rows.add(Arrays.asList(w.getWriteAt(), w.getTemplate().getTemplateTitle(), w.getAppAdmin().getName(),
+                    rows.add(Arrays.asList(w.getWriteAt().toLocalDate(), w.getTemplate().getTemplateTitle(), w.getAppAdmin().getName(),
                         null, null, null));
                 }
                 for (WorkLogAnswer answer : w.getAnswers()) {
-                    rows.add(Arrays.asList(w.getWriteAt(), w.getTemplate().getTemplateTitle(), w.getAppAdmin().getName(),
+                    rows.add(Arrays.asList(w.getWriteAt().toLocalDate(), w.getTemplate().getTemplateTitle(), w.getAppAdmin().getName(),
                         answer.getSection().getSectionName(), answer.getQuestion().getQuestion(), answerText(answer)));
                 }
             }

@@ -1,0 +1,1 @@
+ALTER TABLE tbl_work_log MODIFY COLUMN write_at DATETIME(6) NOT NULL;

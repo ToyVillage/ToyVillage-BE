@@ -3,12 +3,12 @@ package com.command.toyvillage_server.domain.app.all_activities.presentation.dto
 import com.command.toyvillage_server.domain.app.work_log.domain.WorkLog;
 import lombok.Builder;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Builder
 public record WorkLogAllResponse(
         Long workLogId,
-        LocalDate writeAt,
+        LocalDateTime writeAt,
         String templateTitle,
         String title,
         String authorName,

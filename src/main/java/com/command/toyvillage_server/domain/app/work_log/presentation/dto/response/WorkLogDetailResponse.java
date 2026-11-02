@@ -27,7 +27,7 @@ public record WorkLogDetailResponse(
             .templateTitle(workLog.getTemplate().getTemplateTitle())
             .title(workLog.getTitle())
             .writerName(workLog.getAppAdmin().getName())
-            .writeAt(workLog.getWriteAt())
+            .writeAt(workLog.getWriteAt().toLocalDate())
             .sections(sections)
             .build();
     }

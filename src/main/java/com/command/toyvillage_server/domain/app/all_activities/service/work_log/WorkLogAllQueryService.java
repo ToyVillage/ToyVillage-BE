@@ -16,7 +16,10 @@ public class WorkLogAllQueryService {
 
     @Transactional(readOnly = true)
     public List<WorkLogAllResponse> execute(LocalDate date) {
-        return workLogRepository.findAllByWriteAtOrderByIdAsc(date)
+        return workLogRepository.findAllByWriteAtGreaterThanEqualAndWriteAtLessThanOrderByWriteAtAscIdAsc(
+                        date.atStartOfDay(),
+                        date.plusDays(1).atStartOfDay()
+                )
                 .stream()
                 .map(WorkLogAllResponse::from)
                 .toList();

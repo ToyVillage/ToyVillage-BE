@@ -42,8 +42,8 @@ public class DashBoardCountService {
                         endDateTime
                 ),
                 workLogRepository.countByWriteAtGreaterThanEqualAndWriteAtLessThan(
-                        startOfWeek,
-                        startOfWeek.plusWeeks(1)
+                        startDateTime,
+                        endDateTime
                 )
         );
     }
