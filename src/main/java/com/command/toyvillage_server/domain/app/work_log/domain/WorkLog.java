@@ -51,9 +51,6 @@ public class WorkLog {
     @Column(name = "write_at", nullable = false, updatable = false)
     private LocalDateTime writeAt;
 
-    @Column(name = "write_time_known", nullable = false)
-    private boolean writeTimeKnown = true;
-
     @OneToMany(mappedBy = "workLog", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<WorkLogAnswer> answers = new ArrayList<>();
 

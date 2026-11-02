@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 public record WorkLogAllResponse(
         Long workLogId,
         LocalDateTime writeAt,
-        boolean writeTimeKnown,
         String templateTitle,
         String title,
         String authorName,
@@ -19,7 +18,6 @@ public record WorkLogAllResponse(
         return WorkLogAllResponse.builder()
                 .workLogId(workLog.getId())
                 .writeAt(workLog.getWriteAt())
-                .writeTimeKnown(workLog.isWriteTimeKnown())
                 .templateTitle(workLog.getTemplate().getTemplateTitle())
                 .title(workLog.getTitle())
                 .authorName(workLog.getAppAdmin().getName())
