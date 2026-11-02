@@ -39,6 +39,7 @@ public record TaskListResponse(
     private record TaskResponse(
             Long id,
             String title,
+            String content,
             List<AssigneeResponse> assignees,
             int assigneeCount,
             TaskStatus status,
@@ -59,6 +60,7 @@ public record TaskListResponse(
             return TaskResponse.builder()
                     .id(task.getId())
                     .title(task.getTitle())
+                    .content(task.getContent())
                     .assignees(AssigneeResponse.listOf(task.getAssignees()))
                     .assigneeCount(task.getAssignees().size())
                     .status(TaskStatus.of(task.getAssignees().size(), approved, task.getFinishDate(), today))
