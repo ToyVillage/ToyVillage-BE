@@ -24,6 +24,8 @@ public interface FcmTokenRepository extends JpaRepository<FcmToken, String> {
 
     List<FcmToken> findAllByAppAdmin_DeleteStatusFalseAndAppAdmin_RoleIn(Collection<AppAdminRole> roles);
 
+    List<FcmToken> findAllByAppAdmin_IdInAndAppAdmin_DeleteStatusFalse(Collection<Long> appAdminIds);
+
     @Query("""
         select distinct f.token from FcmToken f
         join JoinTeam j on j.appAdmin = f.appAdmin

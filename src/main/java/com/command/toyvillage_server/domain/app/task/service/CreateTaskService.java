@@ -5,10 +5,12 @@ import com.command.toyvillage_server.domain.app.auth.admin.domain.repository.App
 import com.command.toyvillage_server.domain.app.auth.admin.facade.UserFacade;
 import com.command.toyvillage_server.domain.app.task.domain.Task;
 import com.command.toyvillage_server.domain.app.task.domain.repository.TaskRepository;
+import com.command.toyvillage_server.domain.app.task.presentation.dto.events.TaskNotification;
 import com.command.toyvillage_server.domain.app.task.presentation.dto.request.TaskRequest;
 import com.command.toyvillage_server.domain.web.file.domain.File;
 import com.command.toyvillage_server.domain.web.file.service.FileFacade;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
@@ -21,6 +23,7 @@ public class CreateTaskService {
     private final FileFacade fileFacade;
     private final AppAdminRepository appAdminRepository;
     private final UserFacade userFacade;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Transactional
     public Long execute(TaskRequest request) {
@@ -37,6 +40,8 @@ public class CreateTaskService {
                 .files(files)
                 .build();
 
-        return taskRepository.save(task).getId();
+        taskRepository.save(task);
+        eventPublisher.publishEvent(TaskNotification.assigned(task, assignees.stream().map(AppAdmin::getId).toList()));
+        return task.getId();
     }
 }

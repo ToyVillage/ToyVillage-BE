@@ -6,6 +6,7 @@ import com.command.toyvillage_server.domain.app.auth.admin.exception.AppAdminNot
 import com.command.toyvillage_server.domain.app.auth.admin.facade.UserFacade;
 import com.command.toyvillage_server.domain.app.task.domain.Task;
 import com.command.toyvillage_server.domain.app.task.domain.repository.TaskRepository;
+import com.command.toyvillage_server.domain.app.task.presentation.dto.events.TaskNotification;
 import com.command.toyvillage_server.domain.app.workreport.domain.WorkReport;
 import com.command.toyvillage_server.domain.app.workreport.domain.repository.WorkReportRepository;
 import com.command.toyvillage_server.domain.app.workreport.exception.WorkNotFoundException;
@@ -15,6 +16,7 @@ import com.command.toyvillage_server.domain.web.file.domain.File;
 import com.command.toyvillage_server.domain.web.file.service.FileFacade;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.exception.ConstraintViolationException;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,6 +33,7 @@ public class WorkReportCreateService {
     private final AppAdminRepository appAdminRepository;
     private final FileFacade fileFacade;
     private final UserFacade userFacade;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Transactional
     public void execute(Long taskId, WorkReportRequest workReportRequest) {
@@ -67,6 +70,7 @@ public class WorkReportCreateService {
             }
             throw e;
         }
+        eventPublisher.publishEvent(TaskNotification.completed(workReport));
     }
 
     private boolean isDuplicateReport(DataIntegrityViolationException e) {
