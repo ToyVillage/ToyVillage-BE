@@ -1,0 +1,38 @@
+package com.command.toyvillage_server.domain.app.animal_manage.service.manage;
+
+import com.command.toyvillage_server.domain.app.animal_manage.domain.repository.AnimalKindRepository;
+import com.command.toyvillage_server.domain.app.animal_manage.domain.repository.AnimalManageRepository;
+import com.command.toyvillage_server.domain.app.animal_manage.exception.AnimalKindNotFoundException;
+import com.command.toyvillage_server.domain.app.animal_manage.presentation.dto.response.AnimalManageQueryListObjectResponse;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+@Service
+@RequiredArgsConstructor
+public class QueryAnimalManageListService {
+    private final AnimalManageRepository animalManageRepository;
+    private final AnimalKindRepository animalKindRepository;
+
+    @Transactional(readOnly = true)
+    public Page<AnimalManageQueryListObjectResponse> execute(
+        Long animalKindId,
+        String keyword,
+        Pageable pageable
+    ) {
+        if (!animalKindRepository.existsByIdAndDeleteYnFalse(animalKindId)) {
+            throw AnimalKindNotFoundException.EXCEPTION;
+        }
+
+        if (keyword == null || keyword.isBlank()) {
+            return animalManageRepository.findAllByAnimalKindIdAndDeleteYnFalse(animalKindId, pageable)
+                .map(AnimalManageQueryListObjectResponse::from);
+        }
+
+        return animalManageRepository
+            .findAllByAnimalKindIdAndAnimalNameContainingIgnoreCaseAndDeleteYnFalse(animalKindId, keyword.trim(), pageable)
+            .map(AnimalManageQueryListObjectResponse::from);
+    }
+}

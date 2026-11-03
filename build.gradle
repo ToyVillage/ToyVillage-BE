@@ -1,6 +1,6 @@
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '4.0.2'
+    id 'org.springframework.boot' version '3.5.10'
     id 'io.spring.dependency-management' version '1.1.7'
 }
 
@@ -10,14 +10,16 @@ description = 'ToyVillage_server'
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(17)
+        languageVersion = JavaLanguageVersion.of(21)
     }
 }
 
-configurations {
-    compileOnly {
-        extendsFrom annotationProcessor
-    }
+jar {
+    enabled = false
+}
+
+bootJar {
+    archiveFileName = "toyvillage.jar"
 }
 
 repositories {
@@ -25,20 +27,87 @@ repositories {
 }
 
 dependencies {
+
+    implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
-    implementation 'org.springframework.boot:spring-boot-starter-webmvc'
-    compileOnly 'org.projectlombok:lombok'
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    implementation 'org.apache.poi:poi-ooxml:5.4.1'
+
+    // DB
     runtimeOnly 'com.mysql:mysql-connector-j'
+
+    // Lombok
+    compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
-    testImplementation 'org.springframework.boot:spring-boot-starter-data-jpa-test'
-    testImplementation 'org.springframework.boot:spring-boot-starter-jdbc-test'
-    testImplementation 'org.springframework.boot:spring-boot-starter-validation-test'
-    testImplementation 'org.springframework.boot:spring-boot-starter-webmvc-test'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    // JWT
+    implementation 'io.jsonwebtoken:jjwt-api:0.13.0'
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.13.0'
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.13.0'
+
+    // SMTP
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
+
+    // AWS
+    implementation platform('software.amazon.awssdk:bom:2.42.23')
+
+    // S3
+    implementation 'software.amazon.awssdk:s3'
+
+    // Swagger (springdoc)
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.13'
+
+    // Flyway
+    implementation 'org.flywaydb:flyway-core'
+    implementation 'org.flywaydb:flyway-mysql'
+
+    // FCM
+    implementation 'com.google.firebase:firebase-admin:9.2.0'
 }
 
 tasks.named('test') {
+    dependsOn 'validateMigrationVersions'
     useJUnitPlatform()
+}
+
+tasks.register('validateMigrationVersions') {
+    group = 'verification'
+    description = 'Rejects duplicate Flyway migration versions without connecting to a database.'
+
+    def migrations = fileTree('src/main/resources/db/migration') {
+        include '**/V*.sql'
+    }
+    inputs.files(migrations)
+
+    doLast {
+        def versions = migrations.files.groupBy { migration ->
+            def match = migration.name =~ /^V([0-9]+(?:[._][0-9]+)*)__.+\.sql$/
+            if (!match.matches()) {
+                throw new GradleException("Invalid Flyway migration filename: ${migration.name}")
+            }
+
+            def parts = match.group(1).split(/[._]/).collect { new BigInteger(it) }
+            while (parts.size() > 1 && parts.last() == BigInteger.ZERO) {
+                parts.remove(parts.size() - 1)
+            }
+            parts.join('.')
+        }
+        def duplicates = versions.findAll { version, files -> files.size() > 1 }
+        if (!duplicates.isEmpty()) {
+            def details = duplicates.collect { version, files ->
+                "V${version}: ${files.collect { it.name }.sort().join(', ')}"
+            }.sort().join('\n')
+            throw new GradleException("Duplicate Flyway migration versions:\n${details}")
+        }
+        logger.lifecycle("Validated ${versions.size()} unique Flyway migration versions.")
+    }
+}
+
+tasks.named('bootJar') {
+    dependsOn 'validateMigrationVersions'
 }

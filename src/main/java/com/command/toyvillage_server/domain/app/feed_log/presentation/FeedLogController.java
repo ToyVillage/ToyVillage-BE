@@ -1,0 +1,114 @@
+package com.command.toyvillage_server.domain.app.feed_log.presentation;
+
+import com.command.toyvillage_server.domain.app.animal_manage.domain.enums.AnimalTaxonomic;
+import com.command.toyvillage_server.domain.app.feed_log.presentation.dto.request.FeedLogRequest;
+import com.command.toyvillage_server.domain.app.feed_log.presentation.dto.response.FeedLogAdminDetailsQueryResponse;
+import com.command.toyvillage_server.domain.app.feed_log.presentation.dto.response.FeedLogAdminSalaryHistoryListQueryResponse;
+import com.command.toyvillage_server.domain.app.feed_log.presentation.dto.response.FeedLogAdminQueryListResponse;
+import com.command.toyvillage_server.domain.app.feed_log.presentation.dto.response.FeedLogMyQueryResponse;
+import com.command.toyvillage_server.domain.app.feed_log.presentation.dto.response.FeedLogDetailsQueryResponse;
+import com.command.toyvillage_server.domain.app.feed_log.presentation.dto.response.FeedLogQueryResponse;
+import com.command.toyvillage_server.domain.app.feed_log.service.*;
+import com.command.toyvillage_server.global.common.response.MessageResponse;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
+
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/feed-log")
+public class FeedLogController {
+    private final FeedLogCreateService feedLogCreateService;
+    private final FeedLogUpdateService feedLogUpdateService;
+    private final FeedLogAdminUpdateService feedLogAdminUpdateService;
+    private final FeedLogMyQueryService feedLogMyQueryService;
+    private final FeedLogDetailsQueryService feedLogDetailsQueryService;
+    private final FeedLogQueryService feedLogQueryService;
+    private final FeedLogAdminQueryListService feedLogAdminQueryListService;
+    private final FeedLogAdminDetailsQueryService feedLogAdminDetailsQueryService;
+    private final FeedLogAdminSalaryHistoryListQueryService feedLogAdminSalaryHistoryListQueryService;
+    private final FeedLogAdminDeleteService feedLogAdminDeleteService;
+
+    //admin
+    @PutMapping("/admin/{feedLogId}")
+    public ResponseEntity<MessageResponse> updateAdminFeedLog(
+            @PathVariable("feedLogId") Long feedLogId,
+            @RequestBody @Valid FeedLogRequest request
+    ) {
+        feedLogAdminUpdateService.execute(feedLogId, request);
+        return ResponseEntity.ok(MessageResponse.of("급여일지가 수정되었습니다."));
+    }
+
+    @GetMapping("/admin")
+    public FeedLogAdminQueryListResponse getFeedLogList(
+            @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+            @RequestParam(value = "animalTaxonomic", required = false) AnimalTaxonomic animalTaxonomic,
+            @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable
+    ) {
+        return feedLogAdminQueryListService.execute(date, animalTaxonomic, pageable);
+    }
+
+    @GetMapping("/admin/{feedLogId}")
+    public FeedLogAdminDetailsQueryResponse getAdminFeedLogDetail(
+            @PathVariable("feedLogId") Long feedLogId
+    ) {
+        return feedLogAdminDetailsQueryService.execute(feedLogId);
+    }
+
+    @GetMapping("/admin/history/{animalManageId}")
+    public FeedLogAdminSalaryHistoryListQueryResponse getAdminFeedLogHistory(
+            @PathVariable("animalManageId") Long animalManageId
+    ) {
+        return feedLogAdminSalaryHistoryListQueryService.execute(animalManageId);
+    }
+
+    @GetMapping("/animal/{animalManageId}")
+    public FeedLogQueryResponse getFeedLogsByAnimal(
+            @PathVariable("animalManageId") Long animalManageId
+    ) {
+        return feedLogQueryService.execute(animalManageId);
+    }
+
+    @DeleteMapping("/admin/{feedLogId}")
+    public void deleteFeedLog(@PathVariable("feedLogId") Long feedLogId) {
+        feedLogAdminDeleteService.execute(feedLogId);
+    }
+
+    //직원
+    @PostMapping("/{animalManageId}")
+    public void createFeedLog(
+            @PathVariable("animalManageId") Long animalManageId,
+            @RequestBody @Valid FeedLogRequest feedLogRequest
+    ) {
+        feedLogCreateService.execute(animalManageId, feedLogRequest);
+    }
+
+    @PutMapping("/{feedLogId}")
+    public ResponseEntity<MessageResponse> updateFeedLog(
+            @PathVariable("feedLogId") Long feedLogId,
+            @RequestBody @Valid FeedLogRequest request
+    ) {
+        feedLogUpdateService.execute(feedLogId, request);
+        return ResponseEntity.ok(MessageResponse.of("급여일지가 수정되었습니다."));
+    }
+
+    @GetMapping("/me")
+    public FeedLogMyQueryResponse getFeedLog(){
+        return feedLogMyQueryService.execute();
+    }
+
+    @GetMapping("/{feedLogId}")
+    public FeedLogDetailsQueryResponse getFeedLogDetail(
+            @PathVariable("feedLogId") Long feedLogId
+    ) {
+        return feedLogDetailsQueryService.execute(feedLogId);
+    }
+
+}

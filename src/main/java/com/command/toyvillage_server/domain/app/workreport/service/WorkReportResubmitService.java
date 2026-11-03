@@ -1,0 +1,40 @@
+package com.command.toyvillage_server.domain.app.workreport.service;
+
+import com.command.toyvillage_server.domain.app.auth.admin.facade.UserFacade;
+import com.command.toyvillage_server.domain.app.task.presentation.dto.events.TaskNotification;
+import com.command.toyvillage_server.domain.app.workreport.domain.WorkReport;
+import com.command.toyvillage_server.domain.app.workreport.domain.repository.WorkReportRepository;
+import com.command.toyvillage_server.domain.app.workreport.exception.WorkNotFoundException;
+import com.command.toyvillage_server.domain.app.workreport.presentation.dto.request.WorkReportRequest;
+import com.command.toyvillage_server.domain.web.file.domain.File;
+import com.command.toyvillage_server.domain.web.file.service.FileFacade;
+import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
+@Service
+@RequiredArgsConstructor
+public class WorkReportResubmitService {
+    private final WorkReportRepository workReportRepository;
+    private final FileFacade fileFacade;
+    private final UserFacade userFacade;
+    private final ApplicationEventPublisher eventPublisher;
+
+    @Transactional
+    public void execute(Long workReportId, WorkReportRequest workReportRequest) {
+        WorkReport workReport = workReportRepository.findById(workReportId)
+                .orElseThrow(() -> WorkNotFoundException.EXCEPTION);
+
+        workReport.validateEditableBy(userFacade.getCurrentUserId());
+
+        List<File> files = workReportRequest.fileKey() == null
+                ? null
+                : fileFacade.findAllByKeys(workReportRequest.fileKey());
+
+        workReport.resubmit(workReportRequest.content(), workReportRequest.note(), files);
+        eventPublisher.publishEvent(TaskNotification.completed(workReport));
+    }
+}

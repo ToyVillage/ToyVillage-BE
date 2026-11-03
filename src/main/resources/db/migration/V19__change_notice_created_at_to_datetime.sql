@@ -1,0 +1,1 @@
+ALTER TABLE tbl_notice MODIFY COLUMN created_at DATETIME(6) NOT NULL;

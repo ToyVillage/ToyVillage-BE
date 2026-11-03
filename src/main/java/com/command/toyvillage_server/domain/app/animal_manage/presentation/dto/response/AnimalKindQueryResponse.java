@@ -1,0 +1,41 @@
+package com.command.toyvillage_server.domain.app.animal_manage.presentation.dto.response;
+
+import com.command.toyvillage_server.domain.app.animal_manage.domain.AnimalKind;
+import com.command.toyvillage_server.domain.app.animal_manage.domain.enums.AnimalTaxonomic;
+import com.command.toyvillage_server.domain.web.file.presentation.dto.response.FileResponse;
+import lombok.Builder;
+
+import java.util.List;
+
+@Builder
+public record AnimalKindQueryResponse(
+    Long animalKindId,
+    String kindName,
+    String engName,
+    String scientificName,
+    AnimalTaxonomic animalTaxonomic,
+    String detailKind,
+    Integer floor,
+    List<AnimalLegalStatusResponse> legalStatuses,
+    long animalCount,
+    FileResponse kindImage
+) {
+    public static AnimalKindQueryResponse of(
+        AnimalKind animalKind,
+        List<AnimalLegalStatusResponse> legalStatuses,
+        long animalCount
+    ) {
+        return AnimalKindQueryResponse.builder()
+            .animalKindId(animalKind.getId())
+            .kindName(animalKind.getKindName())
+            .engName(animalKind.getEngName())
+            .scientificName(animalKind.getScientificName())
+            .animalTaxonomic(animalKind.getAnimalTaxonomic())
+            .detailKind(animalKind.getDetailKind())
+            .floor(animalKind.getFloor())
+            .legalStatuses(legalStatuses)
+            .animalCount(animalCount)
+            .kindImage(FileResponse.from(animalKind.getKindImage()))
+            .build();
+    }
+}

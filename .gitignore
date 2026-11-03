@@ -35,3 +35,9 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### env ###
+.env
+
+### oh-my-claudecode ###
+.omc/

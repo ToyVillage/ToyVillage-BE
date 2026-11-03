@@ -1,0 +1,91 @@
+server:
+  forward-headers-strategy: framework
+
+spring:
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      connection-init-sql: SET time_zone = '+09:00'
+  jackson:
+    time-zone: Asia/Seoul
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        default_batch_fetch_size: 100
+        jdbc:
+          time_zone: Asia/Seoul
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    baseline-version: 1
+  data:
+    web:
+      pageable:
+        one-indexed-parameters: true
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${MAIL_USERNAME}   # 환경변수로 관리
+    password: ${MAIL_PASSWORD}    # 앱 비밀번호
+    properties:
+      mail:
+        smtp:
+          auth: true
+          connectiontimeout: 5000
+          timeout: 5000
+          writetimeout: 5000
+          starttls:
+            enable: true
+  cloud:
+    aws:
+      credentials:
+        access-key: ${AWS_ACCESS_KEY}
+        secret-key: ${AWS_SECRET_KEY}
+      region:
+        static: ${AWS_REGION}
+      s3:
+        region: ${AWS_S3_REGION}
+        bucket: ${AWS_S3_BUCKET}
+        endpoint: ${AWS_ENDPOINT:}
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 50MB
+
+cors:
+  allowed-origins:
+    local: http://localhost:8080
+    dev: ${DEV_URL}
+    main: ${MAIN_URL}
+
+redis:
+  host: ${REDIS_HOST}
+  port: ${REDIS_PORT}
+
+swagger:
+  username: ${SWAGGER_USERNAME}
+  password: ${SWAGGER_PASSWORD}
+
+springdoc:
+  use-fqn: true  # 스키마 이름을 패키지 포함 전체 이름으로 등록 (같은 이름의 중첩 DTO 충돌 방지)
+
+jwt:
+  web-secret-key: ${WEB_JWT_SECRET_KEY}
+  app-secret-key: ${APP_JWT_SECRET_KEY}
+  web-access-expiration: ${WEB_ACCESS_EXPIRATION:3600000}
+  web-refresh-expiration: ${WEB_REFRESH_EXPIRATION:604800000}
+  app-access-expiration: ${APP_ACCESS_EXPIRATION:3600000}
+  app-refresh-expiration: ${APP_REFRESH_EXPIRATION:604800000}
+  header: Authorization
+  prefix: Bearer
+
+firebase:
+  service-account:
+    project-id: ${FIREBASE_PROJECT_ID}
+    client-email: ${FIREBASE_CLIENT_EMAIL}
+    private-key: ${FIREBASE_PRIVATE_KEY}
