@@ -101,6 +101,14 @@ public class AppAdmin {
         this.passwordChanged = false;
     }
 
+    public void changeRole(AppAdminRole role) {
+        if (!AppAdminRole.EMPLOYEE_ROLES.contains(role)) {
+            throw AppAdminRoleInvalidException.EXCEPTION;
+        }
+
+        this.role = role;
+    }
+
     public void changeDeleteStatus() {
         this.deleteStatus = true;
     }
